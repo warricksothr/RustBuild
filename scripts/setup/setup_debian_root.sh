@@ -28,6 +28,7 @@ mkdir -p $BUILD/openssl/{dist,openssl_src}
 # Get the Rust and Cargo projects
 cd $BUILD
 git clone --recursive https://github.com/rust-lang/rust.git
+mkdir -p rust/build
 git clone --recursive https://github.com/rust-lang/cargo.git
 
 # Get openssl
