@@ -33,13 +33,14 @@ git checkout $1
 git submodule update
 
 # apply patch to link statically against libssl
-git apply /build/static-ssl.patch
+git apply /build/patches/static-ssl.patch
 
 # get information about HEAD
 HEAD_HASH=$(git rev-parse --short HEAD)
 HEAD_DATE=$(TZ=UTC date -d @$(git show -s --format=%ct HEAD) +'%Y-%m-%d')
 TARBALL=cargo-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
 LOGFILE=cargo-$HEAD_DATE-$HEAD_HASH.test.output.txt
+LOGFILE-FAILED=cargo-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
 # check if we have build this exact version of cargo
 if [ ! -z "$($DROPBOX list | grep $HEAD_DATE-$HEAD_HASH)" ]; then
@@ -57,12 +58,7 @@ $DROPBOX -p download $CARGO_NIGHTLY
 tar xzf $CARGO_NIGHTLY
 rm $CARGO_NIGHTLY
 
-export LD_LIBRARY_PATH="$LIBSSL_DIST_DIR/lib:$LD_LIBRARY_PATH:$RUST_NIGHTLY_DIR/lib:$CARGO_NIGHTLY_DIR/lib"
-# Attempt to fix Position-Independent-Code
-#export CFLAGS="$CFLAGS -fPIC"
-#export OPENSSL_LIB_DIR="$LIBSSL_DIST_DIR/lib"
-#export OPENSSL_INCLUDE_DIR="$LIBSSL_DIST_DIR/include"
-#export OPENSSL_STATIC=yes
+export LD_LIBRARY_PATH="$LIBSSL_DIST_DIR/lib:$RUST_NIGHTLY_DIR/lib:$CARGO_NIGHTLY_DIR/lib:LD_LIBRARY_PATH"
 
 # cargo doesn't always build with my latest rust nightly, so try all the
 # nightlies available.
@@ -97,7 +93,6 @@ for RUST_NIGHTLY in $($DROPBOX list . | grep rust- | grep tar | tr -s ' ' | cut 
     --local-rust-root=$RUST_NIGHTLY_DIR \
     --prefix=/
   make clean
-  #OPENSSL_LIB_DIR="$LIBSSL_DIST_DIR/lib" OPENSSL_INCLUDE_DIR="$LIBSSL_DIST_DIR/include" OPENSSL_STATIC=yes make || continue
   make || continue
 
   ## package
@@ -131,11 +126,16 @@ for RUST_NIGHTLY in $($DROPBOX list . | grep rust- | grep tar | tr -s ' ' | cut 
   if [ -z $DONTTEST ]; then
     cd $SRC_DIR
     uname -a > $LOGFILE
+    uname -a > $LOGFILE-FAILED
     $RUST_NIGHTLY_DIR/bin/rustc -V >> $LOGFILE
+    $RUST_NIGHTLY_DIR/bin/rustc -V >> $LOGFILE-FAILED
     echo >> $LOGFILE
+    echo >> $LOGFILE-FAILED
     RUST_TEST_THREADS=$(nproc) make test -k >>$LOGFILE 2>&1 || true
+    cat $LOGFILE | grep "FAILED" >> $LOGFILE-FAILED
     $DROPBOX -p upload $LOGFILE .
-    rm $LOGFILE
+    $DROPBOX -p upload $LOGFILE-FAILED .
+    rm $LOGFILE $LOGFILE-FAILED
   fi
 
   # cleanup
