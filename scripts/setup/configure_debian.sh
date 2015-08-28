@@ -8,7 +8,8 @@ set -e
 : ${OPENSSL_DIR:=/build/openssl}
 : ${OPENSSL_SRC:=$OPENSSL_DIR/openssl_src}
 
-apt-get install -qq build_essential openssl git curl clang gcc g++ cmake file pkg-config python ccache
+apt-get update -qq
+apt-get install --allow-unauthenticated -qq build-essential openssl git curl clang gcc g++ cmake file pkg-config python ccache
 
 # Run the dropbox uploader configuration script
 cd ~

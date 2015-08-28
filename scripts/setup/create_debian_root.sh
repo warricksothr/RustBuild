@@ -17,4 +17,4 @@ fi
 
 mkdir -p $CHROOT_DIR
 cd $CHROOT_DIR
-#debootstrap --arch armhf $DEBIAN_VERSION $CHROOT_NAME
+debootstrap --arch=armhf $DEBIAN_VERSION $CHROOT_NAME

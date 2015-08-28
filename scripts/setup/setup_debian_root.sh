@@ -13,34 +13,37 @@ if [ ! -z "$1" ]; then
 fi
 
 : ${ROOT:=/chroots/$CHROOT_NAME}
-: ${HOME:=$ROOT/root}
+: ${CHROOT_HOME:=$ROOT/root}
 : ${BUILD:=$ROOT/build}
 : ${OPENSSL_DIR:=$BUILD/openssl}
 : ${OPENSSL_VER:=OpenSSL_1_0_2d}
 : ${OPENSSL_SRC_DIR:=$OPENSSL_DIR/openssl_src}
 
 cd $ROOT
-mkdir -p /build/{snapshot,patches}
-mkdir -p /build/nightly/{cargo,rust}
-mkdir -p /build/openssl/{dist}
+mkdir -p $BUILD
+mkdir -p $BUILD/{snapshot,patches}
+mkdir -p $BUILD/nightly/{cargo,rust}
+mkdir -p $BUILD/openssl/{dist,openssl_src}
 
 # Get the Rust and Cargo projects
 cd $BUILD
-git clone https://github.com/rust-lang/rust.git
-git clone https://github.com/rust-lang/cargo.git
+git clone --recursive https://github.com/rust-lang/rust.git
+git clone --recursive https://github.com/rust-lang/cargo.git
 
 # Get openssl
 cd $OPENSSL_DIR
-curl "https://github.com/openssl/openssl/archive/${OPENSSL_VER}.tar.gz" -o ${OPENSSL_VER}.tar.gz
-tar xzf ${OPENSSL_VER}.tar.gz -C $OPENSSL_SRC_DIR
+curl -L "https://github.com/openssl/openssl/archive/${OPENSSL_VER}.tar.gz" -o ${OPENSSL_VER}.tar.gz
+tar xzf ${OPENSSL_VER}.tar.gz
+mv $OPENSSL_DIR/openssl-$OPENSSL_VER/* $OPENSSL_SRC_DIR
+rm -r $OPENSSL_DIR/openssl-$OPENSSL_VER
 
 # Make the distributable directory
-cd $HOME
+cd $CHROOT_HOME
 mkdir -p dist
 
 # Get the dropbox_uploader project script
-git clone https://github.com/andreadabrizi/Dropbox-Uploader.git
-chmod +x Dropbox-Uploader/dropbox_uploader
+git clone https://github.com/andreafabrizi/Dropbox-Uploader.git
+chmod +x Dropbox-Uploader/dropbox_uploader.sh
 ln -s Dropbox-Uploader/dropbox_uploader.sh dropbox_uploader.sh
 
 # Get the project scripts and save them in the root
@@ -49,11 +52,11 @@ git clone https://github.com/WarrickSothr/RustBuild.git
 # Copy the project scripts to the appropriate directories
 cp RustBuild/scripts/build/* ${BUILD}
 chmod +x ${BUILD}/*.sh
-cp RustBuild/scripts/setup/configure_debian.sh /
-chmod +x /configure_debian.sh
+cp RustBuild/scripts/setup/configure_debian.sh $CHROOT_HOME
+chmod +x $CHROOT_HOME/configure_debian.sh
 
 # Copy the patches
 cp RustBuild/patches/* ${BUILD}/patches
 
 # Run the configuration script in in a systemd nspawn
-systemd-nspawn -D ${ROOT} "bash /configure_debian.sh"
+systemd-nspawn -D ${ROOT} /bin/bash ~/configure_debian.sh
