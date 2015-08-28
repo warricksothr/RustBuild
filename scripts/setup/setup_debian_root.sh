@@ -49,11 +49,11 @@ ln -s Dropbox-Uploader/dropbox_uploader.sh dropbox_uploader.sh
 # Get the project scripts and save them in the root
 git clone https://github.com/WarrickSothr/RustBuild.git
 
-# Copy the project scripts to the appropriate directories
-cp RustBuild/scripts/build/* ${BUILD}
-chmod +x ${BUILD}/*.sh
-cp RustBuild/scripts/setup/configure_debian.sh $CHROOT_HOME
-chmod +x $CHROOT_HOME/configure_debian.sh
+# link the project scripts to the appropriate directories
+chmod +x RustBuild/scripts/build/*.sh
+ln -s RustBuild/scripts/build/*.sh .
+chmod +x RustBuild/scripts/setup/configure_debian.sh
+ln -s RustBuild/scripts/setup/configure_debian.sh .
 
 # Copy the patches
 cp RustBuild/patches/* ${BUILD}/patches

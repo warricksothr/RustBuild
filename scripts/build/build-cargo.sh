@@ -22,6 +22,8 @@ set -e
 CARGO_NIGHTLY_DIR=$NIGHTLY_DIR/cargo
 RUST_NIGHTLY_DIR=$NIGHTLY_DIR/rust
 
+start=$(date +"%s")
+
 # update source to match upstream
 cd $SRC_DIR
 git checkout .
@@ -40,7 +42,7 @@ HEAD_HASH=$(git rev-parse --short HEAD)
 HEAD_DATE=$(TZ=UTC date -d @$(git show -s --format=%ct HEAD) +'%Y-%m-%d')
 TARBALL=cargo-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
 LOGFILE=cargo-$HEAD_DATE-$HEAD_HASH.test.output.txt
-LOGFILE-FAILED=cargo-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
+LOGFILE_FAILED=cargo-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
 # check if we have build this exact version of cargo
 if [ ! -z "$($DROPBOX list | grep $HEAD_DATE-$HEAD_HASH)" ]; then
@@ -120,28 +122,41 @@ for RUST_NIGHTLY in $($DROPBOX list . | grep rust- | grep tar | tr -s ' ' | cut 
     $DROPBOX delete $OLDEST_NIGHTLY
     OLDEST_TEST_OUTPUT=$(echo $OLDEST_NIGHTLY | cut -d '-' -f 1-5).test.output.txt
     $DROPBOX delete $OLDEST_TEST_OUTPUT || true
+    OLDEST_TEST_FAILED_OUTPUT=$(echo $OLDEST_NIGHTLY | cut -d '-' -f 1-5).test.failed.output.txt
+    $DROPBOX delete $OLDEST_TEST_FAILED_OUTPUT || true
   done
+
+  end=$(date +"%s")
+  diff=$(($end-$start))
+  echo "Cargo Build Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."
+  starttest=$(date +"%s")
 
   # run tests
   if [ -z $DONTTEST ]; then
     cd $SRC_DIR
     uname -a > $LOGFILE
-    uname -a > $LOGFILE-FAILED
+    uname -a > $LOGFILE_FAILED
     $RUST_NIGHTLY_DIR/bin/rustc -V >> $LOGFILE
-    $RUST_NIGHTLY_DIR/bin/rustc -V >> $LOGFILE-FAILED
+    $RUST_NIGHTLY_DIR/bin/rustc -V >> $LOGFILE_FAILED
     echo >> $LOGFILE
-    echo >> $LOGFILE-FAILED
+    echo >> $LOGFILE_FAILED
     RUST_TEST_THREADS=$(nproc) make test -k >>$LOGFILE 2>&1 || true
-    cat $LOGFILE | grep "FAILED" >> $LOGFILE-FAILED
+    cat $LOGFILE | grep "FAILED" >> $LOGFILE_FAILED
     $DROPBOX -p upload $LOGFILE .
-    $DROPBOX -p upload $LOGFILE-FAILED .
-    rm $LOGFILE $LOGFILE-FAILED
+    $DROPBOX -p upload $LOGFILE_FAILED .
+    rm $LOGFILE $LOGFILE_FAILED
   fi
 
   # cleanup
   rm -rf $CARGO_NIGHTLY_DIR/*
   rm -rf $DIST_DIR/*
   rm -rf $RUST_NIGHTLY_DIR/*
+
+  end=$(date +"%s")
+  diff=$(($end-$starttest))
+  echo "Cargo Test Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
+  diff=$(($end-$start))
+  echo "Cargo Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
 
   exit 0
 done

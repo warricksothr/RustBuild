@@ -63,6 +63,7 @@ HEAD_HASH=$(git rev-parse --short HEAD)
 HEAD_DATE=$(TZ=UTC date -d @$(git show -s --format=%ct HEAD) +'%Y-%m-%d')
 TARBALL=rust-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
 LOGFILE=rust-$HEAD_DATE-$HEAD_HASH.test.output.txt
+LOGFILE_FAILED=rust-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
 # build it
 cd build
@@ -103,11 +104,13 @@ for i in $(seq `expr $MAX_NUMBER_OF_NIGHTLIES + 1` $NUMBER_OF_NIGHTLIES); do
   $DROPBOX delete $OLDEST_NIGHTLY
   OLDEST_TEST_OUTPUT=$(echo $OLDEST_NIGHTLY | cut -d '-' -f 1-5).test.output.txt
   $DROPBOX delete $OLDEST_TEST_OUTPUT || true
+  OLDEST_TEST_FAILED_OUTPUT=$(echo $OLDEST_NIGHTLY | cut -d '-' -f 1-5).test.failed.output.txt
+  $DROPBOX delete $OLDEST_TEST_FAILED_OUTPUT || true
 done
 
 end=$(date +"%s")
 diff=$(($end-$start))
-echo "Build Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."
+echo "Rust Build Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."
 starttest=$(date +"%s")
 
 # run tests
@@ -115,9 +118,12 @@ if [ -z $DONTTEST ]; then
   cd $SRC_DIR/build
   uname -a > $LOGFILE
   echo >> $LOGFILE
+  cat $LOGFILE > $LOGFILE_FAILED
   RUST_TEST_THREADS=$(nproc) timeout 7200 make check -k >>$LOGFILE 2>&1 || true
+  cat $LOGFILE | grep "FAILED" >> $LOGFILE_FAILED
   $DROPBOX -p upload $LOGFILE .
-  rm $LOGFILE
+  $DROPBOX -p upload $LOGFILE_FAILED .
+  rm $LOGFILE $LOGFILE_FAILED
 fi
 
 # cleanup
@@ -126,6 +132,6 @@ rm -rf $SNAP_DIR/*
 
 end=$(date +"%s")
 diff=$(($end-$starttest))
-echo "Test Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
+echo "Rust Test Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
 diff=$(($end-$start))
-echo "Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
+echo "Rust Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
