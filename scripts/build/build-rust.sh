@@ -13,7 +13,8 @@ set -x
 set -e
 
 : ${CHANNEL:=nightly}
-: ${CHANNEL_DESCRIPTOR:=nightly}
+: ${DESCRIPTOR:=nightly}
+: ${CHANNEL_DESCRIPTOR:=${DESCRIPTOR}-}
 : ${BRANCH:=master}
 : ${DIST_DIR:=~/dist}
 : ${DROPBOX:=~/dropbox_uploader.sh}
@@ -30,12 +31,10 @@ fi
 # Configure the build
 case $CHANNEL in
   stable)
-    CHANNEL_DESCRIPTOR=-${CHANNEL}-
     CHANNEL=--release-channel=$CHANNEL
     BRANCH=stable
   ;;
   beta)
-    CHANNEL_DESCRIPTOR=${CHANNEL}-
     CHANNEL=--release-channel=$CHANNEL
     BRANCH=beta
   ;;
@@ -58,12 +57,12 @@ git submodule update
 #Parse the version from the make file
 VERSION=$(cat mk/main.mk | grep CFG_RELEASE_NUM | head -n 1 | sed -e "s/.*=//")
 
-case $CHANNEL in
-  stable || beta)
+case $DESCRIPTOR in
+  stable | beta )
     DROPBOX_SAVE_ROOT:="${VERSION}-${CHANNEL_DESCRIPTOR}"
   ;;
   nightly)
-  ;; 
+  ;;
   *) 
     echo "unknown release channel: $CHANNEL" && exit 1
   ;;
