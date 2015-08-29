@@ -34,15 +34,18 @@ git pull
 git checkout $1
 git submodule update
 
+#Parse the version from the make file
+VERSION=$(cat mk/main.mk | grep CFG_RELEASE_NUM | head -n 1 | sed -e "s/.*=//")
+
 # apply patch to link statically against libssl
 git apply /build/patches/static-ssl.patch
 
 # get information about HEAD
 HEAD_HASH=$(git rev-parse --short HEAD)
 HEAD_DATE=$(TZ=UTC date -d @$(git show -s --format=%ct HEAD) +'%Y-%m-%d')
-TARBALL=cargo-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
-LOGFILE=cargo-$HEAD_DATE-$HEAD_HASH.test.output.txt
-LOGFILE_FAILED=cargo-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
+TARBALL=cargo-$VERSION-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
+LOGFILE=cargo-$VERSION-$HEAD_DATE-$HEAD_HASH.test.output.txt
+LOGFILE_FAILED=cargo-$VERSION-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
 # check if we have build this exact version of cargo
 if [ ! -z "$($DROPBOX list | grep $HEAD_DATE-$HEAD_HASH)" ]; then

@@ -13,31 +13,61 @@ set -x
 set -e
 
 : ${CHANNEL:=nightly}
+: ${CHANNEL_DESCRIPTOR:=nightly}
+: ${BRANCH:=master}
 : ${DIST_DIR:=~/dist}
 : ${DROPBOX:=~/dropbox_uploader.sh}
+: ${DROPBOX_SAVE_ROOT:=.}
 : ${MAX_NUMBER_OF_NIGHTLIES:=5}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
 
+# Set the channel
+if [ ! -z $1 ]; then
+  CHANNEL=$1
+fi
+
+# Configure the build
 case $CHANNEL in
-    beta | stable ) CHANNEL=--release-channel=$CHANNEL;;
-    nightly) CHANNEL=;;
-    *) echo "unknown release channel: $CHANNEL" && exit 1;;
+  stable)
+    CHANNEL_DESCRIPTOR=-${CHANNEL}-
+    CHANNEL=--release-channel=$CHANNEL
+    BRANCH=stable
+  ;;
+  beta)
+    CHANNEL_DESCRIPTOR=${CHANNEL}-
+    CHANNEL=--release-channel=$CHANNEL
+    BRANCH=beta
+  ;;
+  nightly) 
+    CHANNEL_DESCRIPTOR=
+    CHANNEL=;;
+  *) 
+    echo "unknown release channel: $CHANNEL" && exit 1
+  ;;
 esac
 
 start=$(date +"%s")
 
 # Update source to upstream
 cd $SRC_DIR
-git checkout master
+git checkout $BRANCH
 git pull
-
-# Optionally checkout older hash
-git checkout $1
 git submodule update
 
 #Parse the version from the make file
-version=$(cat mk/main.mk | grep CFG_RELEASE_NUM | head -n 1 | sed -e "s/.*=//")
+VERSION=$(cat mk/main.mk | grep CFG_RELEASE_NUM | head -n 1 | sed -e "s/.*=//")
+
+case $CHANNEL in
+  stable || beta)
+    DROPBOX_SAVE_ROOT:="${VERSION}-${CHANNEL_DESCRIPTOR}"
+  ;;
+  nightly)
+  ;; 
+  *) 
+    echo "unknown release channel: $CHANNEL" && exit 1
+  ;;
+esac
 
 # Get the hash and date of the latest snaphot
 SNAP_HASH=$(head -n 1 src/snapshots.txt | tr -s ' ' | cut -d ' ' -f 3)
@@ -61,9 +91,9 @@ bin/rustc -V
 cd $SRC_DIR
 HEAD_HASH=$(git rev-parse --short HEAD)
 HEAD_DATE=$(TZ=UTC date -d @$(git show -s --format=%ct HEAD) +'%Y-%m-%d')
-TARBALL=rust-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
-LOGFILE=rust-$HEAD_DATE-$HEAD_HASH.test.output.txt
-LOGFILE_FAILED=rust-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
+TARBALL=rust-$VERSION-${CHANNEL_DESCRIPTOR}$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
+LOGFILE=rust-$VERSION-${CHANNEL_DESCRIPTOR}$HEAD_DATE-$HEAD_HASH.test.output.txt
+LOGFILE_FAILED=rust-$VERSION-${CHANNEL_DESCRIPTOR}$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
 # build it
 cd build
@@ -93,24 +123,25 @@ TARBALL=$TARBALL-$TARBALL_HASH.tar.gz
 
 # ship it
 if [ -z $DONTSHIP ]; then
-  $DROPBOX -p upload $TARBALL .
+  $DROPBOX mkdir ${DROPBOX_SAVE_ROOT}
+  $DROPBOX -p upload $TARBALL ${DROPBOX_SAVE_ROOT}
 fi
 rm $TARBALL
 
 # delete older nightlies
-NUMBER_OF_NIGHTLIES=$($DROPBOX list . | grep rust- | grep tar | wc -l)
-for i in $(seq `expr $MAX_NUMBER_OF_NIGHTLIES + 1` $NUMBER_OF_NIGHTLIES); do
-  OLDEST_NIGHTLY=$($DROPBOX list . | grep rust- | grep tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
-  $DROPBOX delete $OLDEST_NIGHTLY
-  OLDEST_TEST_OUTPUT=$(echo $OLDEST_NIGHTLY | cut -d '-' -f 1-5).test.output.txt
+NUMBER_OF_BUILDS=$($DROPBOX list ${DROPBOX_SAVE_ROOT} | grep rust- | grep tar | wc -l)
+for i in $(seq `expr $MAX_NUMBER_OF_BUILDS + 1` $NUMBER_OF_BUILDS); do
+  OLDEST_BUILD=$($DROPBOX list . | grep rust- | grep tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+  $DROPBOX delete $OLDEST_BUILD
+  OLDEST_TEST_OUTPUT=$(echo $OLDEST_BUILD | cut -d '-' -f 1-5).test.output.txt
   $DROPBOX delete $OLDEST_TEST_OUTPUT || true
-  OLDEST_TEST_FAILED_OUTPUT=$(echo $OLDEST_NIGHTLY | cut -d '-' -f 1-5).test.failed.output.txt
+  OLDEST_TEST_FAILED_OUTPUT=$(echo $OLDEST_BUILD | cut -d '-' -f 1-5).test.failed.output.txt
   $DROPBOX delete $OLDEST_TEST_FAILED_OUTPUT || true
 done
 
 end=$(date +"%s")
-diff=$(($end-$start))
-echo "Rust Build Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."
+compile_diff=$(($end-$start))
+echo "Rust Build Time: $(($compile_diff / 3600)) hours, $(((compile_$diff / 60) % 60)) minutes and $(($compile_diff % 60)) seconds elapsed."
 starttest=$(date +"%s")
 
 # run tests
@@ -121,8 +152,8 @@ if [ -z $DONTTEST ]; then
   cat $LOGFILE > $LOGFILE_FAILED
   RUST_TEST_THREADS=$(nproc) timeout 7200 make check -k >>$LOGFILE 2>&1 || true
   cat $LOGFILE | grep "FAILED" >> $LOGFILE_FAILED
-  $DROPBOX -p upload $LOGFILE .
-  $DROPBOX -p upload $LOGFILE_FAILED .
+  $DROPBOX -p upload $LOGFILE ${DROPBOX_SAVE_ROOT}
+  $DROPBOX -p upload $LOGFILE_FAILED ${DROPBOX_SAVE_ROOT}
   rm $LOGFILE $LOGFILE_FAILED
 fi
 
@@ -131,7 +162,7 @@ rm -rf $DIST_DIR/*
 rm -rf $SNAP_DIR/*
 
 end=$(date +"%s")
-diff=$(($end-$starttest))
-echo "Rust Test Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
+test_diff=$(($end-$starttest))
+echo "Rust Test Time: $(($test_diff / 3600)) hours, $((($test_diff / 60) % 60)) minutes and $(($test_diff % 60)) seconds elapsed.
 diff=$(($end-$start))
 echo "Rust Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
