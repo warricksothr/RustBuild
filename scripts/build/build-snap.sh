@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# I run this in Raspbian chroot with the following command:
+# I run this in Debian Jessie container with the following command:
 #
 # $ env -i \
 #     HOME=/root \
 #     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
 #     SHELL=/bin/bash \
 #     TERM=$TERM \
-#     chroot /chroot/raspbian/rust /ruststrap/armhf/build-snap.sh
+#     systemd-nspawn /chroot/RustBuild/ ~/build-snap.sh
 
 set -x
 set -e
@@ -17,6 +17,12 @@ set -e
 : ${DROPBOX:=~/dropbox_uploader.sh}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
+# The number of process we should use while building
+: ${BUILD_PROCS:=$(($(nproc)-1))}
+
+# Set the build procs to 1 less than the number of cores/processors available,
+# but always atleast 1 if there's only one processor/core
+if [ ! $BUILD_PROCS -gt 1 ]; then BUILD_PROCS=1; fi
 
 # Set the channel
 if [ ! -z $1 ]; then
@@ -38,6 +44,7 @@ case $CHANNEL in
 esac
 
 start=$(date +"%s")
+
 # checkout latest rust $BRANCH
 cd $SRC_DIR
 git checkout $BRANCH
@@ -80,12 +87,13 @@ cd build
   --enable-local-rust \
   --enable-llvm-static-stdcpp \
   --local-rust-root=$SNAP_DIR \
+  --prefix=/ \
   --build=arm-unknown-linux-gnueabihf \
   --host=arm-unknown-linux-gnueabihf \
   --target=arm-unknown-linux-gnueabihf
 make clean
-make -j$(nproc)
-make -j$(nproc) snap-stage3-H-arm-unknown-linux-gnueabihf
+make -j $BUILD_PROCS
+make -j $BUILD_PROCS snap-stage3-H-arm-unknown-linux-gnueabihf
 
 # ship it
 $DROPBOX -p upload rust-stage0-* snapshots
@@ -93,3 +101,7 @@ rm rust-stage0-*
 
 # cleanup
 rm -rf $SNAP_DIR/*
+
+end=$(date +"%s")
+diff=$(($end-$start))
+echo "Rust Snapshot Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.

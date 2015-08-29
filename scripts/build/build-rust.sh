@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# I run this in Raspbian chroot with the following command:
+# I run this in Debian Jessie container with the following command:
 #
 # $ env -i \
 #     HOME=/root \
 #     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
 #     SHELL=/bin/bash \
 #     TERM=$TERM \
-#     chroot /chroot/raspbian/rust /ruststrap/armhf/build-rust.sh
+#     systemd-nspawn /chroot/RustBuild/ ~/build-rust.sh
 
 set -x
 set -e
@@ -22,6 +22,12 @@ set -e
 : ${MAX_NUMBER_OF_NIGHTLIES:=5}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
+# The number of process we should use while building
+: ${BUILD_PROCS:=$(($(nproc)-1))}
+
+# Set the build procs to 1 less than the number of cores/processors available,
+# but always atleast 1 if there's only one processor/core
+if [ ! $BUILD_PROCS -gt 1 ]; BUILD_PROCS=1;
 
 # Set the channel
 if [ ! -z $1 ]; then
@@ -110,11 +116,11 @@ cd build
   --host=arm-unknown-linux-gnueabihf \
   --target=arm-unknown-linux-gnueabihf
 make clean
-make -j$(nproc)
+make -j $BUILD_PROCS
 
 # package
 rm -rf $DIST_DIR/*
-DESTDIR=$DIST_DIR make install -j$(nproc)
+DESTDIR=$DIST_DIR make -j $BUILD_PROCS install
 cd $DIST_DIR
 tar czf ~/$TARBALL .
 cd ~
