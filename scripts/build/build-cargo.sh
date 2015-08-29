@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# I run this in Raspbian chroot with the following command:
+# I run this in Debian Jessie container with the following command:
 #
 # $ env -i \
 #     HOME=/root \
 #     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
 #     SHELL=/bin/bash \
-#     TERM=$TERM chroot \
-#     /chroot/raspbian/cargo /ruststrap/armhf/build-cargo.sh
+#     TERM=$TERM \
+#     systemd-nspawn /chroot/RustBuild/ ~/build-rust.sh
 
 set -x
 set -e
