@@ -6,7 +6,7 @@ Scripts and patches to auto build Rustc and Cargo on ARM
 This repository comtains the required setup/configuration/build scripts and patches for you to setup your own Rust compilation machine. Pre-built 'unofficial' Rust/Cargo binaries are listed below.
 
 # Binary Downloads
-## [Unoffical Binaries]
+## [Unoffical Binaries](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
 
 # Usage Instructions
 Run # /bin/bash scripts/setup/build_debian_root.sh <name of container> to build a new container from scratch
@@ -19,29 +19,29 @@ In order to build a recent version of rust, you'll need to first build an up to 
 This can be achieved with the 3 following commands currently
 
 ##Nightly
+```bash
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-snap.sh
-
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-rust.sh
-
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-cargo.sh
+```
 
 This will build the most recent nightly by, first botstrapping my oldest snapshot to build your own newer snapshot, then compiling a new rust from your new snapshot, finally building cargo from your snapshot and rustc. These will all be uploaded to the root directory of the app folder for immediate use.
 
 Alternatively you can use the following to also build beta and stable releases
 
 ##Beta
+```bash
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-snap.sh beta
-
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-rust.sh beta
-
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-cargo.sh beta
+```
 
 ##Stable
+```bash
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-snap.sh stable
-
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-rust.sh stable
-
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-cargo.sh stable
+```
 
 # More Information
 I run this on a odroid XU4 running the latest Arch linux with a 32GB eMMC. I have yet to have a memory failure on the eMMC, but it does get heavy usage, so I am considering a ramdrive as the odroid XU4 has 2gb, and Arch + container building barely reach 800mb during peak compilation.
@@ -66,5 +66,3 @@ More information can be found in the LICENSE file in this directory
 
 # Acknowledgements
 Inspired and built upon the excellent work of Jorge Aparicio's [ruststrap](https://github.com/japaric/ruststrap)
-
-[Unofficial Binaries]: https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0
