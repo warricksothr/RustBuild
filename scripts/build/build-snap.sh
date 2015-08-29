@@ -12,13 +12,35 @@
 set -x
 set -e
 
+: ${CHANNEL:=nightly}
+: ${BRANCH:=master}
 : ${DROPBOX:=~/dropbox_uploader.sh}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
 
-# checkout latest rust
+# Set the channel
+if [ ! -z $1 ]; then
+  CHANNEL=$1
+fi
+
+# Configure the build
+case $CHANNEL in
+  stable)
+    BRANCH=stable
+  ;;
+  beta)
+    BRANCH=beta
+  ;;
+  nightly);;
+  *) 
+    echo "unknown release channel: $CHANNEL" && exit 1
+  ;;
+esac
+
+start=$(date +"%s")
+# checkout latest rust $BRANCH
 cd $SRC_DIR
-git checkout master
+git checkout $BRANCH
 git pull
 git submodule update
 
@@ -29,12 +51,19 @@ if [ ! -z "$($DROPBOX list snapshots | grep $LAST_SNAP_HASH)" ]; then
   exit 0
 fi
 
-# XXX here I should use the second to last snapshot hash in `snapshot.txt`, but
-# in most cases it matches with the last stage0 rustc that was built
+#This is the second to last snapshot. This is the snapshot that should be used to build the next one
+SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n 2p | tr -s ' ' | cut -d ' ' -f 3)
+if [ -z "$($DROPBOX list snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
+  # not here, we need this snapshot to continue
+  echo "Need snapshot ${SECOND_TO_LAST_SNAP_HASH} to compile snapshot compiler ${LAST_SNAP_HASH}"
+  exit 1
+fi
+
+# Use the second to last snapshot to build the next snapshot
 # setup snapshot
 cd $SNAP_DIR
 rm -rf *
-SNAP_TARBALL=$($DROPBOX list snapshots | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+SNAP_TARBALL=$($DROPBOX list snapshots | grep ${SECOND_TO_LAST_SNAP_HASH}- | tr -s ' ' | cut -d ' ' -f 4)
 $DROPBOX -p download snapshots/$SNAP_TARBALL
 tar xjf $SNAP_TARBALL --strip-components=1
 
@@ -44,18 +73,19 @@ git checkout $LAST_SNAP_HASH
 cd build
 ../configure \
   --disable-docs \
-  --disable-inject-std-version \
   --disable-valgrind \
   --enable-ccache \
-  --enable-llvm-static-stdcpp \
+  --enable-clang \
+  --disable-libcpp \
   --enable-local-rust \
+  --enable-llvm-static-stdcpp \
   --local-rust-root=$SNAP_DIR \
   --build=arm-unknown-linux-gnueabihf \
   --host=arm-unknown-linux-gnueabihf \
   --target=arm-unknown-linux-gnueabihf
 make clean
 make -j$(nproc)
-make snap-stage3-H-arm-unknown-linux-gnueabihf -j$(nproc)
+make -j$(nproc) snap-stage3-H-arm-unknown-linux-gnueabihf
 
 # ship it
 $DROPBOX -p upload rust-stage0-* snapshots

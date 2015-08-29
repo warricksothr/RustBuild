@@ -100,6 +100,8 @@ cd build
   $CHANNEL \
   --disable-valgrind \
   --enable-ccache \
+  --enable-clang \
+  --disable-libcpp \
   --enable-local-rust \
   --enable-llvm-static-stdcpp \
   --local-rust-root=$SNAP_DIR \
