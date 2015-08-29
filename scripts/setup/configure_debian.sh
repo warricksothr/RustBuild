@@ -8,8 +8,24 @@ set -e
 : ${OPENSSL_DIR:=/build/openssl}
 : ${OPENSSL_SRC:=$OPENSSL_DIR/openssl_src}
 
+# Determine the fastest host to use for updating
+apt-get install --allow-unauthenticated --qq netstat-apt
+netselect-apt
+NEW_HOST=$(cat sources.list | grep deb | head -n 1 | sed 's/deb http:\/\///' | sed 's/\/debian\/ stable.*//')
+rm sources.list
+
+# Replace the old host in the soruces lists with the new ideal host
+SOURCE_FILES=/etc/apt/sources.list.d/*.list
+echo "Source Files: $SOURCE_FILES"
+for f in $SOURCE_FILES
+do
+  echo "Updating: $f"
+  UPDATED=$(cat $f | sed "s/ftp.us.debian.org/$NEW_HOST/")
+  echo "$UPDATED" > $f
+done
+
 apt-get update -qq
-apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache clang-3.6 lldb-3.6 gcc g++ cmake file build-essential pkg-config
+apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache clang/testing gcc g++ cmake file build-essential pkg-config
 
 # Run the dropbox uploader configuration script
 cd ~

@@ -1,4 +1,2 @@
-deb     http://mirror.steadfast.net/debian/ experimental main contrib non-free
-deb-src http://mirror.steadfast.net/debian/ experimental main contrib non-free
-deb     http://ftp.us.debian.org/debian/    experimental main contrib non-free
-deb-src http://ftp.us.debian.org/debian/    experimental main contrib non-free
+deb     http://ftp.us.debian.org/debian/ experimental main contrib non-free
+deb-src http://ftp.us.debian.org/debian/ experimental main contrib non-free

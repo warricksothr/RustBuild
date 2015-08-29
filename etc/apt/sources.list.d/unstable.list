@@ -1,4 +1,2 @@
-deb     http://mirror.steadfast.net/debian/ unstable main contrib non-free
-deb-src http://mirror.steadfast.net/debian/ unstable main contrib non-free
 deb     http://ftp.us.debian.org/debian/    unstable main contrib non-free
 deb-src http://ftp.us.debian.org/debian/    unstable main contrib non-free
