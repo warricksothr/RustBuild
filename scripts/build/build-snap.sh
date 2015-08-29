@@ -7,7 +7,7 @@
 #     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
 #     SHELL=/bin/bash \
 #     TERM=$TERM \
-#     systemd-nspawn /chroot/RustBuild/ ~/build-snap.sh
+#     systemd-nspawn /chroot/RustBuild/ /bin/bash ~/build-snap.sh
 
 set -x
 set -e
