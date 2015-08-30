@@ -31,12 +31,13 @@ if [ ! $BUILD_PROCS -gt 1 ]; then BUILD_PROCS=1; fi
 # Set the channel
 if [ ! -z $1 ]; then
   CHANNEL=$1
+  DESCRIPTOR=$1
 fi
 
+# Set the descriptor to be used in the build name
 : ${CHANNEL_DESCRIPTOR:=${DESCRIPTOR}-}
 
 # Configure the build
-DESCRIPTOR=$CHANNEL
 case $CHANNEL in
   stable)
     CHANNEL=--release-channel=$CHANNEL
