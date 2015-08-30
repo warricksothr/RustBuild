@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # This is the script that installs the required dependencies and runs the final setups on the system
 
