@@ -65,7 +65,7 @@ VERSION=$(cat mk/main.mk | grep CFG_RELEASE_NUM | head -n 1 | sed -e "s/.*=//")
 
 case $DESCRIPTOR in
   stable | beta )
-    DROPBOX_SAVE_ROOT:="${VERSION}-${DESCRIPTOR}/"
+    DROPBOX_SAVE_ROOT="${VERSION}-${DESCRIPTOR}/"
   ;;
   nightly)
   ;;
