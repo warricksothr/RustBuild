@@ -29,7 +29,7 @@ apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python c
 
 # Configure the correct alternatives on the system to ensure we're using clang and clang++ 
 # where we should instead of gcc and g++
-update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang --slave /usr/bin/g++ g++ /usr/bin/clang++
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang 50 --slave /usr/bin/g++ g++ /usr/bin/clang++
 
 # Run the dropbox uploader configuration script
 cd ~
