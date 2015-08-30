@@ -104,4 +104,4 @@ rm -rf $SNAP_DIR/*
 
 end=$(date +"%s")
 diff=$(($end-$start))
-echo "Rust Snapshot Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
+echo "Rust Snapshot Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."

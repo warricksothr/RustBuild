@@ -170,6 +170,6 @@ rm -rf $SNAP_DIR/*
 
 end=$(date +"%s")
 test_diff=$(($end-$starttest))
-echo "Rust Test Time: $(($test_diff / 3600)) hours, $((($test_diff / 60) % 60)) minutes and $(($test_diff % 60)) seconds elapsed.
+echo "Rust Test Time: $(($test_diff / 3600)) hours, $((($test_diff / 60) % 60)) minutes and $(($test_diff % 60)) seconds elapsed."
 diff=$(($end-$start))
-echo "Rust Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed.
+echo "Rust Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."
