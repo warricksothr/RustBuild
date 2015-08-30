@@ -27,7 +27,7 @@ set -e
 
 # Set the build procs to 1 less than the number of cores/processors available,
 # but always atleast 1 if there's only one processor/core
-if [ ! $BUILD_PROCS -gt 1 ]; BUILD_PROCS=1;
+if [ ! $BUILD_PROCS -gt 1 ]; BUILD_PROCS=1; fi
 
 # Set the channel
 if [ ! -z $1 ]; then
