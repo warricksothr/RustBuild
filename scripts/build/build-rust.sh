@@ -18,7 +18,7 @@ set -e
 : ${DIST_DIR:=~/dist}
 : ${DROPBOX:=~/dropbox_uploader.sh}
 : ${DROPBOX_SAVE_ROOT:=.}
-: ${MAX_NUMBER_OF_NIGHTLIES:=5}
+: ${MAX_NUMBER_OF_BUILDS:=5}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
 # The number of process we should use while building
@@ -80,7 +80,7 @@ esac
 SNAP_HASH=$(head -n 1 src/snapshots.txt | tr -s ' ' | cut -d ' ' -f 3)
 
 # Check if the snapshot is available
-SNAP_TARBALL=$($DROPBOX list snapshots | grep $SNAP_HASH | grep tar)
+SNAP_TARBALL=$($DROPBOX list snapshots | grep $SNAP_HASH | grep \.tar)
 if [ -z "$SNAP_TARBALL" ]; then
   exit 1
 fi
@@ -141,9 +141,9 @@ fi
 rm $TARBALL
 
 # delete older nightlies
-NUMBER_OF_BUILDS=$($DROPBOX list ${DROPBOX_SAVE_ROOT} | grep rust- | grep tar | wc -l)
+NUMBER_OF_BUILDS=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep \.tar | wc -l)
 for i in $(seq `expr $MAX_NUMBER_OF_BUILDS + 1` $NUMBER_OF_BUILDS); do
-  OLDEST_BUILD=$($DROPBOX list . | grep rust- | grep tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+  OLDEST_BUILD=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep \.tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
   $DROPBOX delete $OLDEST_BUILD
   OLDEST_TEST_OUTPUT=$(echo $OLDEST_BUILD | cut -d '-' -f 1-5).test.output.txt
   $DROPBOX delete $OLDEST_TEST_OUTPUT || true
