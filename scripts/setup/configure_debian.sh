@@ -27,6 +27,10 @@ done
 apt-get update -qq
 apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache clang/testing gcc g++ cmake file build-essential pkg-config
 
+# Configure the correct alternatives on the system to ensure we're using clang and clang++ 
+# where we should instead of gcc and g++
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang --slave /usr/bin/g++ g++ /usr/bin/clang++
+
 # Run the dropbox uploader configuration script
 cd ~
 bash dropbox_uploader.sh
