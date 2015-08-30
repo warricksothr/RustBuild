@@ -18,5 +18,11 @@ fi
 
 $BASH_SHELL $BUILD_SNAPSHOT_SCRIPT $CHANNEL
 $BASH_SHELL $BUILD_RUST_SCRIPT $CHANNEL
-$BASH_SHELL $BUILD_CARGO_SCRIPT $CHANNEL
+#Only need to build cargo with the nightlies as they have no beta/stable branch yet
+case $CHANNEL in
+  nightly)
+    $BASH_SHELL $BUILD_CARGO_SCRIPT
+    ;;
+  *);;
+esac
 

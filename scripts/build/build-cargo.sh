@@ -29,13 +29,10 @@ cd $SRC_DIR
 git checkout .
 git checkout master
 git pull
-
-# optionally checkout older commit
-git checkout $1
 git submodule update
 
-#Parse the version from the make file
-VERSION=$(cat mk/main.mk | grep CFG_RELEASE_NUM | head -n 1 | sed -e "s/.*=//")
+#Parse the version from the cargo config file
+VERSION=$(cat Cargo.toml | grep version | head -n 1 | sed -e "s/.*= //" | sed 's/"//g')
 
 # apply patch to link statically against libssl
 git apply /build/patches/static-ssl.patch

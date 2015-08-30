@@ -35,6 +35,7 @@ if [ ! -z $1 ]; then
 fi
 
 # Configure the build
+DESCRIPTOR=$CHANNEL
 case $CHANNEL in
   stable)
     CHANNEL=--release-channel=$CHANNEL
@@ -45,7 +46,6 @@ case $CHANNEL in
     BRANCH=beta
   ;;
   nightly) 
-    CHANNEL_DESCRIPTOR=
     CHANNEL=;;
   *) 
     echo "unknown release channel: $CHANNEL" && exit 1
@@ -65,12 +65,12 @@ VERSION=$(cat mk/main.mk | grep CFG_RELEASE_NUM | head -n 1 | sed -e "s/.*=//")
 
 case $DESCRIPTOR in
   stable | beta )
-    DROPBOX_SAVE_ROOT:="${VERSION}-${CHANNEL_DESCRIPTOR}"
+    DROPBOX_SAVE_ROOT:="${VERSION}-${DESCRIPTOR}/"
   ;;
   nightly)
   ;;
   *) 
-    echo "unknown release channel: $CHANNEL" && exit 1
+    echo "unknown release channel: $DESCRIPTOR" && exit 1
   ;;
 esac
 
@@ -130,7 +130,10 @@ TARBALL=$TARBALL-$TARBALL_HASH.tar.gz
 
 # ship it
 if [ -z $DONTSHIP ]; then
-  $DROPBOX mkdir ${DROPBOX_SAVE_ROOT}
+  // Try and create the director if this is not a nightly
+  if [ $DESCRIPTOR -ne "nightly" ]; then
+    $DROPBOX mkdir ${DROPBOX_SAVE_ROOT}
+  fi
   $DROPBOX -p upload $TARBALL ${DROPBOX_SAVE_ROOT}
 fi
 rm $TARBALL
@@ -157,7 +160,7 @@ if [ -z $DONTTEST ]; then
   uname -a > $LOGFILE
   echo >> $LOGFILE
   cat $LOGFILE > $LOGFILE_FAILED
-  RUST_TEST_THREADS=$(nproc) timeout 7200 make check -k >>$LOGFILE 2>&1 || true
+  RUST_TEST_THREADS=$BUILD_PROCS timeout 7200 make check -k >>$LOGFILE 2>&1 || true
   cat $LOGFILE | grep "FAILED" >> $LOGFILE_FAILED
   $DROPBOX -p upload $LOGFILE ${DROPBOX_SAVE_ROOT}
   $DROPBOX -p upload $LOGFILE_FAILED ${DROPBOX_SAVE_ROOT}
