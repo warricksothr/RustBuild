@@ -55,7 +55,7 @@ fi
 # install cargo nightly
 cd $CARGO_NIGHTLY_DIR
 rm -rf *
-CARGO_NIGHTLY=$($DROPBOX list . | grep cargo- | grep \.tar | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+CARGO_NIGHTLY=$($DROPBOX list . | grep cargo- | grep -F .tar | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
 $DROPBOX -p download $CARGO_NIGHTLY
 tar xzf $CARGO_NIGHTLY
 rm $CARGO_NIGHTLY
@@ -66,7 +66,7 @@ export LD_LIBRARY_PATH="$LIBSSL_DIST_DIR/lib:$RUST_NIGHTLY_DIR/lib:$CARGO_NIGHTL
 # nightlies available.
 # FIXME the right way to do this would use the date in the src/rustversion.txt
 # file
-for RUST_NIGHTLY in $($DROPBOX list . | grep rust- | grep \.tar | tr -s ' ' | cut -d ' ' -f 4 | sort -r); do
+for RUST_NIGHTLY in $($DROPBOX list . | grep rust- | grep -F .tar | tr -s ' ' | cut -d ' ' -f 4 | sort -r); do
   ## install nigthly rust
   cd $RUST_NIGHTLY_DIR
   rm -rf *
@@ -116,9 +116,9 @@ for RUST_NIGHTLY in $($DROPBOX list . | grep rust- | grep \.tar | tr -s ' ' | cu
   rm $TARBALL
 
   # delete older nightlies
-  NUMBER_OF_NIGHTLIES=$($DROPBOX list . | grep cargo- | grep \.tar | wc -l)
+  NUMBER_OF_NIGHTLIES=$($DROPBOX list . | grep cargo- | grep -F .tar | wc -l)
   for i in $(seq `expr $MAX_NUMBER_OF_NIGHTLIES + 1` $NUMBER_OF_NIGHTLIES); do
-    OLDEST_NIGHTLY=$($DROPBOX list . | grep cargo- | grep \.tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+    OLDEST_NIGHTLY=$($DROPBOX list . | grep cargo- | grep -F .tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
     $DROPBOX delete $OLDEST_NIGHTLY
     OLDEST_TEST_OUTPUT=$(echo $OLDEST_NIGHTLY | cut -d '-' -f 1-5).test.output.txt
     $DROPBOX delete $OLDEST_TEST_OUTPUT || true

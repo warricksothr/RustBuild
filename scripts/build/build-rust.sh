@@ -80,7 +80,7 @@ esac
 SNAP_HASH=$(head -n 1 src/snapshots.txt | tr -s ' ' | cut -d ' ' -f 3)
 
 # Check if the snapshot is available
-SNAP_TARBALL=$($DROPBOX list snapshots | grep $SNAP_HASH | grep \.tar)
+SNAP_TARBALL=$($DROPBOX list snapshots | grep $SNAP_HASH | grep -F .tar)
 if [ -z "$SNAP_TARBALL" ]; then
   exit 1
 fi
@@ -141,9 +141,9 @@ fi
 rm $TARBALL
 
 # delete older nightlies
-NUMBER_OF_BUILDS=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep \.tar | wc -l)
+NUMBER_OF_BUILDS=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar | wc -l)
 for i in $(seq `expr $MAX_NUMBER_OF_BUILDS + 1` $NUMBER_OF_BUILDS); do
-  OLDEST_BUILD=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep \.tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+  OLDEST_BUILD=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
   $DROPBOX delete $OLDEST_BUILD
   OLDEST_TEST_OUTPUT=$(echo $OLDEST_BUILD | cut -d '-' -f 1-5).test.output.txt
   $DROPBOX delete $OLDEST_TEST_OUTPUT || true
