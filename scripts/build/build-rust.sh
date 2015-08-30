@@ -14,7 +14,6 @@ set -e
 
 : ${CHANNEL:=nightly}
 : ${DESCRIPTOR:=nightly}
-: ${CHANNEL_DESCRIPTOR:=${DESCRIPTOR}-}
 : ${BRANCH:=master}
 : ${DIST_DIR:=~/dist}
 : ${DROPBOX:=~/dropbox_uploader.sh}
@@ -33,6 +32,8 @@ if [ ! $BUILD_PROCS -gt 1 ]; then BUILD_PROCS=1; fi
 if [ ! -z $1 ]; then
   CHANNEL=$1
 fi
+
+: ${CHANNEL_DESCRIPTOR:=${DESCRIPTOR}-}
 
 # Configure the build
 DESCRIPTOR=$CHANNEL
@@ -130,7 +131,7 @@ TARBALL=$TARBALL-$TARBALL_HASH.tar.gz
 
 # ship it
 if [ -z $DONTSHIP ]; then
-  // Try and create the director if this is not a nightly
+  # Try and create the director if this is not a nightly
   if [ $DESCRIPTOR -ne "nightly" ]; then
     $DROPBOX mkdir ${DROPBOX_SAVE_ROOT}
   fi
