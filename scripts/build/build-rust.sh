@@ -102,6 +102,13 @@ TARBALL=rust-$VERSION-${CHANNEL_DESCRIPTOR}$HEAD_DATE-$HEAD_HASH-arm-unknown-lin
 LOGFILE=rust-$VERSION-${CHANNEL_DESCRIPTOR}$HEAD_DATE-$HEAD_HASH.test.output.txt
 LOGFILE_FAILED=rust-$VERSION-${CHANNEL_DESCRIPTOR}$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
+# Check to see if we've already built one
+# If so, skip this build and call it good!
+if [ ! -z "$($DROPBOX list $DROPBOX_SAVE_ROOT | grep $HEAD_DATE-$HEAD_HASH)" ]; then
+  echo "We've already built this version. Skipping!"
+  exit 0
+fi
+
 # build it
 cd build
 ../configure \
