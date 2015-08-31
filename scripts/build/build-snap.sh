@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # I run this in Debian Jessie container with the following command:
 #
