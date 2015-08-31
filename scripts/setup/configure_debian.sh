@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # This is the script that installs the required dependencies and runs the final setups on the system
 
@@ -9,7 +9,7 @@ set -e
 : ${OPENSSL_SRC:=$OPENSSL_DIR/openssl_src}
 
 # Determine the fastest host to use for updating
-apt-get install --allow-unauthenticated --qq netstat-apt
+apt-get install --allow-unauthenticated -qq netselect-apt
 netselect-apt
 NEW_HOST=$(cat sources.list | grep deb | head -n 1 | sed 's/deb http:\/\///' | sed 's/\/debian\/ stable.*//')
 rm sources.list
@@ -24,8 +24,8 @@ do
   echo "$UPDATED" > $f
 done
 
-apt-get update -qq
-apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache clang/testing gcc g++ cmake file build-essential pkg-config
+apt-get update
+apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache clang gcc g++ cmake file build-essential pkg-config
 
 # Configure the correct alternatives on the system to ensure we're using clang and clang++ 
 # where we should instead of gcc and g++

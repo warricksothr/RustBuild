@@ -1,4 +1,4 @@
-#!bin/env bash
+#!/usr/bin/env bash
 
 # This is a script to build a snapshot, rust and cargo binary
 
