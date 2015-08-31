@@ -24,8 +24,8 @@ do
   echo "$UPDATED" > $f
 done
 
-apt-get update -qq
-apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache clang/testing gcc g++ cmake file build-essential pkg-config
+apt-get update
+apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache clang gcc g++ cmake file build-essential pkg-config
 
 # Configure the correct alternatives on the system to ensure we're using clang and clang++ 
 # where we should instead of gcc and g++
