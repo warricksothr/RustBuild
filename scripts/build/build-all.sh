@@ -8,7 +8,7 @@ set -e
 : ${BUILD_SNAPSHOT_SCRIPT:=build_snap.sh}
 : ${BUILD_RUST_SCRIPT:=build_rust.sh}
 : ${BUILD_CARGO_SCRIPT:=build_cargo.sh}
-: ${BASH_SHELL:=/bin/env bash}
+: ${BASH_SHELL:=/usr/bin/env bash}
 #Defaults to the nightly branch
 : ${CHANNEL:=nightly}
 
