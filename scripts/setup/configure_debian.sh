@@ -9,7 +9,7 @@ set -e
 : ${OPENSSL_SRC:=$OPENSSL_DIR/openssl_src}
 
 # Determine the fastest host to use for updating
-apt-get install --allow-unauthenticated --qq netstat-apt
+apt-get install --allow-unauthenticated -qq netselect-apt
 netselect-apt
 NEW_HOST=$(cat sources.list | grep deb | head -n 1 | sed 's/deb http:\/\///' | sed 's/\/debian\/ stable.*//')
 rm sources.list
