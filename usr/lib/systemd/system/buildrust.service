@@ -1,0 +1,6 @@
+[Unit]
+Description=BuildRust
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/BuildRust.sh
