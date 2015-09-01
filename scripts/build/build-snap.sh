@@ -43,7 +43,7 @@ case $CHANNEL in
   nightly);;
   tag-*)
     # Allow custom branches to be requested
-    BRANCH="$(echo $CHANNEL |  $(sed 's/tag-//') ."
+    BRANCH=$(echo $CHANNEL | $(sed 's/tag-//') .
   ;;
   *) 
     echo "unknown release channel: $CHANNEL" && exit 1
@@ -62,6 +62,7 @@ git submodule update
 LAST_SNAP_HASH=$(head src/snapshots.txt | head -n 1 | tr -s ' ' | cut -d ' ' -f 3)
 if [ ! -z "$($DROPBOX list snapshots | grep $LAST_SNAP_HASH)" ]; then
   # already there, nothing left to do
+  echo "Latest snapshot already exists: $LAST_SNAP_HASH"
   exit 0
 fi
 

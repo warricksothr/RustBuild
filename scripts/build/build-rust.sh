@@ -51,7 +51,7 @@ case $CHANNEL in
     CHANNEL=;;
   tag-*)
     # Allow custom branches to be requested
-    BRANCH="$(echo $CHANNEL |  $(sed 's/tag-//') ."
+    BRANCH=$(echo $CHANNEL |  $(sed 's/tag-//') .
     CHANNEL=;;
   ;;
   *) 
@@ -74,7 +74,7 @@ case $DESCRIPTOR in
   stable | beta )
     DROPBOX_SAVE_ROOT="${VERSION}-${DESCRIPTOR}/"
   ;;
-  nightly || tag-*)
+  nightly | tag-*)
   ;;
   *) 
     echo "unknown release channel: $DESCRIPTOR" && exit 1
