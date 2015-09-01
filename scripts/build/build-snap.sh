@@ -17,6 +17,9 @@ set -e
 : ${DROPBOX:=~/dropbox_uploader.sh}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
+# Determines if we can't get the second to last snapshot, if we should try with
+# the oldest, or just fail.
+: ${FAIL_TO_OLDEST_SNAP:=true}
 # The number of process we should use while building
 : ${BUILD_PROCS:=$(($(nproc)-1))}
 
@@ -38,6 +41,10 @@ case $CHANNEL in
     BRANCH=beta
   ;;
   nightly);;
+  tag-*)
+    # Allow custom branches to be requested
+    BRANCH=$(echo $CHANNEL |  $$sed 's/tag-//')
+  ;;
   *) 
     echo "unknown release channel: $CHANNEL" && exit 1
   ;;
@@ -61,9 +68,24 @@ fi
 #This is the second to last snapshot. This is the snapshot that should be used to build the next one
 SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n 2p | tr -s ' ' | cut -d ' ' -f 3)
 if [ -z "$($DROPBOX list snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
-  # not here, we need this snapshot to continue
-  echo "Need snapshot ${SECOND_TO_LAST_SNAP_HASH} to compile snapshot compiler ${LAST_SNAP_HASH}"
-  exit 1
+  if [ $FAIL_TO_OLDEST_SNAP -eq "true" ]; then
+    snap_count=$(cat src/snapshots.txt | grep "S " | wc -l)
+    for pos in 'seq 3 $snap_count'; do
+      SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n ${pos}p | tr -s ' ' | cut -d ' ' -f 3)
+      if [ -z "$($DROPBOX list snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
+        if [ $pos -eq $snap_count ]; then
+          echo "No snapshot older than  ${LAST_SNAP_HASH} available. Need an older snapshot to build a current snapshot"
+          exit 1
+        else
+          continue
+        fi
+      fi
+    done
+  else
+    # not here, we need this snapshot to continue
+    echo "Need snapshot ${SECOND_TO_LAST_SNAP_HASH} to compile snapshot compiler ${LAST_SNAP_HASH}"
+    exit 1
+  fi
 fi
 
 # Use the second to last snapshot to build the next snapshot
