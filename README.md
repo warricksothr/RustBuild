@@ -35,7 +35,7 @@ Alternatively you can use the following to also build beta and stable releases
 ```bash
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-snap.sh beta
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-rust.sh beta
-systemd-nspawn /chroots/<name of container> /bin/bash ~/build-cargo.sh betadd
+systemd-nspawn /chroots/<name of container> /bin/bash ~/build-cargo.sh beta
 ```
 
 ##Stable
