@@ -43,7 +43,7 @@ case $CHANNEL in
   nightly);;
   tag-*)
     # Allow custom branches to be requested
-    BRANCH=$(echo $CHANNEL |  $$sed 's/tag-//')
+    BRANCH="$(echo $CHANNEL |  $(sed 's/tag-//') ."
   ;;
   *) 
     echo "unknown release channel: $CHANNEL" && exit 1
