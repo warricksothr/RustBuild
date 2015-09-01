@@ -121,17 +121,25 @@ if [ -z "$CARGO_DIST" ]; then
   CARGO_DIST_DIR=$CARGO_NIGHTLY_DIR
   BUILD_WITH_NIGHTLY_CARGO=true
 fi
-# Clean the cargo directory
+# Clean the cargo directory (if necessary)
 cd $CARGO_DIST_DIR
-rm -rf *
-CARGO_DIST_PATH=$CARGO_DIST
-if [ $BUILD_WITH_NIGHTLY_CARGO -eq 1 && "$DROPBOX_DIR" != "." ]; then
-  CARGO_DIST_PATH="${DROPBOX_DIR}${CARGO_DIST}"
+
+# Get info about the currently installed version
+INSTALLED_CARGO_VERSION=$(cat VERSION)
+if [ "$CARGO_DIST" != "$INSTALLED_CARGO_VERSION" ]; then
+  rm -rf *
+  CARGO_DIST_PATH=$CARGO_DIST
+  if [ $BUILD_WITH_NIGHTLY_CARGO -eq 1 && "$DROPBOX_DIR" != "." ]; then
+    CARGO_DIST_PATH="${DROPBOX_DIR}${CARGO_DIST}"
+  fi
+  # download the latest and deploy it
+  $DROPBOX -p download $CARGO_DIST_PATH
+  tar xzf $CARGO_DIST
+  rm $CARGO_DIST
+  echo "$CARGO_DIST" > VERSION
+else
+  echo "Installed Cargo version $INSTALLED_CARGO_VERSION matches the requested Cargo version $CARGO_DIST. No need to re-download our existing install."
 fi
-# download the latest and deploy it
-$DROPBOX -p download $CARGO_DIST_PATH
-tar xzf $CARGO_DIST
-rm $CARGO_DIST
 
 export LD_LIBRARY_PATH="$LIBSSL_DIST_DIR/lib:$RUST_DIST_DIR/lib:$CARGO_DIST_DIR/lib:LD_LIBRARY_PATH"
 
@@ -141,17 +149,24 @@ export LD_LIBRARY_PATH="$LIBSSL_DIST_DIR/lib:$RUST_DIST_DIR/lib:$CARGO_DIST_DIR/
 # FIXME the right way to do this would use the date in the src/rustversion.txt
 # file
 for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -s ' ' | cut -d ' ' -f 4 | sort -r); do
-  ## install nigthly rust
+  ## install rust dist
   cd $RUST_DIST_DIR
-  rm -rf *
-
-  RUST_DIST_PATH=$RUST_DIST
-  if [ "$DROPBOX_DIR" != "." ]; then
-    RUST_DIST_PATH="${DROPBOX_DIR}${RUST_DIST}"
+  
+  # Get info about the currentl installed Rust distribution
+  INSTALLED_RUST_VERSION=$(cat VERSION)
+  if [ "$RUST_DIST" != "$INSTALLED_RUST_DIST" ]; then
+    rm -rf *
+    RUST_DIST_PATH=$RUST_DIST
+    if [ "$DROPBOX_DIR" != "." ]; then
+       RUST_DIST_PATH="${DROPBOX_DIR}${RUST_DIST}"
+    fi
+    $DROPBOX -p download $RUST_DIST_PATH
+    tar xzf $RUST_DIST
+    rm $RUST_DIST
+    echo "$RUST_DIST" > VERSION
+  else
+    echo "Installed Rust version $INSTALLED_RUST_VERSION matches the requested Rust version $RUST_DIST. No need to re-download our existing install."
   fi
-  $DROPBOX -p download $RUST_DIST_PATH
-  tar xzf $RUST_DIST
-  rm $RUST_DIST
 
   ## test rust and cargo nightlies
   $RUST_DIST_DIR/bin/rustc -V
