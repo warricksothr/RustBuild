@@ -48,11 +48,12 @@ case $CHANNEL in
     BRANCH=beta
   ;;
   nightly) 
-    CHANNEL=;;
+    CHANNEL=
+  ;;
   tag-*)
     # Allow custom branches to be requested
     BRANCH=$(echo $CHANNEL |  $(sed 's/tag-//') .
-    CHANNEL=;;
+    CHANNEL=
   ;;
   *) 
     echo "unknown release channel: $CHANNEL" && exit 1

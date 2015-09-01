@@ -15,6 +15,7 @@ fi
 : ${ROOT:=/chroots/$CHROOT_NAME}
 : ${CHROOT_HOME:=$ROOT/root}
 : ${BUILD:=$ROOT/build}
+: ${OPT:=$ROOT/opt}
 : ${OPENSSL_DIR:=$BUILD/openssl}
 : ${OPENSSL_VER:=OpenSSL_1_0_2d}
 : ${OPENSSL_SRC_DIR:=$OPENSSL_DIR/openssl_src}
@@ -22,8 +23,10 @@ fi
 cd $ROOT
 mkdir -p $BUILD
 mkdir -p $BUILD/{snapshot,patches}
-mkdir -p $BUILD/nightly/{cargo,rust}
 mkdir -p $BUILD/openssl/{dist,openssl_src}
+
+# Make the opt directories for our cargo and rust builds
+mkdir -p $OPT/rust_{nightly,beta,stable}/{cargo,rust}
 
 # Get the Rust and Cargo projects
 cd $BUILD
