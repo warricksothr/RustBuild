@@ -92,10 +92,21 @@ fi
 # Use the second to last snapshot to build the next snapshot
 # setup snapshot
 cd $SNAP_DIR
-rm -rf *
-SNAP_TARBALL=$($DROPBOX list snapshots | grep ${SECOND_TO_LAST_SNAP_HASH}- | tr -s ' ' | cut -d ' ' -f 4)
-$DROPBOX -p download snapshots/$SNAP_TARBALL
-tar xjf $SNAP_TARBALL --strip-components=1
+# Only need to download if our current snapshot is not at the right version
+INSTALLED_SNAPSHOT_VERSION=
+if [ -f VERSION ]; then
+  INSTALLED_SNAPSHOT_VERSION=$(cat VERSION)
+fi
+if [ "$SNAP_TARBALL" != "$INSTALLED_SNAPSHOT_VERSION" ]; then
+  rm -rf *
+  SNAP_TARBALL=$($DROPBOX list snapshots | grep ${SECOND_TO_LAST_SNAP_HASH}- | tr -s ' ' | cut -d ' ' -f 4)
+  $DROPBOX -p download snapshots/$SNAP_TARBALL
+  tar xjf $SNAP_TARBALL --strip-components=1
+  rm $SNAP_TARBALL
+  echo "$SNAP_TARBALL" > VERSION
+else
+  echo "Requested snapshot $SNAP_TARBALL already installed, no need to re-download and install."
+fi
 
 # build it
 cd $SRC_DIR
@@ -123,7 +134,7 @@ $DROPBOX -p upload rust-stage0-* snapshots
 rm rust-stage0-*
 
 # cleanup
-rm -rf $SNAP_DIR/*
+#rm -rf $SNAP_DIR/*
 
 end=$(date +"%s")
 diff=$(($end-$start))
