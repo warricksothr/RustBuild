@@ -6,7 +6,9 @@ Scripts and patches to auto build Rust and Cargo on ARM
 This repository contains the required setup/configuration/build scripts and patches for you to setup your own Rust compilation machine. Pre-built 'unofficial' Rust/Cargo binaries are listed below.
 
 # Binary Downloads
-## [Unoffical Binaries](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
+## [Unofficial Nightly Binaries (1.4.0)](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
+## [Unofficial Beta Binaries (1.3.0)](https://www.dropbox.com/sh/y5b1lsdjfy7iwnr/AADc5hlMHJ5u7q-AYtS0Z5zqa?dl=0)
+## [Unofficial Stable Binaries (1.2.0)](https://www.dropbox.com/sh/t7zj60r3zxn2a7n/AADKMDSVhb0oSeGbuDzeD6yZa?dl=0)
 
 # Usage Instructions
 Run # /bin/bash scripts/setup/build_debian_root.sh <name of container> to build a new container from scratch
@@ -25,7 +27,7 @@ systemd-nspawn /chroots/<name of container> /bin/bash ~/build-rust.sh
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-cargo.sh
 ```
 
-This will build the most recent nightly by, first botstrapping my oldest snapshot to build your own newer snapshot, then compiling a new rust from your new snapshot, finally building cargo from your snapshot and rustc. These will all be uploaded to the root directory of the app folder for immediate use.
+This will build the most recent nightly by, first bootstrapping my oldest snapshot to build your own newer snapshot, then compiling a new rust from your new snapshot, finally building cargo from your snapshot and rustc. These will all be uploaded to the root directory of the app folder for immediate use.
 
 Alternatively you can use the following to also build beta and stable releases
 
@@ -43,7 +45,7 @@ systemd-nspawn /chroots/<name of container> /bin/bash ~/build-rust.sh stable
 systemd-nspawn /chroots/<name of container> /bin/bash ~/build-cargo.sh stable
 ```
 
-**NOTE:** Neither the beta or stable tags support a unique version of cargo as cargo is still sub 1.0. So passing a tag currently doesn't do anything special, but may in the future.
+**NOTE:** The beta/stable tags on the cargo builder do not mean the beta/stable channels of Cargo. Cargo is currently sub 1.0.0 so there is nothing but the nightly branch. However the beta/stable tags mean to build cargo with the latest version of the beta/stable rust compiler and cargo (nightly cargo if no previous cargo exists). This means that the beta/stable version of Cargo should be less prone to issues over the nightly compiled Cargo.
 
 # More Information
 I run this on a ODROID XU4 running the latest Arch linux and 3.10 HMP kernel with a 32GB eMMC. I have yet to have a memory failure on the eMMC, but it does get heavy usage, so I am considering a ramdrive as the ODROID XU4 has 2gb, and the Arch system + build container running barely reach 800MB during peak compilation.
@@ -72,6 +74,9 @@ These scripts are configured to compile the snapshots and full rust compilers wi
 - [ ] consider a raspbian root in addition to the jessie one for raspberry pi support
 - [ ] rebuild dropbox directory structure to support multiple difference architectures
 - [ ] build a caching script around the dropbox upload script to reduce network usage for recently built snapshots (and maybe nightlies)
+- [x] build cargo with the latest stable/beta rust versions in addition to the nightly
+- [ ] find a way to store version info on the latest stable/beta cargo and rust installed to /opt/rust_{beta,stable} so we can avoid having to re-download and deploy those versions that don't change regularly.
+- [ ] work on integrating multirust with the /opt/rust_{stable,beta,nightly} instead of managing our paths directly in the build scripts. Additionally this will allow the build machine to work on more than the latest versions of rust and cargo and act as a build machine for other rust code without needing a complex bootstrapping process.
 
 # License
 All scripts/patches in this repository are licensed under the MIT license.
