@@ -155,7 +155,8 @@ case $COMMAND in
     # Delete our locally cached files/directories and then pass the command along to the
     # dropbox script
     proxy "$@"
-    rm -r "${CACHE_DIR}/${REAL_PARAMETERS_ARRAY[1]}"
+    # Try to remove the file from cache if it exists, otherwise exit successfully
+    rm -r "${CACHE_DIR}/${REAL_PARAMETERS_ARRAY[1]}" || exit 0
   ;;
   mkdir)
     # Create the directory in our cache, and then pass the command along to the dropbox script
