@@ -190,6 +190,7 @@ if [ -z $DONTTEST ]; then
   uname -a > $LOGFILE
   echo >> $LOGFILE
   cat $LOGFILE > $LOGFILE_FAILED
+  # Run the tests with x threads, use the timeout util to prevent running more than 120 minutes
   RUST_TEST_THREADS=$BUILD_PROCS timeout 7200 make check -k >>$LOGFILE 2>&1 || true
   cat $LOGFILE | grep "FAILED" >> $LOGFILE_FAILED
   $DROPBOX -p upload $LOGFILE ${DROPBOX_SAVE_ROOT}

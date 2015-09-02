@@ -275,11 +275,9 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
   if [ -z $DONTTEST ]; then
     cd $SRC_DIR
     uname -a > $LOGFILE
-    uname -a > $LOGFILE_FAILED
     $RUST_DIST_DIR/bin/rustc -V >> $LOGFILE
-    $RUST_DIST_DIR/bin/rustc -V >> $LOGFILE_FAILED
     echo >> $LOGFILE
-    echo >> $LOGFILE_FAILED
+    cat $LOGFILE > $LOGFILE_FAILED
     RUST_TEST_THREADS=$(nproc) make test -k >>$LOGFILE 2>&1 || true
     cat $LOGFILE | grep "FAILED" >> $LOGFILE_FAILED
     $DROPBOX -p upload $LOGFILE $DROPBOX_DIR
