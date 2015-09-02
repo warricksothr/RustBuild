@@ -51,8 +51,8 @@ set -e
 shopt -s extglob
 
 : ${CHROOT_DIR:=/chroots}
-: ${DEBIAN_VERSION:=jessie}
-: ${CHROOT_NAME:=RustBuild}
+: ${DEBIAN_VERSION:=wheezy}
+: ${CHROOT_NAME:=RustBuild-raspbian}
 : ${ARCH_NAME:="--arch=armhf"}
 # List of supported architectures
 : ${SUPPORTED_ARCHITECTURE:="[armhf,armel,mips,mipsel,amd64,i386]"}
@@ -93,6 +93,6 @@ fi
 
 mkdir -p $CHROOT_DIR
 cd $CHROOT_DIR
-debootstrap $ARCH_NAME $DEBIAN_VERSION $CHROOT_NAME
+debootstrap $ARCH_NAME $DEBIAN_VERSION $CHROOT_NAME http://archive.raspbian.org/raspbian
 
-echo "Run 'setup_debian_root.sh $CHROOT_NAME' to configure the CHROOT with the required files and links."
+echo "Run 'raspbian_root_setup.sh $CHROOT_NAME <tag>' to configure the CHROOT with the required files and links."
