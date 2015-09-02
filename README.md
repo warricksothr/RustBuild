@@ -73,9 +73,9 @@ These scripts are configured to compile the snapshots and full rust compilers wi
 - [ ] look into cross compiling snapshots for other architectures to provide a baseline to allow others to easily build a rustc and cargo implementation for those platforms
 - [ ] consider a raspbian root in addition to the jessie one for raspberry pi support
 - [ ] rebuild dropbox directory structure to support multiple difference architectures
-- [ ] build a caching script around the dropbox upload script to reduce network usage for recently built snapshots (and maybe nightlies)
+- [x] build a caching script around the dropbox upload script to reduce network usage for recently built snapshots (and maybe nightlies)
 - [x] build cargo with the latest stable/beta rust versions in addition to the nightly
-- [ ] find a way to store version info on the latest stable/beta cargo and rust installed to /opt/rust_{beta,stable} so we can avoid having to re-download and deploy those versions that don't change regularly.
+- [x] find a way to store version info on the latest stable/beta cargo and rust installed to /opt/rust_{beta,stable} so we can avoid having to re-download and deploy those versions that don't change regularly.
 - [ ] work on integrating multirust with the /opt/rust_{stable,beta,nightly} instead of managing our paths directly in the build scripts. Additionally this will allow the build machine to work on more than the latest versions of rust and cargo and act as a build machine for other rust code without needing a complex bootstrapping process.
 
 # License
