@@ -94,67 +94,76 @@ fi
 COMMAND=${REAL_PARAMETERS_ARRAY[0]}
 case $COMMAND in
   download)
-  # Check our cache. If it exists there, copy that file and exit. If it doesn't download it 
-  # and then cache it for ourselves.
-  DOWNLOAD=${REAL_PARAMETERS_ARRAY[1]}
-  ORIG_IFS="$IFS"
-  IFS="/"
-  PATH_PARTS=($DOWNLOAD)
-  IFS=$ORIG_IFS
-  # Get the name of our target file/directory
-  END_CHAR=$(echo "$DOWNLOAD" | tr -s ' ' | tail -c 2)
-  TARGET=${PATH_PARTS[-1]}
-  if [ "$END_CHAR" == "/" ]; then
-    TARGET="${TARGET}/"
-  fi
-  if [ -e "${CACHE_DIR}/$DOWNLOAD" ]; then
-    # Need to parse the name from the path as we can download with path information
-    # Also needs to handle when we decide to pull an entire folder. So don't strip a trailing '/'
-    # check how old the existing file is
-    FILE_MODIFIED_TIME=$(stat -c %Y "${CACHE_DIR}/$DOWNLOAD")
-    CURRENT_TIME=$(date +%s)
-    AGE=$(((CURRENT_TIME - FILE_MODIFIED_TIME)))
-    if [ $AGE -le $MAX_LIFETIME ]; then
-      cp -r ${CACHE_DIR}/$DOWNLOAD $TARGET
-      # Exit early for flow reasons. Better to avoid extra if's and duplicated code
-      exit 0
+    # Check our cache. If it exists there, copy that file and exit. If it doesn't download it 
+    # and then cache it for ourselves.
+    # Path of the file we're downloading
+    DOWNLOAD=${REAL_PARAMETERS_ARRAY[1]}
+    
+    # Splitting out parts of the path, to know if we're dealing with a file or directory
+    ORIG_IFS="$IFS"
+    IFS="/"
+    PATH_PARTS=($DOWNLOAD)
+    IFS=$ORIG_IFS
+    
+    # Get the name of our target file/directory
+    END_CHAR=$(echo "$DOWNLOAD" | tr -s ' ' | tail -c 2)
+    TARGET=${PATH_PARTS[-1]}
+    if [ "$END_CHAR" == "/" ]; then
+      TARGET="${TARGET}/"
     fi
-  fi
-  # Need to make sure the requisite cache directory exists to save to
-  if [ ${#PATH_PARTS[@]} -gt 1 ]; then
-    PATH_LENGTH=${#PATH_PARTS[@]}
-    END_PATH_LENGTH=$(($PATH_LENGTH - 2))
-    TARGET_PATH=""
-    for i in "seq $END_PATH_ELEMENT"; do
-      TARGET_PATH="${TARGET_PATH}/${PATH_PARTS[$i]}"
-    done
-    mkdir -p "${CACHE_DIR}/${TARGET_PATH}"
-  fi
-  #echo $PWD
-  proxy "$@"
-  cp -r ${PWD}/$TARGET ${CACHE_DIR}/$DOWNLOAD
+   
+    # If our target file/directory exists in the cache, lets try that
+    if [ -e "${CACHE_DIR}/$DOWNLOAD" ]; then
+      # Need to parse the name from the path as we can download with path information
+      # Also needs to handle when we decide to pull an entire folder. So don't strip a trailing '/'
+      # check how old the existing file is
+      FILE_MODIFIED_TIME=$(stat -c %Y "${CACHE_DIR}/$DOWNLOAD")
+      CURRENT_TIME=$(date +%s)
+      AGE=$(((CURRENT_TIME - FILE_MODIFIED_TIME)))
+      if [ $AGE -le $MAX_LIFETIME ]; then
+        cp -r ${CACHE_DIR}/$DOWNLOAD $TARGET
+        # Exit early for flow reasons. Better to avoid extra if's and duplicated code
+        exit 0
+      fi
+    fi
+
+    # Need to make sure the requisite cache directory exists to save to
+    if [ ${#PATH_PARTS[@]} -gt 1 ]; then
+      PATH_LENGTH=${#PATH_PARTS[@]}
+      END_PATH_LENGTH=$(($PATH_LENGTH - 2))
+      TARGET_PATH=""
+      for i in "seq $END_PATH_ELEMENT"; do
+        TARGET_PATH="${TARGET_PATH}/${PATH_PARTS[$i]}"
+      done
+      mkdir -p "${CACHE_DIR}/${TARGET_PATH}"
+    fi
+
+    # If the above failed, we'll fall through to here and perform like we would've if the
+    # file didn't exist in the cache
+    proxy "$@"
+    cp -r ${PWD}/$TARGET ${CACHE_DIR}/$DOWNLOAD
   ;;
   upload)
-  # Cache the upload and then pass it along to the dropbox script
-  proxy "$@"
-  UPLOAD=${REAL_PARAMETERS_ARRAY[1]}
-  UPLOAD_LOCATION=${REAL_PARAMETERS_ARRAY[2]}
-  mkdir -p ${CACHE_DIR}/${UPLOAD_LOCATION}
-  cp -r $UPLOAD ${CACHE_DIR}/${UPLOAD_LOCATION}
+    # Cache the upload and then pass it along to the dropbox script
+    proxy "$@"
+    UPLOAD=${REAL_PARAMETERS_ARRAY[1]}
+    UPLOAD_LOCATION=${REAL_PARAMETERS_ARRAY[2]}
+    mkdir -p ${CACHE_DIR}/${UPLOAD_LOCATION}
+    cp -r $UPLOAD ${CACHE_DIR}/${UPLOAD_LOCATION}
   ;;
   delete)
-  # Delete our locally cached files/directories and then pass the command along to the
-  # dropbox script
-  proxy "$@"
-  rm -r "${CACHE_DIR}/${REAL_PARAMETERS_ARRAY[1]}"
+    # Delete our locally cached files/directories and then pass the command along to the
+    # dropbox script
+    proxy "$@"
+    rm -r "${CACHE_DIR}/${REAL_PARAMETERS_ARRAY[1]}"
   ;;
   mkdir)
-  # Create the directory in our cache, and then pass the command along to the dropbox script
-  proxy "$@"
-  mkdir -p "${CACHE_DIR}/${REAL_PARAMETERS_ARRAY[1]}"
+    # Create the directory in our cache, and then pass the command along to the dropbox script
+    proxy "$@"
+    mkdir -p "${CACHE_DIR}/${REAL_PARAMETERS_ARRAY[1]}"
   ;;
   *)
-  # Pass anything we don't recognize to the dropbox script so that we're transparent to the user
-  proxy "$@"
+    # Pass anything we don't recognize to the dropbox script so that we're transparent to the user
+    proxy "$@"
   ;;
 esac
