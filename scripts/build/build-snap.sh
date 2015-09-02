@@ -14,9 +14,12 @@ set -e
 
 : ${CHANNEL:=nightly}
 : ${BRANCH:=master}
-: ${DROPBOX:=~/dropbox_uploader.sh}
+: ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
+# Determines if we can't get the second to last snapshot, if we should try with
+# the oldest, or just fail.
+: ${FAIL_TO_OLDEST_SNAP:=true}
 # The number of process we should use while building
 : ${BUILD_PROCS:=$(($(nproc)-1))}
 
@@ -38,6 +41,10 @@ case $CHANNEL in
     BRANCH=beta
   ;;
   nightly);;
+  tag-*)
+    # Allow custom branches to be requested
+    BRANCH=$(echo $CHANNEL | $(sed 's/tag-//') .
+  ;;
   *) 
     echo "unknown release channel: $CHANNEL" && exit 1
   ;;
@@ -55,24 +62,51 @@ git submodule update
 LAST_SNAP_HASH=$(head src/snapshots.txt | head -n 1 | tr -s ' ' | cut -d ' ' -f 3)
 if [ ! -z "$($DROPBOX list snapshots | grep $LAST_SNAP_HASH)" ]; then
   # already there, nothing left to do
+  echo "Latest snapshot already exists: $LAST_SNAP_HASH"
   exit 0
 fi
 
 #This is the second to last snapshot. This is the snapshot that should be used to build the next one
 SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n 2p | tr -s ' ' | cut -d ' ' -f 3)
 if [ -z "$($DROPBOX list snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
-  # not here, we need this snapshot to continue
-  echo "Need snapshot ${SECOND_TO_LAST_SNAP_HASH} to compile snapshot compiler ${LAST_SNAP_HASH}"
-  exit 1
+  if [ $FAIL_TO_OLDEST_SNAP -eq "true" ]; then
+    snap_count=$(cat src/snapshots.txt | grep "S " | wc -l)
+    for pos in 'seq 3 $snap_count'; do
+      SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n ${pos}p | tr -s ' ' | cut -d ' ' -f 3)
+      if [ -z "$($DROPBOX list snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
+        if [ $pos -eq $snap_count ]; then
+          echo "No snapshot older than  ${LAST_SNAP_HASH} available. Need an older snapshot to build a current snapshot"
+          exit 1
+        else
+          continue
+        fi
+      fi
+    done
+  else
+    # not here, we need this snapshot to continue
+    echo "Need snapshot ${SECOND_TO_LAST_SNAP_HASH} to compile snapshot compiler ${LAST_SNAP_HASH}"
+    exit 1
+  fi
 fi
 
 # Use the second to last snapshot to build the next snapshot
 # setup snapshot
 cd $SNAP_DIR
-rm -rf *
-SNAP_TARBALL=$($DROPBOX list snapshots | grep ${SECOND_TO_LAST_SNAP_HASH}- | tr -s ' ' | cut -d ' ' -f 4)
-$DROPBOX -p download snapshots/$SNAP_TARBALL
-tar xjf $SNAP_TARBALL --strip-components=1
+# Only need to download if our current snapshot is not at the right version
+INSTALLED_SNAPSHOT_VERSION=
+if [ -f VERSION ]; then
+  INSTALLED_SNAPSHOT_VERSION=$(cat VERSION)
+fi
+if [ "$SNAP_TARBALL" != "$INSTALLED_SNAPSHOT_VERSION" ]; then
+  rm -rf *
+  SNAP_TARBALL=$($DROPBOX list snapshots | grep ${SECOND_TO_LAST_SNAP_HASH}- | tr -s ' ' | cut -d ' ' -f 4)
+  $DROPBOX -p download snapshots/$SNAP_TARBALL
+  tar xjf $SNAP_TARBALL --strip-components=1
+  rm $SNAP_TARBALL
+  echo "$SNAP_TARBALL" > VERSION
+else
+  echo "Requested snapshot $SNAP_TARBALL already installed, no need to re-download and install."
+fi
 
 # build it
 cd $SRC_DIR
@@ -100,7 +134,7 @@ $DROPBOX -p upload rust-stage0-* snapshots
 rm rust-stage0-*
 
 # cleanup
-rm -rf $SNAP_DIR/*
+#rm -rf $SNAP_DIR/*
 
 end=$(date +"%s")
 diff=$(($end-$start))

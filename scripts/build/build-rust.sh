@@ -16,7 +16,7 @@ set -e
 : ${DESCRIPTOR:=nightly}
 : ${BRANCH:=master}
 : ${DIST_DIR:=~/dist}
-: ${DROPBOX:=~/dropbox_uploader.sh}
+: ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
 : ${DROPBOX_SAVE_ROOT:=.}
 : ${MAX_NUMBER_OF_BUILDS:=5}
 : ${SNAP_DIR:=/build/snapshot}
@@ -48,7 +48,13 @@ case $CHANNEL in
     BRANCH=beta
   ;;
   nightly) 
-    CHANNEL=;;
+    CHANNEL=
+  ;;
+  tag-*)
+    # Allow custom branches to be requested
+    BRANCH=$(echo $CHANNEL |  $(sed 's/tag-//') .
+    CHANNEL=
+  ;;
   *) 
     echo "unknown release channel: $CHANNEL" && exit 1
   ;;
@@ -69,7 +75,7 @@ case $DESCRIPTOR in
   stable | beta )
     DROPBOX_SAVE_ROOT="${VERSION}-${DESCRIPTOR}/"
   ;;
-  nightly)
+  nightly | tag-*)
   ;;
   *) 
     echo "unknown release channel: $DESCRIPTOR" && exit 1
@@ -88,10 +94,20 @@ SNAP_TARBALL=$(echo $SNAP_TARBALL | tr -s ' ' | cut -d ' ' -f 3)
 
 # setup snapshot
 cd $SNAP_DIR
-rm -rf *
-$DROPBOX -p download snapshots/$SNAP_TARBALL
-tar xjf $SNAP_TARBALL --strip-components=1
-rm $SNAP_TARBALL
+# Only need to download if our current snapshot is not at the right version
+INSTALLED_SNAPSHOT_VERSION=
+if [ -f VERSION ]; then
+  INSTALLED_SNAPSHOT_VERSION=$(cat VERSION)
+fi
+if [ "$SNAP_TARBALL" != "$INSTALLED_SNAPSHOT_VERSION" ]; then
+  rm -rf *
+  $DROPBOX -p download snapshots/$SNAP_TARBALL
+  tar xjf $SNAP_TARBALL --strip-components=1
+  rm $SNAP_TARBALL
+  echo "$SNAP_TARBALL" > VERSION
+else
+  echo "Requested snapshot $SNAP_TARBALL already installed, no need to re-download and install."
+fi
 bin/rustc -V
 
 # Get information about HEAD
@@ -178,7 +194,7 @@ fi
 
 # cleanup
 rm -rf $DIST_DIR/*
-rm -rf $SNAP_DIR/*
+#rm -rf $SNAP_DIR/*
 
 end=$(date +"%s")
 test_diff=$(($end-$starttest))
