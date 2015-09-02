@@ -98,6 +98,7 @@ start_time="$(date +%s)"
 
 # update source to match upstream
 cd $SRC_DIR
+git checkout .
 git checkout master
 git pull
 git submodule update

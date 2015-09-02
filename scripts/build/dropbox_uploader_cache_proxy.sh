@@ -130,9 +130,9 @@ case $COMMAND in
     # Need to make sure the requisite cache directory exists to save to
     if [ ${#PATH_PARTS[@]} -gt 1 ]; then
       PATH_LENGTH=${#PATH_PARTS[@]}
-      END_PATH_LENGTH=$(($PATH_LENGTH - 2))
+      END_PATH_LENGTH=$(($PATH_LENGTH - 1))
       TARGET_PATH=""
-      for i in "seq $END_PATH_ELEMENT"; do
+      for ((i=0; i < $END_PATH_LENGTH; i++)); do
         TARGET_PATH="${TARGET_PATH}/${PATH_PARTS[$i]}"
       done
       mkdir -p "${CACHE_DIR}/${TARGET_PATH}"
