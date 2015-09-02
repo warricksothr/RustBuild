@@ -35,6 +35,9 @@ apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python c
 cd ~
 bash dropbox_uploader.sh
 
+# Make sure our tag directory exists
+bash dropbox_uploader.sh mkdir ${CONTAINER_TAG}
+
 # Build OpenSSL with the required information for use in building cargo
 cd $OPENSSL_SRC
 ./config -fPIC shared --prefix=$OPENSSL_DIR/dist
