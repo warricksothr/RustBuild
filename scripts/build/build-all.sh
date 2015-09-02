@@ -22,5 +22,5 @@ $BASH_SHELL $BUILD_RUST_SCRIPT $CHANNEL
 $BASH_SHELL $BUILD_CARGO_SCRIPT $CHANNEL
 end_time="$(date +%s)"
 running_time="$((end_time-start_time))"
-# Prints Days:Hours:Minutes:Seconds
+# Prints Hours:Minutes:Seconds
 printf "Elapsed Build Time: %02d:%02d:%02d\n" "$((running_time/3600%24))" "$((running_time/60%60))" "$((running_time%60))"
