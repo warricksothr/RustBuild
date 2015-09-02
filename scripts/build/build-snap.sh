@@ -9,6 +9,18 @@
 #     TERM=$TERM \
 #     systemd-nspawn /chroot/RustBuild/ /bin/bash ~/build-snap.sh
 
+#
+# This script will build a snapshot for a given rust branch, either based on
+# the tag, or the following branches (stable,beta,master)
+#
+# The goal of this script is to compile a standalone static snapshot the rust
+# compiler, to be used in the creation of full rust compilers and standard
+# libraries. This is the first step in the process of creating a rust compiler
+# from scratch. It depends on a previous compiler existing for the 
+# architecture. If one does not exist, then you'll need to cross compile a
+# snapshot build for the desired architecture.
+#
+
 set -x
 set -e
 
@@ -18,9 +30,11 @@ set -e
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
 # Determines if we can't get the second to last snapshot, if we should try with
-# the oldest, or just fail.
+# the oldest, or just fail. We default to true because we always want to try to
+# build a snapshot
 : ${FAIL_TO_OLDEST_SNAP:=true}
-# The number of process we should use while building
+# The number of process we should use while building. Set to the number of
+# processors available to the system, - 1.
 : ${BUILD_PROCS:=$(($(nproc)-1))}
 
 # Set the build procs to 1 less than the number of cores/processors available,
@@ -33,6 +47,7 @@ if [ ! -z $1 ]; then
 fi
 
 # Configure the build
+# Determine the branch that we'll use to build the snapshot
 case $CHANNEL in
   stable)
     BRANCH=stable
@@ -50,15 +65,17 @@ case $CHANNEL in
   ;;
 esac
 
+# Number of seconds since unix epoch, to use for documenting the time spent
+# building the snapshot
 start_time="$(date +%s)"
 
-# checkout latest rust $BRANCH
+# checkout the latest for the requested rust $BRANCH
 cd $SRC_DIR
 git checkout $BRANCH
 git pull
 git submodule update
 
-# check if the latest snapshot has already been built
+# Check if the latest snapshot has already been built
 LAST_SNAP_HASH=$(head src/snapshots.txt | head -n 1 | tr -s ' ' | cut -d ' ' -f 3)
 if [ ! -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $LAST_SNAP_HASH)" ]; then
   # already there, nothing left to do
@@ -66,7 +83,7 @@ if [ ! -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $LAST_SNAP_HASH)" ]
   exit 0
 fi
 
-#This is the second to last snapshot. This is the snapshot that should be used to build the next one
+# This is the second to last snapshot. This is the snapshot that should be used to build the next one
 SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n 2p | tr -s ' ' | cut -d ' ' -f 3)
 if [ -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
   if [ $FAIL_TO_OLDEST_SNAP -eq "true" ]; then
@@ -89,8 +106,7 @@ if [ -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_
   fi
 fi
 
-# Use the second to last snapshot to build the next snapshot
-# setup snapshot
+# Use the second to last snapshot to build the next snapshot setup snapshot
 cd $SNAP_DIR
 # Only need to download if our current snapshot is not at the right version
 INSTALLED_SNAPSHOT_VERSION=
@@ -108,7 +124,19 @@ else
   echo "Requested snapshot $SNAP_TARBALL already installed, no need to re-download and install."
 fi
 
-# build it
+# build the snapshot
+# --disable-docs to prevent documentation from being built
+# --disable-valgrind to prevent testing with valgrind
+# --enable-ccache to speed up the build by using a code cache
+# --enable-clang to use the clang compiler instead of gcc/g++
+# --disable-libcpp to instead use libstdc++ instead for clang
+# --enable-local-rust to use a prebuilt snapshot, instead of trying to download one
+# --enable-llvm-static-stdcpp ?
+# --local-rust/root=? this is where the local rust we said to use is located
+# --prefix=/ to prevent installing this to the system
+# --build=? the triple that represents the our build system?
+# --host=? the triple that represents our build system
+# --target=? the triple that represents the target system. Used for cross compiling
 cd $SRC_DIR
 git checkout $LAST_SNAP_HASH
 cd build
@@ -125,8 +153,11 @@ cd build
   --build=arm-unknown-linux-gnueabihf \
   --host=arm-unknown-linux-gnueabihf \
   --target=arm-unknown-linux-gnueabihf
+# Clean any previous builds
 make clean
+# Actually build the full rust compiler
 make -j $BUILD_PROCS
+# Create a static snapshot version for host triple
 make -j $BUILD_PROCS snap-stage3-H-arm-unknown-linux-gnueabihf
 
 # ship it

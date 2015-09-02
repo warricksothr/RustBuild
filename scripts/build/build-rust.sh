@@ -9,6 +9,10 @@
 #     TERM=$TERM \
 #     systemd-nspawn /chroot/RustBuild/ /bin/bash ~/build-rust.sh
 
+#
+# Builds the rust compiler with a previously built snapshot for the target
+#
+
 set -x
 set -e
 
@@ -195,7 +199,6 @@ fi
 
 # cleanup
 rm -rf $DIST_DIR/*
-#rm -rf $SNAP_DIR/*
 
 end_time="$(date +%s)"
 test_time=$(($end_time-$start_test_time))
