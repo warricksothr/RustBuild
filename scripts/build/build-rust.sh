@@ -16,7 +16,7 @@ set -e
 : ${DESCRIPTOR:=nightly}
 : ${BRANCH:=master}
 : ${DIST_DIR:=~/dist}
-: ${DROPBOX:=~/dropbox_uploader.sh}
+: ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
 : ${DROPBOX_SAVE_ROOT:=.}
 : ${MAX_NUMBER_OF_BUILDS:=5}
 : ${SNAP_DIR:=/build/snapshot}

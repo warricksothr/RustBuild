@@ -14,7 +14,7 @@ set -e
 
 : ${CHANNEL:=nightly}
 : ${BRANCH:=master}
-: ${DROPBOX:=~/dropbox_uploader.sh}
+: ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
 # Determines if we can't get the second to last snapshot, if we should try with

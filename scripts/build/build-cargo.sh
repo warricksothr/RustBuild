@@ -13,7 +13,7 @@ set -x
 set -e
 
 : ${DIST_DIR:=~/dist}
-: ${DROPBOX:=~/dropbox_uploader.sh}
+: ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
 : ${MAX_NUMBER_OF_CARGO_BUILDS:=5}
 : ${NIGHTLY_DIR:=/opt/rust_nightly}
 : ${BETA_DIR:=/opt/rust_beta}
