@@ -50,7 +50,7 @@ case $CHANNEL in
   ;;
 esac
 
-start=$(date +"%s")
+start_time="$(date +%s)"
 
 # checkout latest rust $BRANCH
 cd $SRC_DIR
@@ -136,6 +136,7 @@ rm rust-stage0-*
 # cleanup
 #rm -rf $SNAP_DIR/*
 
-end=$(date +"%s")
-diff=$(($end-$start))
-echo "Rust Snapshot Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."
+end_time="$(date +%s)"
+running_time=$(($end_time-$start_time))
+# Prints Hours:Minutes:Seconds
+printf "Elapsed Snapshot Build Time: %02d:%02d:%02d\n" "$((running_time/3600%24))" "$((running_time/60%60))" "$((running_time%60))"

@@ -60,7 +60,7 @@ case $CHANNEL in
   ;;
 esac
 
-start=$(date +"%s")
+start_time="$(date +%s)"
 
 # Update source to upstream
 cd $SRC_DIR
@@ -174,10 +174,11 @@ for i in $(seq `expr $MAX_NUMBER_OF_BUILDS + 1` $NUMBER_OF_BUILDS); do
   $DROPBOX delete $OLDEST_TEST_FAILED_OUTPUT || true
 done
 
-end=$(date +"%s")
-compile_diff=$(($end-$start))
-echo "Rust Build Time: $(($compile_diff / 3600)) hours, $(((compile_$diff / 60) % 60)) minutes and $(($compile_diff % 60)) seconds elapsed."
-starttest=$(date +"%s")
+compile_end="$(date +%s)"
+compile_time=$(($compile_end-$start_time))
+# Prints Hours:Minutes:Seconds
+printf "Elapsed Rust Compile Time: %02d:%02d:%02d\n" "$((compile_time/3600%24))" "$((compile_time/60%60))" "$((compile_time%60))"
+start_test_time="$(date +%s)"
 
 # run tests
 if [ -z $DONTTEST ]; then
@@ -196,8 +197,8 @@ fi
 rm -rf $DIST_DIR/*
 #rm -rf $SNAP_DIR/*
 
-end=$(date +"%s")
-test_diff=$(($end-$starttest))
-echo "Rust Test Time: $(($test_diff / 3600)) hours, $((($test_diff / 60) % 60)) minutes and $(($test_diff % 60)) seconds elapsed."
-diff=$(($end-$start))
-echo "Rust Total Time: $(($diff / 3600)) hours, $((($diff / 60) % 60)) minutes and $(($diff % 60)) seconds elapsed."
+end_time="$(date +%s)"
+test_time=$(($end_time-$start_test_time))
+printf "Elapsed Rust Test Time: %02d:%02d:%02d\n" "$((test_time/3600%24))" "$((test_time/60%60))" "$((test_time%60))"
+running_time=$(($end_time-$start_time))
+printf "Elapsed Rust Build Time: %02d:%02d:%02d\n" "$((running_time/3600%24))" "$((running_time/60%60))" "$((running_time%60))"
