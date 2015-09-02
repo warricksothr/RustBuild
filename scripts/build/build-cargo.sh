@@ -33,9 +33,9 @@ set -e
 : ${RUST_STABLE_DIR:=$STABLE_DIR/rust}
 
 # Determine our appropriate dropbox directories
-: ${NIGHTLY_DROPBOX_DIR:=.}
-: ${BETA_DROPBOX_DIR:=$($DROPBOX list . | grep -F [D] | grep beta | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)/}
-: ${STABLE_DROPBOX_DIR:=$($DROPBOX list . | grep -F [D] | grep stable | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)/}
+: ${NIGHTLY_DROPBOX_DIR:=${CONTAINER_TAG}/}
+: ${BETA_DROPBOX_DIR:=${CONTAINER_TAG}/$($DROPBOX list ${CONTAINER_TAG}/ | grep -F [D] | grep beta | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)/}
+: ${STABLE_DROPBOX_DIR:=${CONTAINER_TAG}/$($DROPBOX list ${CONTAINER_TAG}/ | grep -F [D] | grep stable | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)/}
 
 # The default build directories
 : ${RUST_DIST_DIR:=$RUST_NIGHTLY_DIR}
@@ -117,7 +117,7 @@ CARGO_DIST=$($DROPBOX list $DROPBOX_DIR | grep cargo- | grep -F .tar | tail -n 1
 # our desired cargo version.
 if [ -z "$CARGO_DIST" ]; then
   # Falling back on nightly instead
-  CARGO_DIST=$($DROPBOX list . | grep cargo- | grep -F .tar | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+  CARGO_DIST=$($DROPBOX list ${CONTAINER_TAG}/ | grep cargo- | grep -F .tar | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
   CARGO_DIST_DIR=$CARGO_NIGHTLY_DIR
   BUILD_WITH_NIGHTLY_CARGO=true
 fi
@@ -129,7 +129,7 @@ INSTALLED_CARGO_VERSION=$(cat VERSION)
 if [ "$CARGO_DIST" != "$INSTALLED_CARGO_VERSION" ]; then
   rm -rf *
   CARGO_DIST_PATH=$CARGO_DIST
-  if [ $BUILD_WITH_NIGHTLY_CARGO -eq 1 && "$DROPBOX_DIR" != "." ]; then
+  if [ $BUILD_WITH_NIGHTLY_CARGO -eq 1 && "$DROPBOX_DIR" != "${CONTAINER_TAG}" ]; then
     CARGO_DIST_PATH="${DROPBOX_DIR}${CARGO_DIST}"
   fi
   # download the latest and deploy it

@@ -86,7 +86,7 @@ esac
 SNAP_HASH=$(head -n 1 src/snapshots.txt | tr -s ' ' | cut -d ' ' -f 3)
 
 # Check if the snapshot is available
-SNAP_TARBALL=$($DROPBOX list snapshots | grep $SNAP_HASH | grep -F .tar)
+SNAP_TARBALL=$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SNAP_HASH | grep -F .tar)
 if [ -z "$SNAP_TARBALL" ]; then
   exit 1
 fi
@@ -101,7 +101,7 @@ if [ -f VERSION ]; then
 fi
 if [ "$SNAP_TARBALL" != "$INSTALLED_SNAPSHOT_VERSION" ]; then
   rm -rf *
-  $DROPBOX -p download snapshots/$SNAP_TARBALL
+  $DROPBOX -p download ${CONTAINER_TAG}/snapshots/$SNAP_TARBALL
   tar xjf $SNAP_TARBALL --strip-components=1
   rm $SNAP_TARBALL
   echo "$SNAP_TARBALL" > VERSION
