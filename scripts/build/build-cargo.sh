@@ -147,7 +147,10 @@ cd $CARGO_DIST_DIR
 # This is here so we can skip redeploying cargo and rust versions that are 
 # relatively stable and have few build updates. Mostly saves writing and wear
 # on our storage medium and a few seconds of download and deploy time
-INSTALLED_CARGO_VERSION=$(cat VERSION)
+INSTALLED_CARGO_VERSION=
+if [ -f VERSION ]; then
+  INSTALLED_CARGO_VERSION=$(cat VERSION)
+fi
 if [ "$CARGO_DIST" != "$INSTALLED_CARGO_VERSION" ]; then
   rm -rf *
   CARGO_DIST_PATH=$CARGO_DIST
@@ -179,7 +182,10 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
   
   # Get info about the currently installed Rust distribution
   # This is similar to the Cargo process above, and done for the same reasons
-  INSTALLED_RUST_VERSION=$(cat VERSION)
+  INSTALLED_RUST_VERSION=
+  if [ -f VERSION]; then
+    INSTALLED_RUST_VERSION=$(cat VERSION)
+  fi
   if [ "$RUST_DIST" != "$INSTALLED_RUST_DIST" ]; then
     rm -rf *
     RUST_DIST_PATH=$RUST_DIST
