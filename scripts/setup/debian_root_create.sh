@@ -56,7 +56,7 @@ shopt -s extglob
 : ${ARCH_NAME:="--arch=armhf"}
 # List of supported architectures
 : ${SUPPORTED_ARCHITECTURE:="[armhf,armel,mips,mipsel,amd64,i386]"}
-: ${SUPPORTED_ARCHITECTURE_LIST:="+(armhf|armel|mips|mipsel|amd64|i386]"}
+: ${SUPPORTED_ARCHITECTURE_LIST:="+(armhf|armel|mips|mipsel|amd64|i386)"}
 
 # Check that the required software is installed before we procede
 command -v curl >/dev/null 2>&1 || { echo >&2 "I require curl but it's not installed.  Aborting."; exit 1; }

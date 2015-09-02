@@ -55,8 +55,8 @@ shopt -s extglob
 : ${CHROOT_NAME:=RustBuild-raspbian}
 : ${ARCH_NAME:="--arch=armhf"}
 # List of supported architectures
-: ${SUPPORTED_ARCHITECTURE:="[armhf,armel,mips,mipsel,amd64,i386]"}
-: ${SUPPORTED_ARCHITECTURE_LIST:="+(armhf|armel|mips|mipsel|amd64|i386]"}
+: ${SUPPORTED_ARCHITECTURE:="[armhf]"}
+: ${SUPPORTED_ARCHITECTURE_LIST:="+(armhf)"}
 
 # Check that the required software is installed before we procede
 command -v curl >/dev/null 2>&1 || { echo >&2 "I require curl but it's not installed.  Aborting."; exit 1; }
@@ -95,4 +95,4 @@ mkdir -p $CHROOT_DIR
 cd $CHROOT_DIR
 debootstrap $ARCH_NAME $DEBIAN_VERSION $CHROOT_NAME http://archive.raspbian.org/raspbian
 
-echo "Run 'raspbian_root_setup.sh $CHROOT_NAME <tag>' to configure the CHROOT with the required files and links."
+echo "Run 'raspbian_root_setup.sh $CHROOT_NAME' to configure the CHROOT with the required files and links."
