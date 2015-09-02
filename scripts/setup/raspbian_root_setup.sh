@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 
-# Setup script to prepare a new jessie debian instance for building rust on arm
+#
+# Setup script to prepare a new raspbian instance for building rust on arm
+# 
+# The Raspberry Pi is an ARMv6 device with support for Hard Float. This
+# container is an attempt at creating an environment for constructing 
+# ARMv6-armhf compatible binaries for Rust and Cargo.
+#
 
 set -x
 set -e
 
 : ${CHROOT_NAME:=RustBuild-raspbian}
-: ${CHROOT_TAG:=ARMv6}
+: ${CHROOT_TAG:=ARMv6-armhf}
 
 # Allow custom names
 if [ ! -z "$1" ]; then
