@@ -5,9 +5,9 @@
 
 # Build nightly, beta, and then stable
 start_time="$(date +%s)"
-systemd-nspawn -D /chroots/RustBuild /bin/bash /root/build-all.sh
-systemd-nspawn -D /chroots/RustBuild /bin/bash /root/build-all.sh beta
-systemd-nspawn -D /chroots/RustBuild /bin/bash /root/build-all.sh stable
+systemd-nspawn -D /chroots/RustBuild /bin/bash /root/build-all.sh || machinectl terminate RustBuild
+systemd-nspawn -D /chroots/RustBuild /bin/bash /root/build-all.sh beta || machinectl terminate RustBuild
+systemd-nspawn -D /chroots/RustBuild /bin/bash /root/build-all.sh stable || machinectl terminate RustBuild
 end_time="$(date +%s)"
 running_time="$((end_time-start_time))"
 # Prints Hours:Minutes:Seconds
