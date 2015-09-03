@@ -187,7 +187,7 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
   # Get info about the currently installed Rust distribution
   # This is similar to the Cargo process above, and done for the same reasons
   INSTALLED_RUST_VERSION=
-  if [ -f VERSION]; then
+  if [ -f VERSION ]; then
     INSTALLED_RUST_VERSION=$(cat VERSION)
   fi
   if [ "$RUST_DIST" != "$INSTALLED_RUST_DIST" ]; then
