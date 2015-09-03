@@ -59,6 +59,8 @@ mkdir -p dist
 
 #We're going to store the container tag in the bash shell configuration
 echo "export CONTAINER_TAG=${CHROOT_TAG}" >> .bashrc
+# And in a file in the root home directory
+echo "${CHROOT_TAG}" > CONTAINER_TAG
 
 # Get the dropbox_uploader project script
 git clone https://github.com/andreafabrizi/Dropbox-Uploader.git

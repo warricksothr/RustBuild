@@ -49,6 +49,13 @@ set -e
 : ${CARGO_DIST_DIR:=$CARGO_NIGHTLY_DIR}
 : ${DROPBOX_DIR=$NIGHTLY_DROPBOX_DIR}
 
+#Make sure we're using the correct tag for this container
+if [ -z $CONTAINER_TAG ]; then
+  if [ -f "~/CONTAINER_TAG" ]; then
+    export CONTAINER_TAG=$(cat ~/CONTAINER_TAG)
+  fi
+fi
+
 # Set the channel if the user supplied one in argument $1
 if [ ! -z $1 ]; then
   CHANNEL=$1
