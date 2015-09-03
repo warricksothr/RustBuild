@@ -25,8 +25,6 @@ set -e
 : ${SRC_DIR:=/build/cargo}
 : ${LIBSSL_DIST_DIR:=/build/openssl/dist}
 : ${CHANNEL:=nightly}
-# Determine if we need to build cargo with a nightly cargo or not
-: ${BUILD_WITH_NIGHTLY_CARGO:=false}
 
 # Rust directories
 : ${CARGO_NIGHTLY_DIR:=$NIGHTLY_DIR/cargo}
@@ -137,6 +135,7 @@ fi
 
 # Look for the latest built Cargo in the requested channel
 CARGO_DIST=$($DROPBOX list $DROPBOX_DIR | grep cargo- | grep -F .tar | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+CARGO_DOWNLOAD_PATH=${DROPBOX_DIR}${CARGO_DIST}
 # It's possible we might not have a already built stable/beta cargo... So we 
 # can use a nightly to boostrap the process. Ideally in the future we should
 # only fall back on a nightly when we can't get an older stable cargo first.
@@ -144,9 +143,10 @@ CARGO_DIST=$($DROPBOX list $DROPBOX_DIR | grep cargo- | grep -F .tar | tail -n 1
 # our desired cargo version.
 if [ -z "$CARGO_DIST" ]; then
   # Falling back on nightly instead
-  CARGO_DIST=$($DROPBOX list ${CONTAINER_TAG}/ | grep cargo- | grep -F .tar | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+  CARGO_DIST=$($DROPBOX list ${NIGHTLY_DROPBOX_DIR} | grep cargo- | grep -F .tar | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
   CARGO_DIST_DIR=$CARGO_NIGHTLY_DIR
-  BUILD_WITH_NIGHTLY_CARGO=true
+  # Fall back on the nightly to build with
+  CARGO_DOWNLOAD_PATH=${NIGHTLY_DROPBOX_DIR}$CARGO_DIST
 fi
 # Clean the cargo directory (if necessary)
 cd $CARGO_DIST_DIR
@@ -161,12 +161,8 @@ if [ -f VERSION ]; then
 fi
 if [ "$CARGO_DIST" != "$INSTALLED_CARGO_VERSION" ]; then
   rm -rf *
-  CARGO_DIST_PATH=$CARGO_DIST
-  if [ $BUILD_WITH_NIGHTLY_CARGO -eq 1 && "$DROPBOX_DIR" != "${CONTAINER_TAG}" ]; then
-    CARGO_DIST_PATH="${DROPBOX_DIR}${CARGO_DIST}"
-  fi
-  # download the latest and deploy it
-  $DROPBOX -p download $CARGO_DIST_PATH
+  # download the latest cargo and deploy it
+  $DROPBOX -p download $CARGO_DOWNLOAD_PATH
   tar xzf $CARGO_DIST
   rm $CARGO_DIST
   echo "$CARGO_DIST" > VERSION
