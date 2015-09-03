@@ -275,11 +275,11 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
     $DROPBOX delete $OLDEST_TEST_FAILED_OUTPUT_PATH || true
   done
 
-  local compile_end="$(date +%s)"
-  local compile_time=$(($compile_end-$start_time))
+  compile_end="$(date +%s)"
+  compile_time=$(($compile_end-$start_time))
   # Prints Hours:Minutes:Seconds
   printf "Elapsed Cargo Compile Time: %02d:%02d:%02d\n" "$((compile_time/3600%24))" "$((compile_time/60%60))" "$((compile_time%60))"
-  local start_test_time="$(date +%s)"
+  start_test_time="$(date +%s)"
 
   # run the Cargo test suite
   if [ -z $DONTTEST ]; then
@@ -298,10 +298,10 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
   # cleanup
   rm -rf $DIST_DIR/*
 
-  local end_time="$(date +%s)"
-  local test_time=$(($end_time-$start_test_time))
+  end_time="$(date +%s)"
+  test_time=$(($end_time-$start_test_time))
   printf "Elapsed Cargo Test Time: %02d:%02d:%02d\n" "$((test_time/3600%24))" "$((test_time/60%60))" "$((test_time%60))"
-  local running_time=$(($end_time-$start_time))
+  running_time=$(($end_time-$start_time))
   printf "Elapsed Cargo Build Time: %02d:%02d:%02d\n" "$((running_time/3600%24))" "$((running_time/60%60))" "$((running_time%60))"
 
   exit 0
