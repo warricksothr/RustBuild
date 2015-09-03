@@ -21,7 +21,7 @@ set -e
 : ${BRANCH:=master}
 : ${DIST_DIR:=~/dist}
 : ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
-: ${DROPBOX_SAVE_ROOT:=${CONTAINER_TAG}}
+: ${DROPBOX_SAVE_ROOT:=${CONTAINER_TAG}/}
 : ${MAX_NUMBER_OF_BUILDS:=5}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
@@ -166,7 +166,7 @@ TARBALL=$TARBALL-$TARBALL_HASH.tar.gz
 
 # ship it
 if [ -z $DONTSHIP ]; then
-  # Try and create the director if this is not a nightly
+  # Try and create the directory if this is not a nightly
   if [ $DESCRIPTOR -ne "nightly" ]; then
     $DROPBOX mkdir ${DROPBOX_SAVE_ROOT}
   fi
@@ -174,15 +174,15 @@ if [ -z $DONTSHIP ]; then
 fi
 rm $TARBALL
 
-# delete older nightlies
+# delete older builds
 NUMBER_OF_BUILDS=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar | wc -l)
 for i in $(seq `expr $MAX_NUMBER_OF_BUILDS + 1` $NUMBER_OF_BUILDS); do
   OLDEST_BUILD=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
-  $DROPBOX delete $OLDEST_BUILD
+  $DROPBOX delete "${DROPBOX_SAVE_ROOT}$OLDEST_BUILD"
   OLDEST_TEST_OUTPUT=$(echo $OLDEST_BUILD | cut -d '-' -f 1-5).test.output.txt
-  $DROPBOX delete $OLDEST_TEST_OUTPUT || true
+  $DROPBOX delete "${DROPBOX_SAVE_ROOT}$OLDEST_TEST_OUTPUT" || true
   OLDEST_TEST_FAILED_OUTPUT=$(echo $OLDEST_BUILD | cut -d '-' -f 1-5).test.failed.output.txt
-  $DROPBOX delete $OLDEST_TEST_FAILED_OUTPUT || true
+  $DROPBOX delete "${DROPBOX_SAVE_ROOT}$OLDEST_TEST_FAILED_OUTPUT" || true
 done
 
 compile_end="$(date +%s)"
