@@ -6,10 +6,11 @@ Scripts and patches to auto build Rust and Cargo on ARM
 This repository contains the required setup/configuration/build scripts and patches for you to setup your own Rust compilation machine. Pre-built 'unofficial' Rust/Cargo binaries are listed below.
 
 # Binary Downloads
-## [Architecture Releases Directory](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
-## [Unofficial ARMv7 Nightly Binaries (1.4.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
-## [Unofficial ARMv7 Beta Binaries (1.3.0)](https://www.dropbox.com/sh/y5b1lsdjfy7iwnr/AADc5hlMHJ5u7q-AYtS0Z5zqa?dl=0)
-## [Unofficial ARMv7 Stable Binaries (1.2.0)](https://www.dropbox.com/sh/t7zj60r3zxn2a7n/AADKMDSVhb0oSeGbuDzeD6yZa?dl=0)
+### [Architecture Releases Directory](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
+## ARMv7
+### [Unofficial Nightly Binaries (1.4.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
+### [Unofficial Beta Binaries (1.3.0)](https://www.dropbox.com/sh/y5b1lsdjfy7iwnr/AADc5hlMHJ5u7q-AYtS0Z5zqa?dl=0)
+### [Unofficial Stable Binaries (1.2.0)](https://www.dropbox.com/sh/t7zj60r3zxn2a7n/AADKMDSVhb0oSeGbuDzeD6yZa?dl=0)
 
 # Usage Instructions
 Run # /bin/bash scripts/setup/build_debian_root.sh <name of container> to build a new container from scratch
@@ -72,9 +73,11 @@ These scripts are configured to compile the snapshots and full rust compilers wi
 - [ ] automate some of the documentation tasks
 - [x] automate the build process in a container on the ODROID XU4
 - [ ] look into cross compiling snapshots for other architectures to provide a baseline to allow others to easily build a rustc and cargo implementation for those platforms
-- [ ] consider a raspbian root in addition to the jessie one for raspberry pi support
-- [ ] rebuild dropbox directory structure to support multiple difference architectures
+- [x] start work on raspbian container in addition to the jessie one for raspberry pi support
+- [ ] finish and test a build system on the raspbian container and find a way to test the resulting binaries for ARMv6-armhf compatibility.
+- [x] rebuild dropbox directory structure to support multiple difference architectures
 - [x] build a caching script around the dropbox upload script to reduce network usage for recently built snapshots (and maybe nightlies)
+- [ ] add a maximum cache size parameter to the caching script, so that a limit can be put in place.
 - [x] build cargo with the latest stable/beta rust versions in addition to the nightly
 - [x] find a way to store version info on the latest stable/beta cargo and rust installed to /opt/rust_{beta,stable} so we can avoid having to re-download and deploy those versions that don't change regularly.
 - [ ] work on integrating multirust with the /opt/rust_{stable,beta,nightly} instead of managing our paths directly in the build scripts. Additionally this will allow the build machine to work on more than the latest versions of rust and cargo and act as a build machine for other rust code without needing a complex bootstrapping process.
