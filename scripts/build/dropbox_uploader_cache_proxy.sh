@@ -25,7 +25,6 @@ if $DEBUG; then
   echo "Proxying Through Transparent Dropbox Uploader Script"
 fi
 
-
 # The dropbox_uploader script that we're going to proxy
 : ${DROPBOX:=~/dropbox_uploader.sh}
 # Location where we'll store the cached data
@@ -35,6 +34,9 @@ fi
 # through the dropbox script and then cache the new results. The default here
 # is a week. 60 * 60 * 24 * 7
 : ${MAX_LIFETIME:=604800}
+# The maximum amount of data we should cache in KiloBytes
+# 1,000,000 is ~1GB
+: ${MAX_CACHE_SIZE:=1000000}
 
 mkdir -p $CACHE_DIR
 
@@ -80,6 +82,13 @@ if [ "$LOCAL_ONLY" != "true" ]; then
 else
   echo "Prevented from calling $DROPBOX $@"
 fi
+}
+
+# Simple logging function
+log () {
+  if $DEBUG; then
+    echo "$1"
+  fi
 }
 
 #Parse out the real parmeters that we need to care about
@@ -155,8 +164,8 @@ case $COMMAND in
     # Delete our locally cached files/directories and then pass the command along to the
     # dropbox script
     proxy "$@"
-    # Try to remove the file from cache if it exists, otherwise exit successfully
-    rm -r "${CACHE_DIR}/${REAL_PARAMETERS_ARRAY[1]}" || exit 0
+    # Try to remove the file from cache if it exists, otherwise skip
+    rm -r "${CACHE_DIR}/${REAL_PARAMETERS_ARRAY[1]}" || true
   ;;
   mkdir)
     # Create the directory in our cache, and then pass the command along to the dropbox script
@@ -168,3 +177,20 @@ case $COMMAND in
     proxy "$@"
   ;;
 esac
+
+# Clean the cache files in the cache directory until we're below the requested size
+clean_cache_default () {
+
+}
+
+#Clean the cache if it's over the desired size by deleting the oldest files from the cache first
+: ${CURRENT_CACHE_SIZE:="$(du -s $CACHE_DIR | sed -r 's/([0-9]+)\s.*$/\1/')"}
+: ${CURRENT_CACHE_VS_MAX:="$((CURRENT_CACHE_SIZE-MAX_CACHE_SIZE))"}
+
+log "Current Cache Size is ${CURRENT_CACHE_SIZE}.\nThe Maximum Cache Size is ${MAX_CACHE_SIZE}\nTher difference is ${CURRENT_CACHE_VS_MAX}"
+
+if [ $CURRENT_CACHE_VS_MAX -ge $MAX_CACHE_SIZE ]; then
+  log "Cleaning the current cache of the oldest files because it is greater than the max cache size"
+  # Clean the oldest files in the cache, till we've cleaned up the required files
+  clean_cache_oldest $CACHE_DIR $CURRENT_CACHE_VS_MAX
+fi
