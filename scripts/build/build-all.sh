@@ -11,6 +11,15 @@ set -e
 : ${BASH_SHELL:=/usr/bin/env bash}
 #Defaults to the nightly branch
 : ${CHANNEL:=nightly}
+: ${DEBUG:=true}
+
+export DEBUG=$DEBUG
+# Make sure we're using the correct tag for this container
+if [ -z $CONTAINER_TAG ]; then
+  if [ -f "~/CONTAINER_TAG" ]; then
+    export CONTAINER_TAG=$(cat ~/CONTAINER_TAG)
+  fi
+fi
 
 if [ ! -z $1 ]; then
   CHANNEL=$1
