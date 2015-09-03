@@ -258,6 +258,11 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
   fi
   rm $TARBALL
 
+  compile_end="$(date +%s)"
+  compile_time=$(($compile_end-$start_time))
+  # Prints Hours:Minutes:Seconds
+  printf "Elapsed Cargo Compile Time: %02d:%02d:%02d\n" "$((compile_time/3600%24))" "$((compile_time/60%60))" "$((compile_time%60))"
+  
   # delete older cargo versions
   # ensure that we only have the max number of cargo builds, delete the oldest
   NUMBER_OF_CARGO_BUILDS=$($DROPBOX list $DROPBOX_DIR | grep cargo- | grep -F .tar | wc -l)
@@ -275,10 +280,7 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
     $DROPBOX delete $OLDEST_TEST_FAILED_OUTPUT_PATH || true
   done
 
-  compile_end="$(date +%s)"
-  compile_time=$(($compile_end-$start_time))
-  # Prints Hours:Minutes:Seconds
-  printf "Elapsed Cargo Compile Time: %02d:%02d:%02d\n" "$((compile_time/3600%24))" "$((compile_time/60%60))" "$((compile_time%60))"
+  # Start logging the test time
   start_test_time="$(date +%s)"
 
   # run the Cargo test suite

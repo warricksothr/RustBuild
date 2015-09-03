@@ -179,18 +179,20 @@ case $COMMAND in
 esac
 
 # Clean the cache files in the cache directory until we're below the requested size
-clean_cache_default () {
-
-}
+#clean_cache_oldest () {
+#
+#}
 
 #Clean the cache if it's over the desired size by deleting the oldest files from the cache first
 : ${CURRENT_CACHE_SIZE:="$(du -s $CACHE_DIR | sed -r 's/([0-9]+)\s.*$/\1/')"}
 : ${CURRENT_CACHE_VS_MAX:="$((CURRENT_CACHE_SIZE-MAX_CACHE_SIZE))"}
 
-log "Current Cache Size is ${CURRENT_CACHE_SIZE}.\nThe Maximum Cache Size is ${MAX_CACHE_SIZE}\nTher difference is ${CURRENT_CACHE_VS_MAX}"
+log "Current Cache Size is ${CURRENT_CACHE_SIZE}."
+log "The Maximum Cache Size is ${MAX_CACHE_SIZE}."
+log "The difference is ${CURRENT_CACHE_VS_MAX}."
 
 if [ $CURRENT_CACHE_VS_MAX -ge $MAX_CACHE_SIZE ]; then
   log "Cleaning the current cache of the oldest files because it is greater than the max cache size"
   # Clean the oldest files in the cache, till we've cleaned up the required files
-  clean_cache_oldest $CACHE_DIR $CURRENT_CACHE_VS_MAX
+  #clean_cache_oldest $CACHE_DIR $CURRENT_CACHE_VS_MAX
 fi
