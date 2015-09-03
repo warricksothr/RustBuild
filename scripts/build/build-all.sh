@@ -5,6 +5,8 @@
 set -x
 set -e
 
+echo "Building All from $PWD"
+
 : ${BUILD_SNAPSHOT_SCRIPT:=~/build-snap.sh}
 : ${BUILD_RUST_SCRIPT:=~/build-rust.sh}
 : ${BUILD_CARGO_SCRIPT:=~/build-cargo.sh}
@@ -16,7 +18,7 @@ set -e
 export DEBUG=$DEBUG
 # Make sure we're using the correct tag for this container
 if [ -z $CONTAINER_TAG ]; then
-  if [ -f "~/CONTAINER_TAG" ]; then
+  if [ -f "CONTAINER_TAG" ]; then
     export CONTAINER_TAG=$(cat ~/CONTAINER_TAG)
   fi
 fi
