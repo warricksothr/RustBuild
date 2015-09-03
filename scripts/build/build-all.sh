@@ -16,7 +16,7 @@ echo "Building from $PWD"
 : ${BASH_SHELL:=/usr/bin/env bash}
 #Defaults to the nightly branch
 : ${CHANNEL:=nightly}
-: ${DEBUG:=true}
+: ${DEBUG:=false}
 
 export DEBUG=$DEBUG
 #Make sure we're using the correct tag for this container
