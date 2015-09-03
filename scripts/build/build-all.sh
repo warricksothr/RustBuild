@@ -5,7 +5,10 @@
 set -x
 set -e
 
-echo "Building All from $PWD"
+echo "Started from $PWD"
+echo "Moving into home directory $HOME"
+cd $HOME
+echo "Building from $PWD"
 
 : ${BUILD_SNAPSHOT_SCRIPT:=~/build-snap.sh}
 : ${BUILD_RUST_SCRIPT:=~/build-rust.sh}
@@ -16,10 +19,10 @@ echo "Building All from $PWD"
 : ${DEBUG:=true}
 
 export DEBUG=$DEBUG
-# Make sure we're using the correct tag for this container
+#Make sure we're using the correct tag for this container
 if [ -z $CONTAINER_TAG ]; then
-  if [ -f "CONTAINER_TAG" ]; then
-    export CONTAINER_TAG=$(cat ~/CONTAINER_TAG)
+  if [ -f "${HOME}/CONTAINER_TAG" ]; then
+    export CONTAINER_TAG="$(cat ${HOME}/CONTAINER_TAG)"
   fi
 fi
 

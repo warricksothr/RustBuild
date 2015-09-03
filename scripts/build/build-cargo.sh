@@ -51,8 +51,8 @@ set -e
 
 #Make sure we're using the correct tag for this container
 if [ -z $CONTAINER_TAG ]; then
-  if [ -f "CONTAINER_TAG" ]; then
-    export CONTAINER_TAG=$(cat ~/CONTAINER_TAG)
+  if [ -f "${HOME}/CONTAINER_TAG" ]; then
+    export CONTAINER_TAG="$(cat ${HOME}/CONTAINER_TAG)"
   fi
 fi
 
