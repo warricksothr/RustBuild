@@ -36,16 +36,33 @@ mkdir -p $OPT/rust_{nightly,beta,stable}/{cargo,rust}
 
 # Get the Rust and Cargo projects
 cd $BUILD
-git clone --recursive https://github.com/rust-lang/rust.git
+if [ -d rust ]; then
+  cd rust
+  git checkout .
+  git pull
+  cd ..
+else
+  git clone --recursive https://github.com/rust-lang/rust.git
+fi
 mkdir -p rust/build
-git clone --recursive https://github.com/rust-lang/cargo.git
+
+if [ -d cargo ]; then
+  cd cargo
+  git checkout .
+  git pull
+  cd ..
+else
+  git clone --recursive https://github.com/rust-lang/cargo.git
+fi
 
 # Get openssl
 cd $OPENSSL_DIR
-curl -L "https://github.com/openssl/openssl/archive/${OPENSSL_VER}.tar.gz" -o ${OPENSSL_VER}.tar.gz
-tar xzf ${OPENSSL_VER}.tar.gz
-mv $OPENSSL_DIR/openssl-$OPENSSL_VER/* $OPENSSL_SRC_DIR
-rm -r $OPENSSL_DIR/openssl-$OPENSSL_VER
+if [ ! -d openssl-$OPENSSL_VER]; then
+  curl -L "https://github.com/openssl/openssl/archive/${OPENSSL_VER}.tar.gz" -o ${OPENSSL_VER}.tar.gz
+  tar xzf ${OPENSSL_VER}.tar.gz
+  mv $OPENSSL_DIR/openssl-$OPENSSL_VER/* $OPENSSL_SRC_DIR
+  rm -r $OPENSSL_DIR/openssl-$OPENSSL_VER
+fi
 
 # Make the distributable directory
 cd $CHROOT_HOME
@@ -57,18 +74,32 @@ echo "export CONTAINER_TAG=${CHROOT_TAG}" >> .bashrc
 echo "${CHROOT_TAG}" > CONTAINER_TAG
 
 # Get the dropbox_uploader project script
-git clone https://github.com/andreafabrizi/Dropbox-Uploader.git
+if [ -d Dropbox-Uploader ]; then
+  cd Dropbox-Uploader
+  git checkout .
+  git pull
+  cd ..
+else
+  git clone https://github.com/andreafabrizi/Dropbox-Uploader.git
+fi
 chmod +x Dropbox-Uploader/dropbox_uploader.sh
-ln -s Dropbox-Uploader/dropbox_uploader.sh dropbox_uploader.sh
+ln -sf Dropbox-Uploader/dropbox_uploader.sh dropbox_uploader.sh
 
 # Get the project scripts and save them in the root
-git clone https://github.com/WarrickSothr/RustBuild.git
+if [ -d RustBuild ]; then
+  cd RustBuild
+  git checkout .
+  git pull
+  cd ..
+else
+  git clone https://github.com/WarrickSothr/RustBuild.git
+fi
 
 # link the project scripts to the appropriate directories
 chmod +x RustBuild/scripts/build/*.sh
-ln -s RustBuild/scripts/build/*.sh .
-chmod +x RustBuild/scripts/setup/configure_debian.sh
-ln -s RustBuild/scripts/setup/configure_debian.sh .
+ln -sf RustBuild/scripts/build/*.sh .
+chmod +x RustBuild/scripts/setup/debian_configure.sh
+ln -sf RustBuild/scripts/setup/debian_configure.sh .
 
 # Copy the patches
 cp RustBuild/patches/* ${BUILD}/patches
