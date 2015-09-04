@@ -97,8 +97,8 @@ fi
 
 # This is the second to last snapshot. This is the snapshot that should be used to build the next one
 SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n 2p | tr -s ' ' | cut -d ' ' -f 3)
-SNAP_TARBALL="$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)"
-if [ -z $SNAP_TARBALL ]; then
+SNAP_TARBALL=$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)
+if [ -z "$SNAP_TARBALL" ]; then
   if $FAIL_TO_OLDEST_SNAP; then
     all_snaps_available=($("$DROPBOX list ${CONTAINER_TAG}/snapshots | tr -s ' ' cut -d ' ' -f 4)")
     snap_count=$(cat src/snapshots.txt | grep "S " | wc -l)
