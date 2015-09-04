@@ -31,8 +31,15 @@ apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python c
 # where we should instead of gcc and g++
 #update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang 50 --slave /usr/bin/g++ g++ /usr/bin/clang++
 
-# Run the dropbox uploader configuration script
 cd ~
+# Set the container tag if it wasn't properly inherited
+if [ -z $CONTAINER_TAG ]; then
+  if [ -f CONTAINER_TAG ]; then
+    CONTAINER_TAG=$(cat CONTAINER_TAG)
+  fi
+fi
+
+# Run the dropbox uploader configuration script
 bash dropbox_uploader.sh
 
 # Make sure our tag directory exists

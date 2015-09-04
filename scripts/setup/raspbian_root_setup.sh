@@ -79,9 +79,5 @@ ln -s RustBuild/scripts/setup/configure_debian.sh .
 # Copy the patches
 cp RustBuild/patches/* ${BUILD}/patches
 
-# Copy the apt preferences and sources
-cp RustBuild/etc/apt/preferences.d/*.pref ${ROOT}/etc/apt/preferences.d
-cp RustBuild/etc/apt/sources.list.d/*.list ${ROOT}/etc/apt/sources.list.d
-
 # Run the configuration script in in a systemd nspawn
 systemd-nspawn -D ${ROOT} /bin/bash ~/raspbian_configure.sh
