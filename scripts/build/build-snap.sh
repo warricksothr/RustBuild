@@ -97,18 +97,23 @@ fi
 
 # This is the second to last snapshot. This is the snapshot that should be used to build the next one
 SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n 2p | tr -s ' ' | cut -d ' ' -f 3)
-if [ -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
+SNAP_TARBALL="$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)"
+if [ -z $SNAP_TARBALL ]; then
   if $FAIL_TO_OLDEST_SNAP; then
+    all_snaps_available=($("$DROPBOX list ${CONTAINER_TAG}/snapshots | tr -s ' ' cut -d ' ' -f 4)")
     snap_count=$(cat src/snapshots.txt | grep "S " | wc -l)
     for ((pos=3; pos<=$snap_count; pos++)); do
       SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n ${pos}p | tr -s ' ' | cut -d ' ' -f 3)
-      if [ -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
+      SNAP_TARBALL="$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)"
+      if [ -z $SNAP_TARBALL ]; then
         if [ $pos -eq $snap_count ]; then
           echo "No snapshot older than  ${LAST_SNAP_HASH} available. Need an older snapshot to build a current snapshot"
           exit 1
         else
           continue
         fi
+      else
+        break
       fi
     done
   else
@@ -116,6 +121,8 @@ if [ -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_
     echo "Need snapshot ${SECOND_TO_LAST_SNAP_HASH} to compile snapshot compiler ${LAST_SNAP_HASH}"
     exit 1
   fi
+else
+  
 fi
 
 # Use the second to last snapshot to build the next snapshot setup snapshot
