@@ -32,6 +32,9 @@ set -e
 # but always atleast 1 if there's only one processor/core
 if [ ! $BUILD_PROCS -gt 1 ]; then BUILD_PROCS=1; fi
 
+echo "GLIBC Version Info: $(ldd --version | head -n 1)"
+echo "Linker Version Info: $(ld --version | head -n 1)"
+
 #Make sure we're using the correct tag for this container
 if [ -z $CONTAINER_TAG ]; then
   if [ -f "${HOME}/CONTAINER_TAG" ]; then

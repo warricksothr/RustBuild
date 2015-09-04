@@ -34,6 +34,9 @@ set -e
 : ${CARGO_STABLE_DIR:=$STABLE_DIR/cargo}
 : ${RUST_STABLE_DIR:=$STABLE_DIR/rust}
 
+echo "GLIBC Version Info: $(ldd --version | head -n 1)"
+echo "Linker Version Info: $(ld --version | head -n 1)"
+
 # Determine our appropriate dropbox directories
 # Nightlies are always in the root directory for the container_tag
 : ${NIGHTLY_DROPBOX_DIR:=${CONTAINER_TAG}/}

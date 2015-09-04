@@ -51,7 +51,7 @@ set -e
 shopt -s extglob
 
 : ${CHROOT_DIR:=/chroots}
-: ${DEBIAN_VERSION:=jessie}
+: ${DEBIAN_VERSION:=wheezy}
 : ${CHROOT_NAME:=RustBuild}
 : ${ARCH_NAME:="--arch=armhf"}
 # List of supported architectures
