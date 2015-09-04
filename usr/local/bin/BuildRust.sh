@@ -5,19 +5,19 @@
 
 # Check the systemd machinectl to see if a machine is running
 is_machine_running () {
-  local machine_registered="$(machinectl list | grep -F $1 | sed 's/^\s*$1\s.*$/$1/')"
+  local machine_registered="$(machinectl list | grep -F $1 | sed "s/^\s*$1\s.*$/$1/")"
   if [ -z machine_registered ]; then
-    return true
+    echo true
   else
-    return false
+    echo false
   fi 
 }
 
 # Stop a machine if it is already running
 stop_running_machine () {
-  local already_running=is_machine_running $1
+  local already_running=$(is_machine_running "$1")
   if $already_running; then
-    machinectl terminate $1
+    machinectl terminate "$1"
   fi
 }
 
@@ -34,9 +34,9 @@ TARGET="RustBuild"
 stop_running_machine "$TARGET"
 
 # Build nightly, beta, and then stable in the same container consecutively
-systemd-nspawn -D $CHROOT/$TARGET /bin/bash /root/build-all.sh || stop_running_machine "$TARGET"
-systemd-nspawn -D $CHROOT/$TARGET /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
-systemd-nspawn -D $CHROOT/$TARGET /bin/bash /root/build-all.sh stable || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh stable || stop_running_machine "$TARGET"
 
 # Make sure we've exited the container at the end
 stop_running_machine "$TARGET"
@@ -55,9 +55,9 @@ TARGET="RustBuild-raspbian"
 stop_running_machine "$TARGET"
 
 # Build nightly, beta, and then stable in the same container consecutively
-systemd-nspawn -D $CHROOT/$TARGET /bin/bash /root/build-all.sh || stop_running_machine "$TARGET"
-#systemd-nspawn -D $CHROOT/$TARGET /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
-#systemd-nspawn -D $CHROOT/$TARGET /bin/bash /root/build-all.sh stable || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh || stop_running_machine "$TARGET"
+#systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
+#systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh stable || stop_running_machine "$TARGET"
 
 # Make sure we've exited the container at the end
 stop_running_machine "$TARGET"
