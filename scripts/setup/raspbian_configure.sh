@@ -23,6 +23,16 @@ if [ -z $CONTAINER_TAG ]; then
   fi
 fi
 
+# Print a file with system info
+echo "$(uname -a)" > SYSTEM_INFO
+echo "$(ldd --version | head -n 1)" >> SYSTEM_INFO
+echo "$(ld --version | head -n 1)" >> SYSTEM_INFO
+echo "$(gcc --version | head -n 1)" >> SYSTEM_INFO
+echo "$(g++ --version | head -n 1)" >> SYSTEM_INFO
+echo "$(clang --version | tr '\\n' '|' | head -n 1)" >> SYSTEM_INFO
+echo "$(clang++ --version | tr '\\n' '|' | head -n 1)" >> SYSTEM_INFO
+echo "$(ccache --version | head -n 1)" >> SYSTEM_INFO
+
 # Run the dropbox uploader configuration script
 bash dropbox_uploader.sh
 
