@@ -94,9 +94,7 @@ log () {
 #Parse out the real parmeters that we need to care about
 get_real_parameters "$@"
 
-if $DEBUG; then
-  echo "The Real Parameters from [$@] are [${REAL_PARAMETERS_ARRAY[@]}]"
-fi
+log "The Real Parameters from [$@] are [${REAL_PARAMETERS_ARRAY[@]}]"
 
 # In special cases we'll do our own work on the cache and then pass along the command if necessary
 # The first of the real parameters is always going to be the function in the dropbox_upload script
@@ -179,9 +177,19 @@ case $COMMAND in
 esac
 
 # Clean the cache files in the cache directory until we're below the requested size
-#clean_cache_oldest () {
-#
-#}
+clean_cache_oldest () {
+  local cache_directory=$1
+  local current_size_difference=$2
+  # Find a listing of all the files along with their paths in the cache directory
+  local files="$(find -L $cache_directory)"
+  # Build lists of mtime
+  local declare -a files_mtime
+  for file in files; do
+    file_mtime+=("$(du -s $file | sed -r 's/([0-9]+)\s.*$/\1/') $file")
+  done
+  echo $file_mtime
+  # Delete files, starting with the oldest, until the desired size is reached
+}
 
 #Clean the cache if it's over the desired size by deleting the oldest files from the cache first
 : ${CURRENT_CACHE_SIZE:="$(du -s $CACHE_DIR | sed -r 's/([0-9]+)\s.*$/\1/')"}
@@ -194,5 +202,5 @@ log "The difference is ${CURRENT_CACHE_VS_MAX}."
 if [ $CURRENT_CACHE_VS_MAX -ge $MAX_CACHE_SIZE ]; then
   log "Cleaning the current cache of the oldest files because it is greater than the max cache size"
   # Clean the oldest files in the cache, till we've cleaned up the required files
-  #clean_cache_oldest $CACHE_DIR $CURRENT_CACHE_VS_MAX
+  clean_cache_oldest $CACHE_DIR $CURRENT_CACHE_VS_MAX
 fi
