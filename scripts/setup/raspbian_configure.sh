@@ -13,7 +13,8 @@ apt-key add raspbian.public.key
 rm raspbian.public.key
 
 apt-get update
-apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache clang gcc g++ cmake file build-essential pkg-config
+apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache clang gcc gcc-4.7  g++ g++-4.7 cmake file build-essential pkg-config
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 50 --slave /usr/bin/g++ g++ /usr/bin/g++-4.7
 
 cd ~
 # Set the container tag if it wasn't properly inherited
