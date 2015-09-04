@@ -13,13 +13,12 @@ apt-key add raspbian.public.key
 rm raspbian.public.key
 
 apt-get update
-apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache gcc gcc-4.7 g++ g++-4.7 cmake file build-essential pkg-config
-update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 50 --slave /usr/bin/g++ g++ /usr/bin/g++-4.7
+apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache cmake file build-essential pkg-config
 
 # Set jessie as the branch of debian temporarily for an updated clang to build with
 echo "deb http://archive.raspbian.org/raspbian jessie main" > /etc/apt/sources.list
 apt-get update
-apt-get install --allow-unauthenticated -qq clang llvm
+apt-get install --allow-unauthenticated -qq clang llvm gcc g++ ccache
 echo "deb http://archive.raspbian.org/raspbian wheezy main" > /etc/apt/sources.list
 apt-get update
 
