@@ -64,7 +64,7 @@ fi
 
 # Get openssl
 cd $OPENSSL_DIR
-  if [ ! -d openssl-$OPENSSL_VAR ]; then
+  if [ ! -d $OPENSSL_SRC_DIR ]; then
   curl -L "https://github.com/openssl/openssl/archive/${OPENSSL_VER}.tar.gz" -o ${OPENSSL_VER}.tar.gz
   tar xzf ${OPENSSL_VER}.tar.gz
   mv $OPENSSL_DIR/openssl-$OPENSSL_VER/* $OPENSSL_SRC_DIR
