@@ -129,6 +129,9 @@ case $COMMAND in
       AGE=$(((CURRENT_TIME - FILE_MODIFIED_TIME)))
       if [ $AGE -le $MAX_LIFETIME ]; then
         cp -r ${CACHE_DIR}/$DOWNLOAD $TARGET
+        # Touch the file to indicate that we have used it recently and it
+        # shouldn't be removed from the cache right now
+        touch ${CACHE_DIR}/$DOWNLOAD
         # Exit early for flow reasons. Better to avoid extra if's and duplicated code
         exit 0
       fi
@@ -183,12 +186,35 @@ clean_cache_oldest () {
   # Find a listing of all the files along with their paths in the cache directory
   local files="$(find -L $cache_directory)"
   # Build lists of mtime
-  local declare -a files_mtime
-  for file in files; do
-    file_mtime+=("$(du -s $file | sed -r 's/([0-9]+)\s.*$/\1/') $file")
+  declare -a files_mtime
+  for file in $files; do
+    # Don't include directories
+    if [ ! -d $file ]; then
+      # Done by time and then size
+      file_mtime+=("$(stat -c %Y "${file}")|$(du -s $file | sed -r 's/([0-9]+)\s.*$/\1/')|${file}")
+    fi
   done
-  echo $file_mtime
+  # Print out size and file name, then create a list and sort them
+  printf '%s\n' "${file_mtime[@]}" > .cache_file_list
+  file_list_sorted=($(cat .cache_file_list | sort -bg))
+  rm .cache_file_list
   # Delete files, starting with the oldest, until the desired size is reached
+  # Walk through the cache and delete the old files till we no longer need them
+  for cache_file_line in ${file_list_sorted[@]}; do
+    local line=($(echo $cache_file_line | tr "|" "\n"))
+    local size=${line[1]}
+    local cache_file=${line[2]}
+    log $cache_file
+    rm $cache_file
+    current_size_difference=$((current_size_difference - size))
+    if [ $current_size_difference -ge 0 ]; then
+      # Continue till we're below out desired cache size
+      continue
+    else
+      # Exit once we're clear
+      break
+    fi
+  done
 }
 
 #Clean the cache if it's over the desired size by deleting the oldest files from the cache first
@@ -198,6 +224,8 @@ clean_cache_oldest () {
 log "Current Cache Size is ${CURRENT_CACHE_SIZE}."
 log "The Maximum Cache Size is ${MAX_CACHE_SIZE}."
 log "The difference is ${CURRENT_CACHE_VS_MAX}."
+
+clean_cache_oldest $CACHE_DIR $CURRENT_CACHE_VS_MAX
 
 if [ $CURRENT_CACHE_VS_MAX -ge $MAX_CACHE_SIZE ]; then
   log "Cleaning the current cache of the oldest files because it is greater than the max cache size"
