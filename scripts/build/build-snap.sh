@@ -81,6 +81,8 @@ start_time="$(date +%s)"
 
 # checkout the latest for the requested rust $BRANCH
 cd $SRC_DIR
+git clean -df
+git checkout -- .
 git checkout $BRANCH
 git pull
 git submodule update
@@ -96,7 +98,7 @@ fi
 # This is the second to last snapshot. This is the snapshot that should be used to build the next one
 SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n 2p | tr -s ' ' | cut -d ' ' -f 3)
 if [ -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
-  if [ $FAIL_TO_OLDEST_SNAP -eq "true" ]; then
+  if $FAIL_TO_OLDEST_SNAP; then
     snap_count=$(cat src/snapshots.txt | grep "S " | wc -l)
     for pos in 'seq 3 $snap_count'; do
       SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n ${pos}p | tr -s ' ' | cut -d ' ' -f 3)
