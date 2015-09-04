@@ -16,7 +16,7 @@ is_machine_running () {
 # Stop a machine if it is already running
 stop_running_machine () {
   local already_running=is_machine_running $1
-  if already_running; then
+  if $already_running; then
     machinectl terminate $1
   fi
 }
