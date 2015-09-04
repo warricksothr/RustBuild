@@ -125,7 +125,7 @@ HEAD_HASH=$(git rev-parse --short HEAD)
 HEAD_DATE=$(TZ=UTC date -d @$(git show -s --format=%ct HEAD) +'%Y-%m-%d')
 TARBALL=cargo-$VERSION-$CHANNEL-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
 LOGFILE=cargo-$VERSION-$CHANNEL-$HEAD_DATE-$HEAD_HASH.test.output.txt
-LOGFILE_FAILED=cargo--$VERSION-$CHANNEL-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
+LOGFILE_FAILED=cargo-$VERSION-$CHANNEL-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
 # check if we have built this exact version of cargo. If so exit gracefully
 if [ ! -z "$($DROPBOX list $DROPBOX_DIR | grep $HEAD_DATE-$HEAD_HASH)" ]; then
