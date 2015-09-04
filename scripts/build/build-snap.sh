@@ -100,7 +100,7 @@ SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n 2p | tr -s
 if [ -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
   if $FAIL_TO_OLDEST_SNAP; then
     snap_count=$(cat src/snapshots.txt | grep "S " | wc -l)
-    for pos in 'seq 3 $snap_count'; do
+    for ((pos=3; pos<=$snap_count; pos++)); do
       SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n ${pos}p | tr -s ' ' | cut -d ' ' -f 3)
       if [ -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
         if [ $pos -eq $snap_count ]; then
