@@ -97,14 +97,14 @@ fi
 
 # This is the second to last snapshot. This is the snapshot that should be used to build the next one
 SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n 2p | tr -s ' ' | cut -d ' ' -f 3)
-SNAP_TARBALL="$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH | tr -s ' ' cut -d ' ' -f 4)"
+SNAP_TARBALL="$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH | tr -s ' ' | cut -d ' ' -f 4)"
 if [ -z "$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH)" ]; then
   if $FAIL_TO_OLDEST_SNAP; then
-    all_snaps_available=($("$DROPBOX list ${CONTAINER_TAG}/snapshots | tr -s ' ' cut -d ' ' -f 4)")
+    #all_snaps_available=($("$DROPBOX list ${CONTAINER_TAG}/snapshots | tr -s ' ' cut -d ' ' -f 4)")
     snap_count=$(cat src/snapshots.txt | grep "S " | wc -l)
     for ((pos=3; pos<=$snap_count; pos++)); do
       SECOND_TO_LAST_SNAP_HASH=$(cat src/snapshots.txt | grep "S " | sed -n ${pos}p | tr -s ' ' | cut -d ' ' -f 3)
-      SNAP_TARBALL="$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH | tr -s ' ' cut -d ' ' -f 4)"
+      SNAP_TARBALL="$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SECOND_TO_LAST_SNAP_HASH | tr -s ' ' | cut -d ' ' -f 4)"
       if [ -z $SNAP_TARBALL ]; then
         if [ $pos -eq $snap_count ]; then
           echo "No snapshot older than  ${LAST_SNAP_HASH} available. Need an older snapshot to build a current snapshot"
