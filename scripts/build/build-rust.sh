@@ -28,6 +28,14 @@ set -e
 # The number of process we should use while building
 : ${BUILD_PROCS:=$(($(nproc)-1))}
 
+# These are defaults that can be overwritten by a container build configuration file
+: ${USE_CLANG:=true}
+
+# Source additional global variables if available
+if [ -f ~/BUILD_CONFIGURATION ]; then
+  . ~/BUILD_CONFIGURATION
+fi
+
 # Set the build procs to 1 less than the number of cores/processors available,
 # but always atleast 1 if there's only one processor/core
 if [ ! $BUILD_PROCS -gt 1 ]; then BUILD_PROCS=1; fi

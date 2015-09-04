@@ -37,6 +37,14 @@ set -e
 # processors available to the system, - 1.
 : ${BUILD_PROCS:=$(($(nproc)-1))}
 
+# These are defaults that can be overwritten by a container build configuration file
+: ${USE_CLANG:=true}
+
+# Source additional global variables if available
+if [ -f ~/BUILD_CONFIGURATION ]; then
+  . ~/BUILD_CONFIGURATION
+fi
+
 echo "GLIBC Version Info: $(ldd --version | head -n 1)"
 echo "Linker Version Info: $(ld --version | head -n 1)"
 

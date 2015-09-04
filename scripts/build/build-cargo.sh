@@ -34,6 +34,11 @@ set -e
 : ${CARGO_STABLE_DIR:=$STABLE_DIR/cargo}
 : ${RUST_STABLE_DIR:=$STABLE_DIR/rust}
 
+# Source additional global variables if available
+if [ -f ~/BUILD_CONFIGURATION ]; then
+  . ~/BUILD_CONFIGURATION
+fi
+
 echo "GLIBC Version Info: $(ldd --version | head -n 1)"
 echo "Linker Version Info: $(ld --version | head -n 1)"
 
