@@ -172,10 +172,12 @@ case $COMMAND in
     # Create the directory in our cache, and then pass the command along to the dropbox script
     proxy "$@"
     mkdir -p "${CACHE_DIR}/${REAL_PARAMETERS_ARRAY[1]}"
+    exit 0
   ;;
   *)
     # Pass anything we don't recognize to the dropbox script so that we're transparent to the user
     proxy "$@"
+    exit 0
   ;;
 esac
 
