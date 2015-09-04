@@ -38,7 +38,9 @@ mkdir -p $BUILD/nightly/{cargo,rust}
 mkdir -p $BUILD/openssl/{dist,openssl_src}
 
 # Get the raspbian public key
-wget http://archive.raspbian.org/raspbian.public.key
+if [ ! -f raspbian.public.key ]; then
+  wget http://archive.raspbian.org/raspbian.public.key
+fi
 
 # Get the Rust and Cargo projects
 cd $BUILD
