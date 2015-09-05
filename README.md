@@ -8,12 +8,24 @@ This repository contains the required setup/configuration/build scripts and patc
 # Binary Downloads
 ### [Architecture Releases Directory](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
 ## ARMv7
+
 (Built on Debian Jessie, with Clang 3.5,  GLIBC 2.19-18, OpenSSL 1.2.0d static)
+
+For ARMv7 Devices with atleast GLIBC 2.19
+
+(Including Raspberry Pi 2 B __on Raspbian Jessie__ (8))
+
 ### [Unofficial Nightly Binaries (1.4.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
 ### [Unofficial Beta Binaries (1.3.0)](https://www.dropbox.com/sh/y5b1lsdjfy7iwnr/AADc5hlMHJ5u7q-AYtS0Z5zqa?dl=0)
 ### [Unofficial Stable Binaries (1.2.0)](https://www.dropbox.com/sh/t7zj60r3zxn2a7n/AADKMDSVhb0oSeGbuDzeD6yZa?dl=0)
+
 ## ARMv6
-(Built on Raspbian with Clang 3.5, GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
+(Built on Raspbian with GCC 4.8, GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
+
+For ARMv6 Devices with atleast GLIBC 2.13
+
+For Raspberry Pi (A, A+, B, B+, 2 B) running Raspbian Wheezy (7)
+
 ### [Unofficial Nightly Binaries (1.4.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
 
 # Usage Instructions
