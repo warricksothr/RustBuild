@@ -22,7 +22,7 @@ set -e
 : ${DIST_DIR:=~/dist}
 : ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
 : ${DROPBOX_SAVE_ROOT:=${CONTAINER_TAG}/}
-: ${MAX_NUMBER_OF_BUILDS:=5}
+: ${MAX_NUMBER_OF_BUILDS:=10}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
 # The number of process we should use while building
