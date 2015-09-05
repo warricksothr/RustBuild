@@ -56,8 +56,8 @@ stop_running_machine "$TARGET"
 
 # Build nightly, beta, and then stable in the same container consecutively
 systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh || stop_running_machine "$TARGET"
-#systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
-#systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh stable || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh stable || stop_running_machine "$TARGET"
 
 # Make sure we've exited the container at the end
 stop_running_machine "$TARGET"
