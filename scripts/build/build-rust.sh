@@ -51,6 +51,13 @@ if [ -z $CONTAINER_TAG ]; then
   fi
 fi
 
+# Set The Clang Parameters
+if $USE_CLANG; then
+: ${CLANG_PARAMS:="--enable-clang --disable-libcpp"}
+else
+: ${CLANG_PARAMS:=}
+fi
+
 # Set the channel
 if [ ! -z $1 ]; then
   CHANNEL=$1
@@ -156,8 +163,7 @@ cd build
   $CHANNEL \
   --disable-valgrind \
   --enable-ccache \
-  --enable-clang \
-  --disable-libcpp \
+  $CLANG_PARAMS \
   --enable-local-rust \
   --enable-llvm-static-stdcpp \
   --local-rust-root=$SNAP_DIR \
