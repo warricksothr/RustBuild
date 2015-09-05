@@ -45,7 +45,7 @@ if [ ! -f raspbian.public.key ]; then
   wget http://archive.raspbian.org/raspbian.public.key
 fi
  
-if [ ~ -f archive-key-7.0.asc ]; then
+if [ ! -f archive-key-7.0.asc ]; then
   wget https://ftp-master.debian.org/keys/archive-key-7.0.asc
 fi
 
