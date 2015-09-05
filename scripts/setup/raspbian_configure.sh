@@ -8,6 +8,9 @@ set -e
 : ${OPENSSL_DIR:=/build/openssl}
 : ${OPENSSL_SRC:=$OPENSSL_DIR/openssl_src}
 
+# Set the sources correctly
+echo "deb http://mirrordirector.raspbian.org/raspbian/ wheezy main contrib non-free rpi" > /etc/apt/sources.list
+
 cd /
 apt-key add raspbian.public.key
 rm raspbian.public.key
