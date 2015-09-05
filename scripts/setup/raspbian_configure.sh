@@ -18,7 +18,7 @@ apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python c
 # Set jessie as the branch of debian temporarily for an updated clang to build with
 echo "deb http://archive.raspbian.org/raspbian jessie main" > /etc/apt/sources.list
 apt-get update
-apt-get install --allow-unauthenticated -qq clang llvm gcc g++ ccache
+apt-get install --allow-unauthenticated -qq clang llvm gcc g++ ccache cmake
 echo "deb http://archive.raspbian.org/raspbian wheezy main" > /etc/apt/sources.list
 apt-get update
 
