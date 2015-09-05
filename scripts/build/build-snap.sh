@@ -45,7 +45,8 @@ if [ -f ~/BUILD_CONFIGURATION ]; then
   . ~/BUILD_CONFIGURATION
 fi
 
-echo "GLIBC Version Info: $(ldd --version | head -n 1)"
+echo "GLIBC Version Info: $(dpkg -l | grep libc6 | head -n1 | tr -s ' ' | cut -d ' ' -f 2-4)"
+echo "LDD Version Info: $(ldd --version | head -n 1)"
 echo "Linker Version Info: $(ld --version | head -n 1)"
 
 # Set the build procs to 1 less than the number of cores/processors available,
