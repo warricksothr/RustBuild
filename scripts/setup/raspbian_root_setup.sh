@@ -44,6 +44,11 @@ mkdir -p $OPT/rust_{nightly,beta,stable}/{cargo,rust}
 if [ ! -f raspbian.public.key ]; then
   wget http://archive.raspbian.org/raspbian.public.key
 fi
+
+# Get the raspbian public key
+if [ ! -f raspberrypi.gpg.key ]; then
+  wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+fi
  
 if [ ! -f archive-key-7.0.asc ]; then
   wget https://ftp-master.debian.org/keys/archive-key-7.0.asc
