@@ -11,6 +11,7 @@ set -e
 # Set the sources correctly
 echo "deb http://mirrordirector.raspbian.org/raspbian/ wheezy main contrib non-free rpi" > /etc/apt/sources.list
 echo "deb http://httpredir.debian.org/debian wheezy-backports main" >> /etc/apt/sources.list
+echo "deb http://archive.raspberrypi.org/debian/ wheezy main" >> /etc/apt/sources.list
 
 cd /
 apt-key add raspbian.public.key
