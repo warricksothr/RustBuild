@@ -12,15 +12,15 @@ cd /
 apt-key add raspbian.public.key
 rm raspbian.public.key
 
-apt-get update
-apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache cmake file build-essential pkg-config
+apt-key add archive-key-7.0.asc
+rm archive-key-7.0.asc
 
-# Set jessie as the branch of debian temporarily for an updated clang to build with
-echo "deb http://archive.raspbian.org/raspbian jessie main" > /etc/apt/sources.list
 apt-get update
-apt-get install --allow-unauthenticated -qq clang llvm gcc g++ ccache cmake
-echo "deb http://archive.raspbian.org/raspbian wheezy main" > /etc/apt/sources.list
-apt-get update
+# GCC-4.8 and G++-4.8
+apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache gcc-4.8 g++-4.8 file build-essential pkg-config
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
+# Later cmake from wheezy-backports to hopefully build Cargo with
+isudo apt-get install --allow-unauthenticated -t wheezy-backports cmake
 
 cd ~
 # Set the container tag if it wasn't properly inherited
