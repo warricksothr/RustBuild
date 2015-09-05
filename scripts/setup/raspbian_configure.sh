@@ -40,6 +40,7 @@ fi
 
 # Print a file with system info
 echo "$(uname -a)" > SYSTEM_INFO
+echo "$(dpkg -l | grep libc6)" >> SYSTEM_INFO
 echo "$(ldd --version | head -n 1)" >> SYSTEM_INFO
 echo "$(ld --version | head -n 1)" >> SYSTEM_INFO
 echo "$(gcc --version | head -n 1)" >> SYSTEM_INFO
