@@ -21,7 +21,7 @@ set -e
 : ${BRANCH:=master}
 : ${DIST_DIR:=~/dist}
 : ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
-: ${DROPBOX_SAVE_ROOT:=${CONTAINER_TAG}}
+: ${DROPBOX_SAVE_ROOT:=${CONTAINER_TAG}/}
 : ${MAX_NUMBER_OF_BUILDS:=5}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
