@@ -17,7 +17,7 @@ apt-key add raspbian.public.key
 rm raspbian.public.key
 
 apt-key add raspberrypi.gpg.key
-rm add raspberrypi.gpg.key
+rm raspberrypi.gpg.key
 
 apt-key add archive-key-7.0.asc
 rm archive-key-7.0.asc
