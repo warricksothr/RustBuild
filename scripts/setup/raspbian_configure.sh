@@ -28,7 +28,7 @@ apt-get update
 apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache gcc-4.8 g++-4.8 file build-essential pkg-config
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
 # Later cmake from wheezy-backports to hopefully build Cargo with
-apt-get install --allow-unauthenticated -t wheezy-backports cmake
+apt-get install --allow-unauthenticated -qq -t wheezy-backports cmake
 
 cd ~
 # Set the container tag if it wasn't properly inherited
