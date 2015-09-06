@@ -60,6 +60,8 @@ bash dropbox_uploader.sh mkdir ${CONTAINER_TAG}
 
 # Build OpenSSL with the required information for use in building cargo
 cd $OPENSSL_SRC
-./config -fPIC shared --prefix=$OPENSSL_DIR/dist
+# configure for armv4 minimum, with an arch of armv6, fPIC so it can be included
+# as a static library, produce shared libraries and install it into the openssl/dist directory
+./Configure linux-armv4 -march=armv6 -fPIC shared --prefix=$OPENSSL_DIR/dist
 make
 make install
