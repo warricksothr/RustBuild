@@ -6,6 +6,9 @@ Scripts and patches to auto build Rust and Cargo on ARM
 This repository contains the required setup/configuration/build scripts and patches for you to setup your own Rust compilation machine. Pre-built 'unofficial' Rust/Cargo binaries are listed below.
 
 # Binary Downloads
+
+For those familiar with Jorge Aparicio's [ruststrap](https://github.com/japaric/ruststrap) project; the ARMv6 builds are incredibly similar to his documented process. They're built on a raspbian container with glibc 2.13 and GCC 4.8. This means that they're compatible with ARMv6-armhf systems and up (Thanks to the requirement by ARM, that all newer ARM architectures are required to recognize and run old ARM architectures). So anyone with a Raspberry Pi, running the wheezy distribution of Raspbian should use those, even if they have a Raspberry Pi 2, which is ARMv7. However, if the Raspberry Pi 2 is running the newer jessie distribution of Raspbian, that should be able to run the ARMv7 binaries as it meets the requirement of glibc >= 2.19.
+
 ### [Architecture Releases Directory](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
 ## ARMv7
 
