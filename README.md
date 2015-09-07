@@ -14,7 +14,7 @@ For those familiar with Jorge Aparicio's [ruststrap](https://github.com/japaric/
 
 (Built on Debian Jessie, with Clang 3.5,  GLIBC 2.19-18, OpenSSL 1.2.0d static)
 
-For ARMv7 Devices with atleast GLIBC 2.19
+For ARMv7+ Devices with atleast GLIBC 2.19
 
 (Including Raspberry Pi 2 B __on Raspbian Jessie__ (8))
 
@@ -25,11 +25,13 @@ For ARMv7 Devices with atleast GLIBC 2.19
 ## ARMv6
 (Built on Raspbian with GCC 4.8, GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
 
-For ARMv6 Devices with atleast GLIBC 2.13
+For ARMv6+ Devices with atleast GLIBC 2.13
 
 For Raspberry Pi (A, A+, B, B+, 2 B) running Raspbian Wheezy (7)
 
 ### [Unofficial Nightly Binaries (1.4.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
+### [Unofficial Beta Binaries (1.3.0)](https://www.dropbox.com/sh/gtlk25hal9bch9s/AAA15JobWqD8G09tzxNUnJV5a?dl=0)
+### [Unofficial Stable Binaries (1.2.0)](https://www.dropbox.com/sh/cwqf1wzxhfr9hbc/AADrK0MveZwrI26nBgmEgfGJa?dl=0)
 
 # Usage Instructions
 Run # /bin/bash scripts/setup/build_debian_root.sh <name of container> to build a new container from scratch
