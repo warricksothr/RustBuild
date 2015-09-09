@@ -34,9 +34,9 @@ For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 ### [Unofficial Stable Binaries (1.2.0)](https://www.dropbox.com/sh/cwqf1wzxhfr9hbc/AADrK0MveZwrI26nBgmEgfGJa?dl=0)
 
 ## Builds tested on:
- - ODROID XU4 (9/6/2015) [ARMv7](#armv7)
+ - ODROID XU4 (9/9/2015) [ARMv7](#armv7)
  - CubieBoard2 (8/30/2015) [ARMv7](#armv7)
- - Samsung Note 10.1 (2014) in Arch chroot (9/6/2015) [ARMv7](#armv7)
+ - Samsung Note 10.1 (2014) in Arch chroot (9/9/2015) [ARMv7](#armv7)
  - Raspberry Pi B (9/6/2015) [ARMv6-armhf](#armv6-armhf)
 
 # Usage Instructions
