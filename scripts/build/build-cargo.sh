@@ -112,6 +112,7 @@ start_time="$(date +%s)"
 
 # update source to match upstream
 cd $SRC_DIR
+git reset
 git clean -df
 git checkout -- .
 git checkout master
