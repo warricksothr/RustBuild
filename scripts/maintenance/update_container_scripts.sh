@@ -24,6 +24,7 @@ for file in ${directories[@]}; do
     if [ -d $rust_build_dir ]; then
       opwd=$PWD
       cd $rust_build_dir
+      git reset
       git clean -df
       git checkout -- .
       git pull
