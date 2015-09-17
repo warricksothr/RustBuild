@@ -97,6 +97,7 @@ start_time="$(date +%s)"
 
 # checkout the latest for the requested rust $BRANCH
 cd $SRC_DIR
+git reset
 git clean -df
 git checkout -- .
 git checkout $BRANCH

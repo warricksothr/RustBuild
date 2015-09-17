@@ -94,6 +94,7 @@ start_time="$(date +%s)"
 
 # Update source to upstream
 cd $SRC_DIR
+git reset
 git clean -df
 git checkout -- .
 git checkout $BRANCH
