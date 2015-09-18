@@ -101,6 +101,7 @@ git reset
 git clean -df
 git checkout -- .
 git checkout $BRANCH
+git submodule update
 git pull
 git submodule update
 

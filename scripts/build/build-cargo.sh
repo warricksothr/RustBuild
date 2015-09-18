@@ -116,6 +116,7 @@ git reset
 git clean -df
 git checkout -- .
 git checkout master
+git submodule update
 git pull
 git submodule update
 
