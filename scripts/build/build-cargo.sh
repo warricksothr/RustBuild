@@ -289,8 +289,8 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
   NUMBER_OF_CARGO_BUILDS=$($DROPBOX list $DROPBOX_DIR | grep cargo- | grep -F .tar | wc -l)
   for i in $(seq `expr $MAX_NUMBER_OF_CARGO_BUILDS + 1` $NUMBER_OF_CARGO_BUILDS); do
     OLDEST_CARGO=$($DROPBOX list $DROPBOX_DIR | grep cargo- | grep -F .tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
-    OLDEST_TEST_OUTPUT=$(echo $OLDEST_CARGO | cut -d '-' -f 1-6).test.output.txt
-    OLDEST_TEST_FAILED_OUTPUT=$(echo $OLDEST_CARGO | cut -d '-' -f 1-6).test.failed.output.txt
+    OLDEST_TEST_OUTPUT=$(echo $OLDEST_CARGO | cut -d '-' -f 1-7).test.output.txt
+    OLDEST_TEST_FAILED_OUTPUT=$(echo $OLDEST_CARGO | cut -d '-' -f 1-7).test.failed.output.txt
     # Set the paths to the dropbox dir
     OLDEST_CARGO_PATH="${DROPBOX_DIR}${OLDEST_CARGO}"
     OLDEST_TEST_OUTPUT_PATH="${DROPBOX_DIR}${OLDEST_TEST_OUTPUT}"
