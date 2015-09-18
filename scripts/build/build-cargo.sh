@@ -25,6 +25,7 @@ set -e
 : ${SRC_DIR:=/build/cargo}
 : ${LIBSSL_DIST_DIR:=/build/openssl/dist}
 : ${CHANNEL:=nightly}
+: ${BRANCH:=master}
 
 # Rust directories
 : ${CARGO_NIGHTLY_DIR:=$NIGHTLY_DIR/cargo}
