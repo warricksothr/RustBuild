@@ -194,7 +194,7 @@ TARBALL=$TARBALL-$TARBALL_HASH.tar.gz
 # ship it
 if [ -z $DONTSHIP ]; then
   # Try and create the directory if this is not a nightly
-  if [ $DESCRIPTOR != "nightly" ]; then
+  if [ "$DESCRIPTOR" != "nightly" ]; then
     $DROPBOX mkdir ${DROPBOX_SAVE_ROOT}
   fi
   $DROPBOX -p upload $TARBALL ${DROPBOX_SAVE_ROOT}
