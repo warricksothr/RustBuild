@@ -16,6 +16,9 @@
 set -x
 set -e
 
+# Source the tools script
+. $HOME/tools.sh
+
 : ${CHANNEL:=nightly}
 : ${DESCRIPTOR:=nightly}
 : ${BRANCH:=master}
@@ -197,6 +200,9 @@ if [ -z $DONTSHIP ]; then
   $DROPBOX -p upload $TARBALL ${DROPBOX_SAVE_ROOT}
 fi
 rm $TARBALL
+
+# Tweet that we've built a new rustc version
+tweet_status "Successfully Built: ${CONTAINER_TAG} Rust-${VERSION}-${DESCRIPTOR}"
 
 # delete older nightlies
 NUMBER_OF_BUILDS=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar | wc -l)

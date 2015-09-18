@@ -16,6 +16,9 @@
 set -x
 set -e
 
+# Source the tools script
+. $HOME/tools.sh
+
 : ${DIST_DIR:=~/dist}
 : ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
 : ${MAX_NUMBER_OF_CARGO_BUILDS:=10}
@@ -272,6 +275,9 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
     $DROPBOX -p upload $TARBALL $DROPBOX_DIR
   fi
   rm $TARBALL
+
+  # Tweet that we've built a new cargo version
+  tweet_status "Successfully Built: ${CONTAINER_TAG} Cargo-${VERSION}-${DESCRIPTOR}"
 
   compile_end="$(date +%s)"
   compile_time=$(($compile_end-$start_time))

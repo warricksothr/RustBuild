@@ -24,6 +24,9 @@
 set -x
 set -e
 
+# Source the tools script
+. $HOME/tools.sh
+
 : ${CHANNEL:=nightly}
 : ${BRANCH:=master}
 : ${DROPBOX:=~/dropbox_uploader_cache_proxy.sh}
