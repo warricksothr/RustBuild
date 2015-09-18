@@ -1,6 +1,4 @@
-# RustBuild
-
-Build Status Updates: [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/SothrDev)
+# RustBuild [![Twitter URL](https://img.shields.io/twitter/url/http/SothrDev.svg?style=social)](https://twitter.com/SothrDev)
 
 Scripts and patches to auto build Rust and Cargo on an ARM machine
 
