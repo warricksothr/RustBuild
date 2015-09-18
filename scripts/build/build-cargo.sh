@@ -112,10 +112,11 @@ start_time="$(date +%s)"
 
 # update source to match upstream
 cd $SRC_DIR
-git reset --hard origin/$BRANCH
 git clean -df
 git checkout -- .
-git checkout master
+git checkout $BRANCH
+git submodule update
+git reset --hard origin/$BRANCH
 git submodule update
 git pull
 git submodule update

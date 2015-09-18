@@ -97,10 +97,11 @@ start_time="$(date +%s)"
 
 # checkout the latest for the requested rust $BRANCH
 cd $SRC_DIR
-git reset --hard origin/$BRANCH
 git clean -df
 git checkout -- .
 git checkout $BRANCH
+git submodule update
+git reset --hard origin/$BRANCH
 git submodule update
 git pull
 git submodule update
