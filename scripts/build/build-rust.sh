@@ -202,7 +202,7 @@ fi
 rm $TARBALL
 
 # Tweet that we've built a new rustc version
-tweet_status "Successfully Built: ${CONTAINER_TAG} Rust-${VERSION}-${DESCRIPTOR}"
+tweet_status "Successfully Built: ${CONTAINER_TAG} Rust-${VERSION}-${DESCRIPTOR} #RustBuild"
 
 # delete older nightlies
 NUMBER_OF_BUILDS=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar | wc -l)

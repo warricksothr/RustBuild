@@ -277,7 +277,7 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
   rm $TARBALL
 
   # Tweet that we've built a new cargo version
-  tweet_status "Successfully Built: ${CONTAINER_TAG} Cargo-${VERSION}-${DESCRIPTOR}"
+  tweet_status "Successfully Built: ${CONTAINER_TAG} Cargo-${VERSION}-${DESCRIPTOR} #RustBuild"
 
   compile_end="$(date +%s)"
   compile_time=$(($compile_end-$start_time))
