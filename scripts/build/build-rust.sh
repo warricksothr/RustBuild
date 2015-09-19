@@ -67,9 +67,6 @@ if [ ! -z $1 ]; then
   DESCRIPTOR=$1
 fi
 
-# Set the descriptor to be used in the build name
-CHANNEL_DESCRIPTOR=${DESCRIPTOR}-
-
 # Configure the build
 case $CHANNEL in
   stable)
@@ -153,9 +150,9 @@ bin/rustc -V
 cd $SRC_DIR
 HEAD_HASH=$(git rev-parse --short HEAD)
 HEAD_DATE=$(TZ=UTC date -d @$(git show -s --format=%ct HEAD) +'%Y-%m-%d')
-TARBALL=rust-$VERSION-${CHANNEL_DESCRIPTOR}$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
-LOGFILE=rust-$VERSION-${CHANNEL_DESCRIPTOR}$HEAD_DATE-$HEAD_HASH.test.output.txt
-LOGFILE_FAILED=rust-$VERSION-${CHANNEL_DESCRIPTOR}$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
+TARBALL=rust-$VERSION-${DESCRIPTOR}-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
+LOGFILE=rust-$VERSION-${DESCRIPTOR}-$HEAD_DATE-$HEAD_HASH.test.output.txt
+LOGFILE_FAILED=rust-$VERSION-${DESCRIPTOR}-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
 # Check to see if we've already built one
 # If so, skip this build and call it good!

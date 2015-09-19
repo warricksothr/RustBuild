@@ -72,9 +72,6 @@ if [ ! -z $1 ]; then
   CHANNEL=$1
 fi
 
-# Set the descriptor to be used in the build name
-CHANNEL_DESCRIPTOR=${DESCRIPTOR}
-
 # Configure the build
 # Set the appropriate distribution directories for rust and cargo
 # Set the dropbox output directory and initial check directory
@@ -145,9 +142,9 @@ git apply /build/patches/static-ssl.patch
 # Construct the paths for the tarball and logs that will be produced
 HEAD_HASH=$(git rev-parse --short HEAD)
 HEAD_DATE=$(TZ=UTC date -d @$(git show -s --format=%ct HEAD) +'%Y-%m-%d')
-TARBALL=cargo-$VERSION-$CHANNEL-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
-LOGFILE=cargo-$VERSION-$CHANNEL-$HEAD_DATE-$HEAD_HASH.test.output.txt
-LOGFILE_FAILED=cargo-$VERSION-$CHANNEL-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
+TARBALL=cargo-$VERSION-$DESCRIPTOR-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
+LOGFILE=cargo-$VERSION-$DESCRIPTOR-$HEAD_DATE-$HEAD_HASH.test.output.txt
+LOGFILE_FAILED=cargo-$VERSION-$DESCRIPTOR-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
 # check if we have built this exact version of cargo. If so exit gracefully
 if [ ! -z "$($DROPBOX list $DROPBOX_DIR | grep $HEAD_DATE-$HEAD_HASH)" ]; then
