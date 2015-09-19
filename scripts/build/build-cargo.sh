@@ -86,6 +86,7 @@ case $CHANNEL in
     RUST_DIST_DIR=$RUST_STABLE_DIR
     CARGO_DIST_DIR=$CARGO_STABLE_DIR
     DROPBOX_DIR=$STABLE_DROPBOX_DIR
+    DESCRIPTOR=$CHANNEL
     if [ -z "$DROPBOX_DIR" ]; then
       echo "Can't build a stable cargo without a stable rust"
       exit 1
@@ -95,6 +96,7 @@ case $CHANNEL in
     RUST_DIST_DIR=$RUST_BETA_DIR
     CARGO_DIST_DIR=$CARGO_BETA_DIR
     DROPBOX_DIR=$BETA_DROPBOX_DIR
+    DESCRIPTOR=$CHANNEL
     if [ -z "$DROPBOX_DIR" ]; then
       echo "Can't build a beta cargo without a beta rust"
       exit 1
@@ -102,9 +104,11 @@ case $CHANNEL in
   ;;
   nightly)
     # Don't need to do anything as these are the defaults
+    DESCRIPTOR=$CHANNEL
   ;; 
   tag-*)
     # Allow custom branches to be requested
+    DESCRIPTOR=$CHANNEL
   ;;
   *) 
     echo "unknown release channel: $CHANNEL" && exit 1
