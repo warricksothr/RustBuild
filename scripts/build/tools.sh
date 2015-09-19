@@ -11,6 +11,6 @@ set -e
 # account. If no account is configured, then we'll just ignore this request
 tweet_status() {
     if [ -f "$HOME/.ttytterkey" ]; then
-        ttytter -ssl -status="$1"
+        ttytter -ssl -status="$1" || true
     fi
 }
