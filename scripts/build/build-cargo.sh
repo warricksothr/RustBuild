@@ -73,7 +73,7 @@ if [ ! -z $1 ]; then
 fi
 
 # Set the descriptor to be used in the build name
-: ${CHANNEL_DESCRIPTOR:=${DESCRIPTOR}-}
+CHANNEL_DESCRIPTOR=${DESCRIPTOR}
 
 # Configure the build
 # Set the appropriate distribution directories for rust and cargo
