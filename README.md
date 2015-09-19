@@ -19,9 +19,9 @@ For ARMv7+ Devices with atleast GLIBC 2.19
 
 (Including Raspberry Pi 2 __running Raspbian Jessie__ (8))
 
-### [Unofficial Nightly Binaries (1.4.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
-### [Unofficial Beta Binaries (1.3.0)](https://www.dropbox.com/sh/y5b1lsdjfy7iwnr/AADc5hlMHJ5u7q-AYtS0Z5zqa?dl=0)
-### [Unofficial Stable Binaries (1.2.0)](https://www.dropbox.com/sh/t7zj60r3zxn2a7n/AADKMDSVhb0oSeGbuDzeD6yZa?dl=0)
+### [Unofficial Nightly Binaries (1.5.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
+### [Unofficial Beta Binaries (1.4.0)](https://www.dropbox.com/sh/0ie217m6yiv5wic/AAC3nAwnC5uUPFcbTuz6EmLRa?dl=0)
+### [Unofficial Stable Binaries (1.3.0)](https://www.dropbox.com/sh/zth6wky23ih88c8/AABTYCOBeaTDBIASKoWyAPwma?dl=0)
 
 ## ARMv6-armhf
 (Built on Raspbian with GCC 4.8, GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
