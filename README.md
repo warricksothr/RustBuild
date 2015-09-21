@@ -50,25 +50,22 @@ Using the binary builds can be achieved in two ways. Ideally, using multirust to
 
 ## Installation
 
-1.  Create the directory where rust will be installed and move into it. I use "/opt/rust/nightly"
+*  Create the directory where rust will be installed and move into it. I use "/opt/rust/nightly" (Step 1)
 ```shell
 # mkdir -p /opt/rust/nightly
 # cd /opt/rust/nightly
 ```
-
-2. Download the latest cargo and rust nightly.
+* Download the latest cargo and rust nightly. (Step 2)
 ```shell
 # wget $LATEST_CARGO_TARBALL
 # wget $LATEST_RUST_TARBALL
 ```
-
-3. Extract the releases into the directory
+* Extract the releases into the directory (Step 3)
 ```shell
 # tar xzf $LATEST_CARGO_TARBALL && rm $LATEST_CARGO_TARBALL
 # tar xzf $LATEST_RUST_TARBALL && rm $LATEST_RUST_TARBALL
 ```
-
-4. Link multirust to the current extracted rust and cargo.
+* Link multirust to the current extracted rust and cargo. (Step 4)
 ```shell
 # multirust update unofficial-nightly --link-local
 # multirust default unofficial-nightly
@@ -82,12 +79,11 @@ Updating is as simple as entering the deployed directory, removing all the files
 
 ## Uninstallation
 
-1. Remove the files and directories in the deployed directory
+* Remove the files and directories in the deployed directory (Step 1)
 ```shell
 # rm -rf /opt/rust/nightly
 ```
-
-2. Unlink multirust
+* Unlink multirust (Step 2)
 ```shell
 # multirust remove-toolchain unofficial-nightly
 ```
