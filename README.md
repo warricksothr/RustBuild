@@ -30,12 +30,12 @@ For ARMv6+ Devices with atleast GLIBC 2.13
 
 For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 
-### [Unofficial Nightly Binaries (1.4.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
-### [Unofficial Beta Binaries (1.3.0)](https://www.dropbox.com/sh/gtlk25hal9bch9s/AAA15JobWqD8G09tzxNUnJV5a?dl=0)
-### [Unofficial Stable Binaries (1.2.0)](https://www.dropbox.com/sh/cwqf1wzxhfr9hbc/AADrK0MveZwrI26nBgmEgfGJa?dl=0)
+### [Unofficial Nightly Binaries (1.5.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
+### [Unofficial Beta Binaries (1.4.0)](https://www.dropbox.com/sh/ausedh4kwrx5rug/AACXoXri73xfQNw3-EsF38Zga?dl=0)
+### [Unofficial Stable Binaries (1.3.0)](https://www.dropbox.com/sh/laespfc9u77hga6/AACy-arsOzQe2nT1hvcWegoea?dl=0)
 
 ## Builds tested on:
- - ODROID XU4 (9/9/2015) [ARMv7](#armv7)
+ - ODROID XU4 (@Today) [ARMv7](#armv7)[ARMv6-armhf](#armv6-armhf)
  - CubieBoard2 (8/30/2015) [ARMv7](#armv7)
  - Samsung Note 10.1 (2014) in Arch chroot (9/9/2015) [ARMv7](#armv7)
  - Raspberry Pi B (9/6/2015) [ARMv6-armhf](#armv6-armhf)
