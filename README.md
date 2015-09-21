@@ -45,8 +45,8 @@ For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 Using the binary builds can be achieved in two ways. Ideally, using multirust to manage your rust binaries, or through manual linking on your system. I'm going to cover using multirust as that is the system I prefer to use. In this guide I will walk you through adding the latest nightly binary build to multirust. This can be adapted for the stable and beta builds simply.
 
 Requirements:
-    - [Multirust](https://github.com/brson/multirust)
-    - One or more binary builds for your system above.
+  - [Multirust](https://github.com/brson/multirust)
+  - One or more binary builds for your system from above.
 
 1.  Create the directory where rust will be installed and move into it. I use "/opt/rust/nightly"
 ```shell
@@ -67,7 +67,7 @@ Requirements:
 ```
 
 4. Link multirust to the current extracted rust and cargo.
-```
+```shell
 # multirust update unofficial-nightly --link-local
 # multirust default unofficial-nightly
 ```
