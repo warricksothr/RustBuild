@@ -44,9 +44,11 @@ For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 
 Using the binary builds can be achieved in two ways. Ideally, using multirust to manage your rust binaries, or through manual linking on your system. I'm going to cover using multirust as that is the system I prefer to use. In this guide I will walk you through adding the latest nightly binary build to multirust. This can be adapted for the stable and beta builds simply.
 
-Requirements:
+##Requirements:
   - [Multirust](https://github.com/brson/multirust)
   - One or more binary builds for your system from above.
+
+##Installation
 
 1.  Create the directory where rust will be installed and move into it. I use "/opt/rust/nightly"
 ```shell
@@ -72,11 +74,23 @@ Requirements:
 # multirust default unofficial-nightly
 ```
 
-Now you'll have a version of rust installed in a standard place. Other users could also link against it with only the last two steps.
+Now you'll have a version of rust installed in a standard place. Other users could also link against it with only the last step.
 
 If you'd prefer to install it only for your user, just use a directory in your home for deployment. Something like "~/opt/rust/nightly" would be fine.
 
 Updating is as simple as entering the deployed directory, removing all the files and folders, and then perform steps 2 and 3 again. (Because we used --link-local multirust doesn't care that we've changed the files.)
+
+##Uninstallation
+
+1. Remove the files and directories in the deployed directory
+```shell
+# rm -rf /opt/rust/nightly
+```
+
+2. Unlink multirust
+```shell
+# multirust remove-toolchain unofficial-nightly
+```
 
 # Usage Instructions
 Run # /bin/bash scripts/setup/debian_root_build.sh <name of container> to build a new container from scratch (in the default /chroots directory).
