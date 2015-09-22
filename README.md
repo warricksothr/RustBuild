@@ -47,25 +47,45 @@ Using the binary builds can be achieved in two ways. Ideally, using multirust to
 ## Requirements:
   - [Multirust](https://github.com/brson/multirust)
   - One or more binary builds for your system from above.
+  - The users that will have access to rust on the system will have to belong to a group, such as users or rust
 
 ## Installation
+
+* Adding user to a group (Setup step for first time users)
+
+```shell
+# usermod -aG <group> <user>
+```
 
 *  Create the directory where rust will be installed and move into it. I use "/opt/rust/nightly" (Step 1)
 ```shell
 # mkdir -p /opt/rust/nightly
 # cd /opt/rust/nightly
 ```
+
 * Download the latest cargo and rust nightly. (Step 2)
+
 ```shell
 # wget $LATEST_CARGO_TARBALL
 # wget $LATEST_RUST_TARBALL
 ```
+
 * Extract the releases into the directory (Step 3)
+
 ```shell
 # tar xzf $LATEST_CARGO_TARBALL && rm $LATEST_CARGO_TARBALL
 # tar xzf $LATEST_RUST_TARBALL && rm $LATEST_RUST_TARBALL
 ```
-* Link multirust to the current extracted rust and cargo. (Step 4)
+
+* Set the group and permissions (Step 4)
+
+```shell
+# chown -R root:<group> /opt/rust/nightly
+# chmod -R 775 /opt/rust/nightly
+```
+
+* Link multirust to the current extracted rust and cargo. (Step 5)
+
 ```shell
 # multirust update unofficial-nightly --link-local
 # multirust default unofficial-nightly
@@ -75,15 +95,18 @@ Now you'll have a version of rust installed in a standard place. Other users cou
 
 If you'd prefer to install it only for your user, just use a directory in your home for deployment. Something like "~/opt/rust/nightly" would be fine.
 
-Updating is as simple as entering the deployed directory, removing all the files and folders, and then perform steps 2 and 3 again. (Because we used --link-local multirust doesn't care that we've changed the files.)
+Updating is as simple as entering the deployed directory, removing all the files and folders, and then perform steps 2-4 again. (Because we used --link-local multirust doesn't care that we've changed the files.)
 
 ## Uninstallation
 
 * Remove the files and directories in the deployed directory (Step 1)
+
 ```shell
 # rm -rf /opt/rust/nightly
 ```
+
 * Unlink multirust (Step 2)
+
 ```shell
 # multirust remove-toolchain unofficial-nightly
 ```
