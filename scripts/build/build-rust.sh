@@ -107,6 +107,9 @@ git submodule update
 #Parse the version from the make file
 VERSION=$(cat mk/main.mk | grep CFG_RELEASE_NUM | head -n 1 | sed -e "s/.*=//")
 
+#Apply the patch that allows us to specify a custom LLVM_TARGETS variable
+git apply /build/patches/rust_configure_llvm_targets.patch
+
 case $DESCRIPTOR in
   stable | beta )
     DROPBOX_SAVE_ROOT="${CONTAINER_TAG}/${VERSION}-${DESCRIPTOR}/"
@@ -163,6 +166,10 @@ fi
 
 # build it
 cd build
+
+#Set custom LLVM_TARGETS for only arm
+LLVM_TARGETS=--enable-targets=arm
+
 ../configure \
   $CHANNEL \
   --disable-valgrind \
