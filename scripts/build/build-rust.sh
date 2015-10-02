@@ -167,10 +167,8 @@ fi
 # build it
 cd build
 
-#Set custom LLVM_TARGETS for only arm
-LLVM_TARGETS=--enable-targets=arm
-
-../configure \
+# Override the LLVM build targets. only need arm.
+LLVM_TARGETS=arm ../configure \
   $CHANNEL \
   --disable-valgrind \
   --enable-ccache \
@@ -181,7 +179,7 @@ LLVM_TARGETS=--enable-targets=arm
   --prefix=/ \
   --build=arm-unknown-linux-gnueabihf \
   --host=arm-unknown-linux-gnueabihf \
-  --target=arm-unknown-linux-gnueabihf
+  --target=arm-unknown-linux-gnueabihf \
 make clean
 make -j $BUILD_PROCS
 

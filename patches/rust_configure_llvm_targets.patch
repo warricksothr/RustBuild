@@ -1,8 +1,8 @@
 diff --git a/configure b/configure
-index 21657b0..1e04603 100755
+index 21657b0..2d509be 100755
 --- a/configure
 +++ b/configure
-@@ -1550,8 +1550,11 @@ do
+@@ -1550,8 +1550,13 @@ do
  
          msg "configuring LLVM for $gnu_t"
  
@@ -11,7 +11,9 @@ index 21657b0..1e04603 100755
 +        if [ -z $LLVM_TARGETS ];
 +	then
 +		LLVM_TARGETS="--enable-targets=x86,x86_64,arm,aarch64,mips,powerpc"
-+        fi
++        else
++		LLVM_TARGETS="--enable-targets=$LLVM_TARGETS"
++	fi
 +	LLVM_BUILD="--build=$gnu_t"
          LLVM_HOST="--host=$gnu_t"
          LLVM_TARGET="--target=$gnu_t"
