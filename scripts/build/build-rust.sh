@@ -167,6 +167,11 @@ fi
 # build it
 cd build
 
+# Here we do some additional important cleanup
+if [ -d arm-unknown-linux-gnueabihf ]; then
+  rm -rf arm-unknown-linux-gnueabihf
+fi
+
 # Override the LLVM build targets. only need arm.
 LLVM_TARGETS=arm ../configure \
   $CHANNEL \
@@ -179,7 +184,7 @@ LLVM_TARGETS=arm ../configure \
   --prefix=/ \
   --build=arm-unknown-linux-gnueabihf \
   --host=arm-unknown-linux-gnueabihf \
-  --target=arm-unknown-linux-gnueabihf \
+  --target=arm-unknown-linux-gnueabihf
 make clean
 make -j $BUILD_PROCS
 
