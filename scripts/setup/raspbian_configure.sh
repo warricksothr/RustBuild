@@ -7,6 +7,10 @@ set -e
 
 : ${OPENSSL_DIR:=/build/openssl}
 : ${OPENSSL_SRC:=$OPENSSL_DIR/openssl_src}
+: ${CMAKE_SRC:=/build/cmake}
+: ${CMAKE_TAG:=v3.3.2}
+: ${LLVM_SRC:=/build/llvm}
+: ${LLVM_BUILD:=/build/llvm_build}
 
 # Set the sources correctly
 echo "deb http://mirrordirector.raspbian.org/raspbian/ wheezy main contrib non-free rpi" > /etc/apt/sources.list
@@ -25,7 +29,7 @@ rm archive-key-7.0.asc
 
 apt-get update
 # GCC-4.8 and G++-4.8
-apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache gcc-4.8 g++-4.8 file build-essential pkg-config
+apt-get install --allow-unauthenticated -qq openssl zlib1g-dev git curl python ccache gcc-4.8 g++-4.8 file build-essential pkg-config subversion
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
 # Later cmake from wheezy-backports to hopefully build Cargo with
 apt-get install --allow-unauthenticated -qq -t wheezy-backports cmake
@@ -63,5 +67,18 @@ cd $OPENSSL_SRC
 # configure for armv4 minimum, with an arch of armv6, fPIC so it can be included
 # as a static library, produce shared libraries and install it into the openssl/dist directory
 ./Configure linux-armv4 -march=armv6 -fPIC shared --prefix=$OPENSSL_DIR/dist
+make
+make install
+
+# Build a newer cmake through the boostrapping process
+cd ${CMAKE_SRC}
+git checkout tags/v3.3.2
+./bootstrap
+make
+make install
+
+# Build a new clang to use :D
+cd ${LLVM_BUILD}
+cmake -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ${LLVM_SRC}
 make
 make install

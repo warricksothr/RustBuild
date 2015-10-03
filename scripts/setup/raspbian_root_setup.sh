@@ -123,5 +123,24 @@ ln -sf RustBuild/scripts/setup/raspbian_configure.sh .
 # Copy the patches
 cp RustBuild/patches/* ${BUILD}/patches
 
+opwd=$pwd
+# clone Cmake
+mkdir ${BUILD}/cmake
+cd ${BUILD}/cmake
+git clone https://cmake.org/cmake.git .
+
+# clone LLVM/Clang
+mkdir ${BUILD}
+svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
+cd llvm/tools
+svn co http://llvm.org/svn/llvm-project/cfe/trunk clang
+cd clang/tools
+svn co http://llvm.org/svn/llvm-project/clang-tools-extra/trunk extra
+cd ../../../projects
+svn co http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt
+cd $opwd
+
+mkdir ${BUILD}/llvm_build
+
 # Run the configuration script in in a systemd nspawn
 systemd-nspawn -D ${ROOT} /bin/bash ~/raspbian_configure.sh
