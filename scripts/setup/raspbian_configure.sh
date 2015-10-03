@@ -79,6 +79,13 @@ make install
 
 # Build a new clang to use :D
 cd ${LLVM_BUILD}
-cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=ARM -DLLVM_TARGET_ARCH=ARM -G "Unix Makefiles" ${LLVM_SRC}
+cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DLLVM_TARGETS_TO_BUILD="ARM" \
+    -DLLVM_TARGET_ARCH="ARM" \
+    -DCMAKE_C_FLAGS="-O2 -march=armv6 -mfloat-abi=hard -mfpu=vfp" \
+    -DCMAKE_CXX_FLAGS="-O2 -march=armv6 -mfloat-abi=hard -mfpu=vfp" \
+    -G "Unix Makefiles" \
+    ${LLVM_SRC}
 make
 make install
