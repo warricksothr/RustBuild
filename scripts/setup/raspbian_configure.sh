@@ -83,6 +83,8 @@ cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DLLVM_TARGETS_TO_BUILD="ARM" \
     -DLLVM_TARGET_ARCH="ARM" \
+    -DCMAKE_SYSTEM_NAME=Linux \
+    -DCMAKE_SYSTEM_PROCESSOR=arm \
     -DCMAKE_C_FLAGS="-O2 -march=armv6 -mfloat-abi=hard -mfpu=vfp" \
     -DCMAKE_CXX_FLAGS="-O2 -march=armv6 -mfloat-abi=hard -mfpu=vfp" \
     -G "Unix Makefiles" \
