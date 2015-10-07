@@ -14,6 +14,9 @@ set -e
 
 if [ $(($(nprocs) / 2)) >= 1 ]; then
     MAKE_JOBS=$(($(nprocs) / 2))
+    if [ $(($(nprocs) % 2)) == 1 ] && [ $(nprocs) > 2 ]; then
+        MAKE_JOBS=$(($MAKE_JOBS + 1))
+    fi
 else
     MAKE_JOBS=1
 fi
