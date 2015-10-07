@@ -12,6 +12,12 @@ set -e
 : ${LLVM_SRC:=/build/llvm}
 : ${LLVM_BUILD:=/build/llvm_build}
 
+if [ $(($(nprocs) / 2)) >= 1 ]; then
+    MAKE_JOBS=$(($(nprocs) / 2))
+else
+    MAKE_JOBS=1
+fi
+
 # Set the sources correctly
 echo "deb http://mirrordirector.raspbian.org/raspbian/ wheezy main contrib non-free rpi" > /etc/apt/sources.list
 echo "deb http://httpredir.debian.org/debian wheezy-backports main" >> /etc/apt/sources.list
@@ -67,13 +73,13 @@ cd $OPENSSL_SRC
 # configure for armv4 minimum, with an arch of armv6, fPIC so it can be included
 # as a static library, produce shared libraries and install it into the openssl/dist directory
 ./Configure linux-armv4 -march=armv6 -fPIC shared --prefix=$OPENSSL_DIR/dist
-make
+make -j $MAKE_JOBS
 make install
 
 # Build a newer cmake through the boostrapping process
 cd ${CMAKE_SRC}
 ./bootstrap
-make
+make -j $MAKE_JOBS
 make install
 
 # Build a new clang to use :D
@@ -90,5 +96,5 @@ cmake \
     -DCMAKE_CXX_FLAGS="-O2 -march=armv6 -mfloat-abi=hard -mfpu=vfp" \
     -G "Unix Makefiles" \
     ${LLVM_SRC}
-make
+make -j $MAKE_JOBS
 make install
