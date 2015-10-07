@@ -72,7 +72,6 @@ make install
 
 # Build a newer cmake through the boostrapping process
 cd ${CMAKE_SRC}
-git checkout tags/v3.3.2
 ./bootstrap
 make
 make install
@@ -81,9 +80,10 @@ make install
 cd ${LLVM_BUILD}
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_CROSSCOMPILING=True \
     -DLLVM_TARGETS_TO_BUILD="ARM" \
-    -DLLVM_DEFAULT_TARGET_TRIPLE=arm-linux-gnueabihf \
     -DLLVM_TARGET_ARCH="ARM" \
+    -DLLVM_DEFAULT_TARGET_TRIPLE=arm-linux-gnueabihf \
     -DCMAKE_SYSTEM_NAME=Linux \
     -DCMAKE_SYSTEM_PROCESSOR=arm \
     -DCMAKE_C_FLAGS="-O2 -march=armv6 -mfloat-abi=hard -mfpu=vfp" \

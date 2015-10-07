@@ -17,6 +17,8 @@ set -e
 # branches/release_XY is the release of LLVM/CLang coresponding to X.Y
 # so branches/release_37 is LLVM/Clang 3.7
 : ${LLVM_RELEASE:="branches/release_37"}
+# Tag to grab for CMAKE
+: ${CMAKE_TAG:="v3.3.2"}
 
 # Allow custom names
 if [ ! -z "$1" ]; then
@@ -132,7 +134,7 @@ opwd=$pwd
 mkdir ${BUILD}/cmake
 cd ${BUILD}/cmake
 git clone https://cmake.org/cmake.git .
-
+git checkout tags/$CMAKE_TAG
 
 # clone LLVM/Clang
 mkdir ${BUILD}
