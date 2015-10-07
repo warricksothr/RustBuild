@@ -13,6 +13,10 @@ set -e
 
 : ${CHROOT_NAME:=RustBuild-raspbian}
 : ${CHROOT_TAG:=ARMv6-armhf}
+# trunk is the latest development
+# branches/release_XY is the release of LLVM/CLang coresponding to X.Y
+# so branches/release_37 is LLVM/Clang 3.7
+: ${LLVM_RELEASE:="branches/release_37"}
 
 # Allow custom names
 if [ ! -z "$1" ]; then
@@ -129,15 +133,16 @@ mkdir ${BUILD}/cmake
 cd ${BUILD}/cmake
 git clone https://cmake.org/cmake.git .
 
+
 # clone LLVM/Clang
 mkdir ${BUILD}
-svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
+svn co http://llvm.org/svn/llvm-project/llvm/$LLVM_RELEASE llvm
 cd llvm/tools
-svn co http://llvm.org/svn/llvm-project/cfe/trunk clang
+svn co http://llvm.org/svn/llvm-project/cfe/$LLVM_RELEASE clang
 cd clang/tools
-svn co http://llvm.org/svn/llvm-project/clang-tools-extra/trunk extra
+svn co http://llvm.org/svn/llvm-project/clang-tools-extra/$LLVM_RELEASE extra
 cd ../../../projects
-svn co http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt
+svn co http://llvm.org/svn/llvm-project/compiler-rt/$LLVM_RELEASE compiler-rt
 cd $opwd
 
 mkdir ${BUILD}/llvm_build
