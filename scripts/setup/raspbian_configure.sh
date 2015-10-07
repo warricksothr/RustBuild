@@ -54,7 +54,7 @@ echo "$(clang++ --version | tr '\\n' '|' | head -n 1)" >> SYSTEM_INFO
 echo "$(ccache --version | head -n 1)" >> SYSTEM_INFO
 
 # Echo settings to the Build Configuration file
-echo "USE_CLANG=false" > BUILD_CONFIGURATION
+echo "USE_CLANG=true" > BUILD_CONFIGURATION
 
 # Run the dropbox uploader configuration script
 bash dropbox_uploader.sh
