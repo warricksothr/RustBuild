@@ -82,7 +82,7 @@ cd ${LLVM_BUILD}
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DLLVM_TARGETS_TO_BUILD="ARM" \
-    -DLLVM_DEFAULT_TARGET_TRIPLE=arm-linux-gnueabihf
+    -DLLVM_DEFAULT_TARGET_TRIPLE=arm-linux-gnueabihf \
     -DLLVM_TARGET_ARCH="ARM" \
     -DCMAKE_SYSTEM_NAME=Linux \
     -DCMAKE_SYSTEM_PROCESSOR=arm \
