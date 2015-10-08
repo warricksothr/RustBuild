@@ -38,7 +38,7 @@ For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
  - ODROID XU4 (@Today This is the build server) [ARMv7](#armv7) [ARMv6-armhf](#armv6-armhf)
  - CubieBoard2 (8/30/2015) [ARMv7](#armv7)
  - Samsung Note 10.1 (2014) in Arch chroot (9/21/2015) [ARMv7](#armv7)
- - Raspberry Pi B (9/6/2015) [ARMv6-armhf](#armv6-armhf)
+ - Raspberry Pi B (10/7/2015) [ARMv6-armhf](#armv6-armhf)
 
 # Binary Install/Uninstall Instructions
 
