@@ -87,14 +87,12 @@ make install
 
 # Build a new clang to use :D
 cd ${LLVM_BUILD}
-cmake \
+cmake \ 
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CROSSCOMPILING=True \
-    -DLLVM_TARGETS_TO_BUILD="ARM" \
-    -DLLVM_TARGET_ARCH="ARM" \
-    -DLLVM_DEFAULT_TARGET_TRIPLE=arm-linux-gnueabihf \
-    -DCMAKE_SYSTEM_NAME=Linux \
-    -DCMAKE_SYSTEM_PROCESSOR=arm \
+    -DLLVM_DEFAULT_TARGET_TRIPLE=arm-unknown-linux-gnueabihf \
+    -DLLVM_TARGETS_TO_BUILD=ARM \
+    -DLLVM_TARGET_ARCH=ARM \
     -DCMAKE_C_FLAGS="-O2 -march=armv6 -mfloat-abi=hard -mfpu=vfp" \
     -DCMAKE_CXX_FLAGS="-O2 -march=armv6 -mfloat-abi=hard -mfpu=vfp" \
     -G "Unix Makefiles" \
