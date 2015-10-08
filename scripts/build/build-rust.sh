@@ -165,9 +165,10 @@ fi
 cd build
 
 # Here we do some additional important cleanup
-if [ -d arm-unknown-linux-gnueabihf ]; then
-  rm -rf arm-unknown-linux-gnueabihf
-fi
+# Temporarily disabling. The error that was caused shouldn't need cleaning this all the time.
+#if [ -d arm-unknown-linux-gnueabihf ]; then
+#  rm -rf arm-unknown-linux-gnueabihf
+#fi
 
 # Override the LLVM build targets. only need arm.
 ../configure \
