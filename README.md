@@ -24,7 +24,7 @@ For ARMv7+ Devices with atleast GLIBC 2.19
 ### [Unofficial Stable Binaries (1.3.0)](https://www.dropbox.com/sh/zth6wky23ih88c8/AABTYCOBeaTDBIASKoWyAPwma?dl=0)
 
 ## ARMv6-armhf
-(Built on Raspbian with GCC 4.8, GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
+(Built on Raspbian with Clang 3.7 (October 7th+) or GCC 4.8 (September 29th-), GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
 
 For ARMv6+ Devices with atleast GLIBC 2.13
 
