@@ -151,6 +151,7 @@ cd $SRC_DIR
 HEAD_HASH=$(git rev-parse --short HEAD)
 HEAD_DATE=$(TZ=UTC date -d @$(git show -s --format=%ct HEAD) +'%Y-%m-%d')
 TARBALL=rust-$VERSION-${DESCRIPTOR}-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
+TARBALL_LIB=rustlib-$VERSION-${DESCRIPTOR}-$HEAD_DATE-$HEAD_HASH-arm-unknown-linux-gnueabihf
 LOGFILE=rust-$VERSION-${DESCRIPTOR}-$HEAD_DATE-$HEAD_HASH.test.output.txt
 LOGFILE_FAILED=rust-$VERSION-${DESCRIPTOR}-$HEAD_DATE-$HEAD_HASH.test.failed.output.txt
 
@@ -191,10 +192,15 @@ rm -rf $DIST_DIR/*
 DESTDIR=$DIST_DIR make -j $BUILD_PROCS install
 cd $DIST_DIR
 tar czf ~/$TARBALL .
+tar czf ~/$TARBALL_LIB ./lib/rustlib
 cd ~
 TARBALL_HASH=$(sha1sum $TARBALL | tr -s ' ' | cut -d ' ' -f 1)
 mv $TARBALL $TARBALL-$TARBALL_HASH.tar.gz
 TARBALL=$TARBALL-$TARBALL_HASH.tar.gz
+
+TARBALL_LIB_HASH=$(sha1sum $TARBALL_LIB | tr -s ' ' | cut -d ' ' -f 1)
+mv $TARBALL_LIB $TARBALL_LIB-$TARBALL_LIB_HASH.tar.gz
+TARBALL_LIB=$TARBALL_LIB-$TARBALL_LIB_HASH.tar.gz
 
 # ship it
 if [ -z $DONTSHIP ]; then
@@ -203,6 +209,7 @@ if [ -z $DONTSHIP ]; then
     $DROPBOX mkdir ${DROPBOX_SAVE_ROOT}
   fi
   $DROPBOX -p upload $TARBALL ${DROPBOX_SAVE_ROOT}
+  $DROPBOX -p upload $TARBALL_LIB ${DROPBOX_SAVE_ROOT}
 fi
 rm $TARBALL
 
@@ -214,6 +221,8 @@ NUMBER_OF_BUILDS=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar 
 for i in $(seq `expr $MAX_NUMBER_OF_BUILDS + 1` $NUMBER_OF_BUILDS); do
   OLDEST_BUILD=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
   $DROPBOX delete ${DROPBOX_SAVE_ROOT}${OLDEST_BUILD}
+  OLDEST_LIB_BUILD=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rustlib- | grep -F .tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+  $DROPBOX delete ${DROPBOX_SAVE_ROOT}${OLDEST_LIB_BUILD}
   OLDEST_TEST_OUTPUT=$(echo $OLDEST_BUILD | cut -d '-' -f 1-7).test.output.txt
   $DROPBOX delete ${DROPBOX_SAVE_ROOT}${OLDEST_TEST_OUTPUT} || true
   OLDEST_TEST_FAILED_OUTPUT=$(echo $OLDEST_BUILD | cut -d '-' -f 1-7).test.failed.output.txt
