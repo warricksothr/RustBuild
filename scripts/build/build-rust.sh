@@ -187,17 +187,20 @@ cd build
 make clean
 make -j $BUILD_PROCS
 
-# package
+# Package rust and rustlib
 rm -rf $DIST_DIR/*
 DESTDIR=$DIST_DIR make -j $BUILD_PROCS install
 cd $DIST_DIR
 tar czf ~/$TARBALL .
 tar czf ~/$TARBALL_LIB ./lib/rustlib
 cd ~
+
+# Add the sha1sum of the file to the name
 TARBALL_HASH=$(sha1sum $TARBALL | tr -s ' ' | cut -d ' ' -f 1)
 mv $TARBALL $TARBALL-$TARBALL_HASH.tar.gz
 TARBALL=$TARBALL-$TARBALL_HASH.tar.gz
 
+# Add the sha1sum of the file to the name
 TARBALL_LIB_HASH=$(sha1sum $TARBALL_LIB | tr -s ' ' | cut -d ' ' -f 1)
 mv $TARBALL_LIB $TARBALL_LIB-$TARBALL_LIB_HASH.tar.gz
 TARBALL_LIB=$TARBALL_LIB-$TARBALL_LIB_HASH.tar.gz
