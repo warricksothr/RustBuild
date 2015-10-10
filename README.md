@@ -11,19 +11,7 @@ This repository contains the required setup/configuration/build scripts and patc
 For those familiar with Jorge Aparicio's [ruststrap](https://github.com/japaric/ruststrap) project; the ARMv6 builds are incredibly similar to his documented process. They're built in a Raspbian container with glibc 2.13 and GCC 4.8. This means that they're compatible with ARMv6-armhf systems and up (Thanks to the requirement by ARM, that all newer ARM architectures are required to recognize and run old ARM architectures). So anyone with a Raspberry Pi running the Wheezy distribution of Raspbian should use those, even if it's the ARMv7 Raspberry Pi 2. However, if the Raspberry Pi 2 is running the newer Jessie distribution of Raspbian, that should be able to run the ARMv7 binaries as it meets the requirement of glibc >= 2.19.
 
 ## Linking Service
-I'm now running a simple linking service to direct to the latest versions available for download without having to go directly to dropbox.
-
-## ARMv7
-###[Latest Unofficial Nightly Binary](https://sothr.com/RustBuild/armv7/rust/nightly/latest)
-###[Latest Unofficial Beta Binary](https://sothr.com/RustBuild/armv7/rust/beta/latest)
-###[Latest Unofficial Stable Binary](https://sothr.com/RustBuild/armv7/rust/stable/latest)
-
-## ARMv6-armhf
-###[Latest Unofficial Nightly Binary](https://sothr.com/RustBuild/armv6-armhf/rust/nightly/latest)
-###[Latest Unofficial Beta Binary](https://sothr.com/RustBuild/armv6-armhf/rust/beta/latest)
-###[Latest Unofficial Stable Binary](https://sothr.com/RustBuild/armv6-armhf/rust/stable/latest)
-
-The links below will still work, but those above may be more convienient endpoints to pull from as they will automatically update every 12 hours to the latest binaries.
+I'm now running a simple linking service to direct to the latest versions available for download without having to go directly to dropbox. The repository links below will still work. However the new links are more convienient as they will update every 12 hours to point to the latest builds.
 
 ### [Architecture Releases Directory](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
 ## ARMv7
@@ -34,6 +22,20 @@ For ARMv7+ Devices with atleast GLIBC 2.19
 
 (Including Raspberry Pi 2 __running Raspbian Jessie__ (8))
 
+### Nightly
+* [Latest Unofficial Nightly Rust Binary](https://sothr.com/RustBuild/armv7/rust/nightly/latest)
+* [Latest Unofficial Nightly Cargo Binary](https://sothr.com/RustBuild/armv7/cargo/nightly/latest)
+* [Latest Unofficial Nightly Rustlib Archive](https://sothr.com/RustBuild/armv7/rustlib/nightly/latest)
+### Beta
+* [Latest Unofficial Beta Rust Binary](https://sothr.com/RustBuild/armv7/rust/beta/latest)
+* [Latest Unofficial Beta Cargo Binary](https://sothr.com/RustBuild/armv7/cargo/beta/latest)
+* [Latest Unofficial Beta Rustlib Archive](https://sothr.com/RustBuild/armv7/rustlib/beta/latest)
+### Stable
+* [Latest Unofficial Stable Rust Binary](https://sothr.com/RustBuild/armv7/rust/stable/latest)
+* [Latest Unofficial Stable Cargo Binary](https://sothr.com/RustBuild/armv7/cargo/stable/latest)
+* [Latest Unofficial Stable Rustlib Archive](https://sothr.com/RustBuild/armv7/rustlib/stable/latest)
+
+## ARMv7 Direct Repository Links
 ### [Unofficial Nightly Binaries (1.5.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
 ### [Unofficial Beta Binaries (1.4.0)](https://www.dropbox.com/sh/0ie217m6yiv5wic/AAC3nAwnC5uUPFcbTuz6EmLRa?dl=0)
 ### [Unofficial Stable Binaries (1.3.0)](https://www.dropbox.com/sh/zth6wky23ih88c8/AABTYCOBeaTDBIASKoWyAPwma?dl=0)
@@ -45,6 +47,20 @@ For ARMv6+ Devices with atleast GLIBC 2.13
 
 For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 
+### Nightly
+* [Latest Unofficial Nightly Rust Binary](https://sothr.com/RustBuild/armv6-armhf/rust/nightly/latest)
+* [Latest Unofficial Nightly Cargo Binary](https://sothr.com/RustBuild/armv6-armhf/cargo/nightly/latest)
+* [Latest Unofficial Nightly Rustlib Archive](https://sothr.com/RustBuild/armv6-armhf/rustlib/nightly/latest)
+### Beta
+* [Latest Unofficial Beta Rust Binary](https://sothr.com/RustBuild/armv6-armhf/rust/beta/latest)
+* [Latest Unofficial Beta Cargo Binary](https://sothr.com/RustBuild/armv6-armhf/cargo/beta/latest)
+* [Latest Unofficial Beta Rustlib Archive](https://sothr.com/RustBuild/armv6-armhf/rustlib/beta/latest)
+### Stable
+* [Latest Unofficial Stable Rust Binary](https://sothr.com/RustBuild/armv6-armhf/rust/stable/latest)
+* [Latest Unofficial Stable Cargo Binary](https://sothr.com/RustBuild/armv6-armhf/cargo/stable/latest)
+* [Latest Unofficial Stable Rustlib Archive](https://sothr.com/RustBuild/armv6-armhf/rustlib/stable/latest)
+
+## ARMv6-armhf Direct Repository Links
 ### [Unofficial Nightly Binaries (1.5.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
 ### [Unofficial Beta Binaries (1.4.0)](https://www.dropbox.com/sh/ausedh4kwrx5rug/AACXoXri73xfQNw3-EsF38Zga?dl=0)
 ### [Unofficial Stable Binaries (1.3.0)](https://www.dropbox.com/sh/laespfc9u77hga6/AACy-arsOzQe2nT1hvcWegoea?dl=0)
