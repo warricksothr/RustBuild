@@ -26,10 +26,12 @@ For ARMv7+ Devices with atleast GLIBC 2.19
 * [Latest Unofficial Nightly Rust Binary](https://sothr.com/RustBuild/armv7/rust/nightly/latest)
 * [Latest Unofficial Nightly Cargo Binary](https://sothr.com/RustBuild/armv7/cargo/nightly/latest)
 * [Latest Unofficial Nightly Rustlib Archive](https://sothr.com/RustBuild/armv7/rustlib/nightly/latest)
+
 ### Beta
 * [Latest Unofficial Beta Rust Binary](https://sothr.com/RustBuild/armv7/rust/beta/latest)
 * [Latest Unofficial Beta Cargo Binary](https://sothr.com/RustBuild/armv7/cargo/beta/latest)
 * [Latest Unofficial Beta Rustlib Archive](https://sothr.com/RustBuild/armv7/rustlib/beta/latest)
+
 ### Stable
 * [Latest Unofficial Stable Rust Binary](https://sothr.com/RustBuild/armv7/rust/stable/latest)
 * [Latest Unofficial Stable Cargo Binary](https://sothr.com/RustBuild/armv7/cargo/stable/latest)
@@ -51,10 +53,12 @@ For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 * [Latest Unofficial Nightly Rust Binary](https://sothr.com/RustBuild/armv6-armhf/rust/nightly/latest)
 * [Latest Unofficial Nightly Cargo Binary](https://sothr.com/RustBuild/armv6-armhf/cargo/nightly/latest)
 * [Latest Unofficial Nightly Rustlib Archive](https://sothr.com/RustBuild/armv6-armhf/rustlib/nightly/latest)
+
 ### Beta
 * [Latest Unofficial Beta Rust Binary](https://sothr.com/RustBuild/armv6-armhf/rust/beta/latest)
 * [Latest Unofficial Beta Cargo Binary](https://sothr.com/RustBuild/armv6-armhf/cargo/beta/latest)
 * [Latest Unofficial Beta Rustlib Archive](https://sothr.com/RustBuild/armv6-armhf/rustlib/beta/latest)
+
 ### Stable
 * [Latest Unofficial Stable Rust Binary](https://sothr.com/RustBuild/armv6-armhf/rust/stable/latest)
 * [Latest Unofficial Stable Cargo Binary](https://sothr.com/RustBuild/armv6-armhf/cargo/stable/latest)
