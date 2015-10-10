@@ -10,6 +10,21 @@ This repository contains the required setup/configuration/build scripts and patc
 
 For those familiar with Jorge Aparicio's [ruststrap](https://github.com/japaric/ruststrap) project; the ARMv6 builds are incredibly similar to his documented process. They're built in a Raspbian container with glibc 2.13 and GCC 4.8. This means that they're compatible with ARMv6-armhf systems and up (Thanks to the requirement by ARM, that all newer ARM architectures are required to recognize and run old ARM architectures). So anyone with a Raspberry Pi running the Wheezy distribution of Raspbian should use those, even if it's the ARMv7 Raspberry Pi 2. However, if the Raspberry Pi 2 is running the newer Jessie distribution of Raspbian, that should be able to run the ARMv7 binaries as it meets the requirement of glibc >= 2.19.
 
+## Linking Service
+I'm now running a simple linking service to direct to the latest versions available for download without having to go directly to dropbox.
+
+## ARMv7
+###[Latest Unofficial Nightly Binary](https://sothr.com/RustBuild/armv7/rust/nightly/latest)
+###[Latest Unofficial Beta Binary](https://sothr.com/RustBuild/armv7/rust/beta/latest)
+###[Latest Unofficial Stable Binary](https://sothr.com/RustBuild/armv7/rust/stable/latest)
+
+## ARMv6-armhf
+###[Latest Unofficial Nightly Binary](https://sothr.com/RustBuild/armv6-armhf/rust/nightly/latest)
+###[Latest Unofficial Beta Binary](https://sothr.com/RustBuild/armv6-armhf/rust/beta/latest)
+###[Latest Unofficial Stable Binary](https://sothr.com/RustBuild/armv6-armhf/rust/stable/latest)
+
+The links below will still work, but those above may be more convienient endpoints to pull from as they will automatically update every 12 hours to the latest binaries.
+
 ### [Architecture Releases Directory](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
 ## ARMv7
 
