@@ -215,6 +215,7 @@ if [ -z $DONTSHIP ]; then
   $DROPBOX -p upload $TARBALL_LIB ${DROPBOX_SAVE_ROOT}
 fi
 rm $TARBALL
+rm $TARBALL_LIB
 
 # Tweet that we've built a new rustc version
 tweet_status "Successfully Built: ${CONTAINER_TAG} Rust-${VERSION}-${DESCRIPTOR} #RustBuild"
