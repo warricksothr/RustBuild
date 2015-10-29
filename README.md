@@ -13,6 +13,9 @@ For those familiar with Jorge Aparicio's [ruststrap](https://github.com/japaric/
 ## Linking Service
 I'm now running a simple linking service to direct to the latest versions available for download without having to go directly to dropbox. The repository links below will still work. However the new links are more convienient as they will update every 12 hours to point to the latest builds.
 
+## Note: 6 Week Rust Release Schedule
+Every 6 weeks Rust will roll forward to a new release version. The linking service will autmatically direct to the latest files as they become available. However, on the day of the release it will take the build server about 24 hours to catch up to the latest builds.
+
 ### [Architecture Releases Directory](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
 ## ARMv7
 
@@ -25,19 +28,22 @@ For ARMv7+ Devices with atleast GLIBC 2.19
 ### Nightly
 * [Latest Unofficial Nightly Rust Binary](https://sothr.com/RustBuild/armv7/rust/nightly/latest)
 * [Latest Unofficial Nightly Cargo Binary](https://sothr.com/RustBuild/armv7/cargo/nightly/latest)
+* [Latest Unofficial Nightly Rust Library](https://sothr.com/RustBuild/armv7/rustlib/nightly/latest)
 
 ### Beta
 * [Latest Unofficial Beta Rust Binary](https://sothr.com/RustBuild/armv7/rust/beta/latest)
 * [Latest Unofficial Beta Cargo Binary](https://sothr.com/RustBuild/armv7/cargo/beta/latest)
+* [Latest Unofficial Beta Rust Library](https://sothr.com/RustBuild/armv7/rustlib/beta/latest)
 
 ### Stable
 * [Latest Unofficial Stable Rust Binary](https://sothr.com/RustBuild/armv7/rust/stable/latest)
 * [Latest Unofficial Stable Cargo Binary](https://sothr.com/RustBuild/armv7/cargo/stable/latest)
+* [Latest Unofficial Stable Rust Library](https://sothr.com/RustBuild/armv7/rustlib/stable/latest)
 
 ## ARMv7 Direct Repository Links
-### [Unofficial Nightly Binaries (1.5.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
-### [Unofficial Beta Binaries (1.4.0)](https://www.dropbox.com/sh/0ie217m6yiv5wic/AAC3nAwnC5uUPFcbTuz6EmLRa?dl=0)
-### [Unofficial Stable Binaries (1.3.0)](https://www.dropbox.com/sh/zth6wky23ih88c8/AABTYCOBeaTDBIASKoWyAPwma?dl=0)
+### [Unofficial Nightly Binaries (1.6.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
+### [Unofficial Beta Binaries (1.5.0)](https://www.dropbox.com/sh/dcrp7cjjt0x44un/AAB3jl22SLd8wFgqEspfqzoZa?dl=0)
+### [Unofficial Stable Binaries (1.4.0)](https://www.dropbox.com/sh/apmrspozgb9zj3e/AAAWw0-Dp3a9WnCm88krRpg9a?dl=0)
 
 ## ARMv6-armhf
 (Built on Raspbian with Clang 3.7 (October 7th+) or GCC 4.8 (September 29th-), GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
@@ -49,24 +55,27 @@ For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 ### Nightly
 * [Latest Unofficial Nightly Rust Binary](https://sothr.com/RustBuild/armv6-armhf/rust/nightly/latest)
 * [Latest Unofficial Nightly Cargo Binary](https://sothr.com/RustBuild/armv6-armhf/cargo/nightly/latest)
+* [Latest Unofficial Nightly Rust Library](https://sothr.com/RustBuild/armv6-armhf/rustlib/nightly/latest)
 
 ### Beta
 * [Latest Unofficial Beta Rust Binary](https://sothr.com/RustBuild/armv6-armhf/rust/beta/latest)
 * [Latest Unofficial Beta Cargo Binary](https://sothr.com/RustBuild/armv6-armhf/cargo/beta/latest)
+* [Latest Unofficial Beta Rust Library](https://sothr.com/RustBuild/armv6-armhf/rustlib/beta/latest)
 
 ### Stable
 * [Latest Unofficial Stable Rust Binary](https://sothr.com/RustBuild/armv6-armhf/rust/stable/latest)
 * [Latest Unofficial Stable Cargo Binary](https://sothr.com/RustBuild/armv6-armhf/cargo/stable/latest)
+* [Latest Unofficial Stable Rust Library](https://sothr.com/RustBuild/armv6-armhf/rustlib/stable/latest)
 
 ## ARMv6-armhf Direct Repository Links
-### [Unofficial Nightly Binaries (1.5.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
-### [Unofficial Beta Binaries (1.4.0)](https://www.dropbox.com/sh/ausedh4kwrx5rug/AACXoXri73xfQNw3-EsF38Zga?dl=0)
-### [Unofficial Stable Binaries (1.3.0)](https://www.dropbox.com/sh/laespfc9u77hga6/AACy-arsOzQe2nT1hvcWegoea?dl=0)
+### [Unofficial Nightly Binaries (1.6.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
+### [Unofficial Beta Binaries (1.5.0)](https://www.dropbox.com/sh/x3ggurtfl5qsu0q/AACbJ0Nq_pvFX5KFjVQR07Jra?dl=0)
+### [Unofficial Stable Binaries (1.4.0)](https://www.dropbox.com/sh/3crw268v4b7qed2/AABFfxT6o9NiMvCNvROaKilYa?dl=0)
 
 ## Builds tested on:
  - ODROID XU4 (@Today This is the build server) [ARMv7](#armv7) [ARMv6-armhf](#armv6-armhf)
  - CubieBoard2 (8/30/2015) [ARMv7](#armv7)
- - Samsung Note 10.1 (2014) in Arch chroot (9/21/2015) [ARMv7](#armv7)
+ - Samsung Note 10.1 (2014) in Arch chroot (10/29/2015) [ARMv7](#armv7)
  - Raspberry Pi B (10/7/2015) [ARMv6-armhf](#armv6-armhf)
 
 # Binary Install/Uninstall Instructions
