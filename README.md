@@ -8,13 +8,13 @@ This repository contains the required setup/configuration/build scripts and patc
 
 # Binary Downloads
 
-For those familiar with Jorge Aparicio's [ruststrap](https://github.com/japaric/ruststrap) project; the ARMv6 builds are incredibly similar to his documented process. They're built in a Raspbian container with glibc 2.13 and GCC 4.8. This means that they're compatible with ARMv6-armhf systems and up (Thanks to the requirement by ARM, that all newer ARM architectures are required to recognize and run old ARM architectures). So anyone with a Raspberry Pi running the Wheezy distribution of Raspbian should use those, even if it's the ARMv7 Raspberry Pi 2. However, if the Raspberry Pi 2 is running the newer Jessie distribution of Raspbian, that should be able to run the ARMv7 binaries as it meets the requirement of glibc >= 2.19.
+For those familiar with Jorge Aparicio's [ruststrap](https://github.com/japaric/ruststrap) project; the ARMv6 builds are incredibly similar to his documented process. They're built in a Raspbian container with glibc 2.13 and Clang 3.7. This means that they're compatible with ARMv6-armhf systems and up (Thanks to the requirement by ARM, that all newer ARM architectures are required to recognize and run old ARM architectures). So anyone with a Raspberry Pi running the Wheezy distribution of Raspbian should use those, even if it's the ARMv7 Raspberry Pi 2. However, if the Raspberry Pi 2 is running the newer Jessie distribution of Raspbian, that should be able to run the ARMv7 binaries as it meets the requirement of glibc >= 2.19.
 
 ## Linking Service
-I'm now running a simple linking service to direct to the latest versions available for download without having to go directly to dropbox. The repository links below will still work. However the new links are more convienient as they will update every 12 hours to point to the latest builds.
+I'm now running a simple linking service to direct to the latest versions available for download without having to go directly to dropbox. The repository links below will still work. However the new links are more convienient as they will update every 12 hours to point to the latest builds. [RustBuild-Linker source](https://github.com/warricksothr/RustBuild-Linker)
 
 ## Note: 6 Week Rust Release Schedule
-Every 6 weeks Rust will roll forward to a new release version. The linking service will autmatically direct to the latest files as they become available. However, on the day of the release it will take the build server about 24 hours to catch up to the latest builds.
+Every 6 weeks Rust will roll forward to a new release version. The linking service will automatically direct to the latest files as they become available. However, on the day of the release it will take the build server about 24 hours to catch up to the latest builds.
 
 ### [Architecture Releases Directory](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
 ## ARMv7
