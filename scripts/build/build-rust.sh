@@ -174,6 +174,7 @@ cd build
 # Override the LLVM build targets. only need arm.
 ../configure \
   $CHANNEL \
+  --disable-jemalloc \
   --disable-valgrind \
   --enable-ccache \
   $CLANG_PARAMS \
