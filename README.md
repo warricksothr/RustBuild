@@ -41,9 +41,9 @@ For ARMv7+ Devices with atleast GLIBC 2.19
 * [Latest Unofficial Stable Rust Library](https://sothr.com/RustBuild/armv7/rustlib/stable/latest)
 
 ## ARMv7 Direct Repository Links
-### [Unofficial Nightly Binaries (1.7.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
-### [Unofficial Beta Binaries (1.6.0)](https://www.dropbox.com/sh/zwt8efw2q8i4tp1/AABsxIsk0vh_swbenZHDYC8ya?dl=0)
-### [Unofficial Stable Binaries (1.5.0)](https://www.dropbox.com/sh/28g3ji7xpcotare/AADPR0jIUZQskT-vJXEb3NOUa?dl=0)
+### [Unofficial Nightly Binaries (1.8.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
+### [Unofficial Beta Binaries (1.7.0)](https://www.dropbox.com/sh/8z5wi4y697kntjb/AADPPiW1CsxkEZnFjtegHIqoa?dl=0)
+### [Unofficial Stable Binaries (1.6.0)](https://www.dropbox.com/sh/g3aka9nhvigqscx/AAChVewPC1AMlKPYPJNYvWSTa?dl=0)
 
 ## ARMv6-armhf
 (Built on Raspbian with Clang 3.7 (October 7th+) or GCC 4.8 (September 29th-), GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
@@ -68,9 +68,9 @@ For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 * [Latest Unofficial Stable Rust Library](https://sothr.com/RustBuild/armv6-armhf/rustlib/stable/latest)
 
 ## ARMv6-armhf Direct Repository Links
-### [Unofficial Nightly Binaries (1.7.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
-### [Unofficial Beta Binaries (1.6.0)](https://www.dropbox.com/sh/hqy2kz0r0hecvjw/AABolHvAly0RT3-nosNC_Ze1a?dl=0)
-### [Unofficial Stable Binaries (1.5.0)](https://www.dropbox.com/sh/wat1e4n897dih3u/AABc7c2a1_UY2O8eNrRn7b2Ca?dl=0)
+### [Unofficial Nightly Binaries (1.8.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
+### [Unofficial Beta Binaries (1.7.0)](https://www.dropbox.com/sh/7ih9mrv9hsazvw1/AAAYC6QAGx6Jh7ch6wiljAYka?dl=0)
+### [Unofficial Stable Binaries (1.6.0)](https://www.dropbox.com/sh/ksbwtblgb4uqo09/AACcNOAuDTh-iYH3uvhl8iJya?dl=0)
 
 ## Builds tested on:
  - ODROID XU4 (@Today This is the build server) [ARMv7](#armv7) [ARMv6-armhf](#armv6-armhf)
