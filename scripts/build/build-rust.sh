@@ -104,6 +104,13 @@ git submodule update
 git pull
 git submodule update
 
+# Build with armv7 optimizations if that's the container target
+# https://github.com/warricksothr/RustBuild/issues/11
+if [ "$CONTAINER_TAG" = "ARMv7" ]; then
+    sed -i s/v6/v7/ src/librustc_back/target/arm_unknown_linux_gnueabihf.rs
+    sed -i s/v6/v7/ mk/cfg/arm-unknown-linux-gnueabihf.mk
+fi
+
 #Parse the version from the make file
 VERSION=$(cat mk/main.mk | grep CFG_RELEASE_NUM | head -n 1 | sed -e "s/.*=//")
 
