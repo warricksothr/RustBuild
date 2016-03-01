@@ -150,9 +150,9 @@ Updating is as simple as entering the deployed directory, removing all the files
 ```
 
 # Usage Instructions
-Run # /bin/bash scripts/setup/debian_root_build.sh <name of container> to build a new container from scratch (in the default /chroots directory).
+Run `# /bin/bash scripts/setup/debian_root_build.sh <name of container>` to build a new container from scratch (in the default /chroots directory).
 
-Then run # /bin/bash scripts/setup/debian_root_setup.sh <name of container> to download the required sources and do the initial setup of the filesystem for the container. This will start the container with systemd-nspawn and do the final configuration in the container, downloading the system tools required. During the process you will need to configure the dropbox_uploader utility. Follow the prompts when they appear.
+Then run `# /bin/bash scripts/setup/debian_root_setup.sh <name of container>` to download the required sources and do the initial setup of the filesystem for the container. This will start the container with systemd-nspawn and do the final configuration in the container, downloading the system tools required. During the process you will need to configure the dropbox_uploader utility. Follow the prompts when they appear.
 
 Now you have a working container with the ability to build Rust/Cargo arm binaries. To kickstart the process, in the app folder you defined during the dropbox_upload setup, create a "snapshots" folder and copy the oldest snapshot from my [snapshots](https://www.dropbox.com/sh/a7kpdcglzsga8yk/AAAjM05nNf8lkbmpuraKZnEXa?dl=0) folder to yours. This is essential for your first build process. After that you are entirely reliant on your own binaries. (Alternatively you can cross compile a stage-0 rust compiler on a host machine with your desired target and use that instead.)
 
