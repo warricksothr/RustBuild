@@ -135,7 +135,7 @@ VERSION=$(cat Cargo.toml | grep version | head -n 1 | sed -e "s/.*= //" | sed 's
 # This is so that we build cargo with static-ssl, otherwise out distributons
 # may fail to run on other systems. This patch is updated so that ideally
 # our distributions don't throw warnings on other systems.
-git apply /build/patches/static-ssl.patch
+#git apply /build/patches/static-ssl.patch
 
 # get information about HEAD
 # Construct the hash that describes this build

@@ -106,9 +106,13 @@ git submodule update
 
 # Build with armv7 optimizations if that's the container target
 # https://github.com/warricksothr/RustBuild/issues/11
+CONFIG_BUILD=arm-unknown-linux-gnueabihf
+CONFIG_HOST=arm-unknown-linux-gnueabihf
+CONFIG_TARGET=arm-unknown-linux-gnueabihf
 if [ "$CONTAINER_TAG" = "ARMv7" ]; then
-    sed -i s/v6/v7/ src/librustc_back/target/arm_unknown_linux_gnueabihf.rs
-    sed -i s/v6/v7/ mk/cfg/arm-unknown-linux-gnueabihf.mk
+	CONFIG_BUILD=armv7-unknown-linux-gnueabihf
+	CONFIG_HOST=armv7-unknown-linux-gnueabihf
+	CONFIG_TARGET=armv7-unknown-linux-gnueabihf
 fi
 
 #Parse the version from the make file
@@ -189,9 +193,9 @@ cd build
   --enable-llvm-static-stdcpp \
   --local-rust-root=$SNAP_DIR \
   --prefix=/ \
-  --build=arm-unknown-linux-gnueabihf \
-  --host=arm-unknown-linux-gnueabihf \
-  --target=arm-unknown-linux-gnueabihf
+  --build=$CONFIG_BUILD \
+  --host=$CONFIG_HOST \
+  --target=$CONFIG_TARGET
 make clean
 make -j $BUILD_PROCS
 
