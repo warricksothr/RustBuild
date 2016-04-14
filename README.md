@@ -41,9 +41,9 @@ For ARMv7+ Devices with atleast GLIBC 2.19
 * [Latest Unofficial Stable Rust Library](https://sothr.com/RustBuild/armv7/rustlib/stable/latest)
 
 ## ARMv7 Direct Repository Links
-### [Unofficial Nightly Binaries (1.7.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
-### [Unofficial Beta Binaries (1.6.0)](https://www.dropbox.com/sh/zwt8efw2q8i4tp1/AABsxIsk0vh_swbenZHDYC8ya?dl=0)
-### [Unofficial Stable Binaries (1.5.0)](https://www.dropbox.com/sh/28g3ji7xpcotare/AADPR0jIUZQskT-vJXEb3NOUa?dl=0)
+### [Unofficial Nightly Binaries (1.8.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
+### [Unofficial Beta Binaries (1.7.0)](https://www.dropbox.com/sh/8z5wi4y697kntjb/AADPPiW1CsxkEZnFjtegHIqoa?dl=0)
+### [Unofficial Stable Binaries (1.6.0)](https://www.dropbox.com/sh/g3aka9nhvigqscx/AAChVewPC1AMlKPYPJNYvWSTa?dl=0)
 
 ## ARMv6-armhf
 (Built on Raspbian with Clang 3.7 (October 7th+) or GCC 4.8 (September 29th-), GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
@@ -68,9 +68,9 @@ For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 * [Latest Unofficial Stable Rust Library](https://sothr.com/RustBuild/armv6-armhf/rustlib/stable/latest)
 
 ## ARMv6-armhf Direct Repository Links
-### [Unofficial Nightly Binaries (1.7.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
-### [Unofficial Beta Binaries (1.6.0)](https://www.dropbox.com/sh/hqy2kz0r0hecvjw/AABolHvAly0RT3-nosNC_Ze1a?dl=0)
-### [Unofficial Stable Binaries (1.5.0)](https://www.dropbox.com/sh/wat1e4n897dih3u/AABc7c2a1_UY2O8eNrRn7b2Ca?dl=0)
+### [Unofficial Nightly Binaries (1.8.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
+### [Unofficial Beta Binaries (1.7.0)](https://www.dropbox.com/sh/7ih9mrv9hsazvw1/AAAYC6QAGx6Jh7ch6wiljAYka?dl=0)
+### [Unofficial Stable Binaries (1.6.0)](https://www.dropbox.com/sh/ksbwtblgb4uqo09/AACcNOAuDTh-iYH3uvhl8iJya?dl=0)
 
 ## Builds tested on:
  - ODROID XU4 (@Today This is the build server) [ARMv7](#armv7) [ARMv6-armhf](#armv6-armhf)
@@ -150,9 +150,9 @@ Updating is as simple as entering the deployed directory, removing all the files
 ```
 
 # Usage Instructions
-Run # /bin/bash scripts/setup/debian_root_build.sh <name of container> to build a new container from scratch (in the default /chroots directory).
+Run `# /bin/bash scripts/setup/debian_root_build.sh <name of container>` to build a new container from scratch (in the default /chroots directory).
 
-Then run # /bin/bash scripts/setup/debian_root_setup.sh <name of container> to download the required sources and do the initial setup of the filesystem for the container. This will start the container with systemd-nspawn and do the final configuration in the container, downloading the system tools required. During the process you will need to configure the dropbox_uploader utility. Follow the prompts when they appear.
+Then run `# /bin/bash scripts/setup/debian_root_setup.sh <name of container>` to download the required sources and do the initial setup of the filesystem for the container. This will start the container with systemd-nspawn and do the final configuration in the container, downloading the system tools required. During the process you will need to configure the dropbox_uploader utility. Follow the prompts when they appear.
 
 Now you have a working container with the ability to build Rust/Cargo arm binaries. To kickstart the process, in the app folder you defined during the dropbox_upload setup, create a "snapshots" folder and copy the oldest snapshot from my [snapshots](https://www.dropbox.com/sh/a7kpdcglzsga8yk/AAAjM05nNf8lkbmpuraKZnEXa?dl=0) folder to yours. This is essential for your first build process. After that you are entirely reliant on your own binaries. (Alternatively you can cross compile a stage-0 rust compiler on a host machine with your desired target and use that instead.)
 
