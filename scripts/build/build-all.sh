@@ -2,7 +2,7 @@
 
 # This is a script to build a snapshot, rust and cargo binary
 
-set -x
+#set -x
 set -e
 
 echo "Started from $PWD"

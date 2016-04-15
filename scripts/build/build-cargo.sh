@@ -13,7 +13,7 @@
 # Script to build a cargo version as specified by the passed in channel
 #
 
-set -x
+#set -x
 set -e
 
 # Source the tools script

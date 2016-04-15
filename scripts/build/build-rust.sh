@@ -13,7 +13,7 @@
 # Builds the rust compiler with a previously built snapshot for the target
 #
 
-set -x
+#set -x
 set -e
 
 # Source the tools script

@@ -21,7 +21,7 @@
 # snapshot build for the desired architecture.
 #
 
-set -x
+#set -x
 set -e
 
 # Source the tools script
