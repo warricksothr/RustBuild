@@ -197,7 +197,7 @@ cd build
   --host=$CONFIG_HOST \
   --target=$CONFIG_TARGET
 make clean
-make -j $BUILD_PROCS
+RUSTFLAGS="-C codegen-units=$BUILD_PROCS" make -j $BUILD_PROCS
 
 # Package rust and rustlib
 rm -rf $DIST_DIR/*
