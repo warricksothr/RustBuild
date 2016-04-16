@@ -43,10 +43,6 @@ if [ -f ~/BUILD_CONFIGURATION ]; then
   . ~/BUILD_CONFIGURATION
 fi
 
-echo "GLIBC Version Info: $(dpkg -l | grep libc6 | head -n1 | tr -s ' ' | cut -d ' ' -f 2-4)"
-echo "LDD Version Info: $(ldd --version | head -n 1)"
-echo "Linker Version Info: $(ld --version | head -n 1)"
-
 # Determine our appropriate dropbox directories
 # Nightlies are always in the root directory for the container_tag
 : ${NIGHTLY_DROPBOX_DIR:=${CONTAINER_TAG}/}
@@ -111,6 +107,14 @@ case $CHANNEL in
     echo "unknown release channel: $CHANNEL" && exit 1
   ;;
 esac
+
+echo "#################################################################"
+echo "# Building Rust Cargo For [$CONTAINER_TAG] On Branch [$CHANNEL] #"
+echo "#################################################################"
+
+echo "GLIBC Version Info: $(dpkg -l | grep libc6 | head -n1 | tr -s ' ' | cut -d ' ' -f 2-4)"
+echo "LDD Version Info: $(ldd --version | head -n 1)"
+echo "Linker Version Info: $(ld --version | head -n 1)"
 
 # Seconds since unix epoch for documentation purposes
 start_time="$(date +%s)"

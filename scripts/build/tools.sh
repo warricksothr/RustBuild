@@ -4,7 +4,7 @@
 # Script file with common functions for usage by all build scripts
 #
 
-set -x
+# set -x
 set -e
 
 # If TTYtter is installed, we can use it to tweet a status to the configured

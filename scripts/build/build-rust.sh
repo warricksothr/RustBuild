@@ -44,10 +44,6 @@ fi
 # but always atleast 1 if there's only one processor/core
 if [ ! $BUILD_PROCS -gt 1 ]; then BUILD_PROCS=1; fi
 
-echo "GLIBC Version Info: $(dpkg -l | grep libc6 | head -n1 | tr -s ' ' | cut -d ' ' -f 2-4)"
-echo "LDD Version Info: $(ldd --version | head -n 1)"
-echo "Linker Version Info: $(ld --version | head -n 1)"
-
 #Make sure we're using the correct tag for this container
 if [ -z $CONTAINER_TAG ]; then
   if [ -f "${HOME}/CONTAINER_TAG" ]; then
@@ -90,6 +86,14 @@ case $CHANNEL in
     echo "unknown release channel: $CHANNEL" && exit 1
   ;;
 esac
+
+echo "############################################################################"
+echo "# Building Rustc and Rust stdlib For [$CONTAINER_TAG] On Branch [$CHANNEL] #"
+echo "############################################################################"
+
+echo "GLIBC Version Info: $(dpkg -l | grep libc6 | head -n1 | tr -s ' ' | cut -d ' ' -f 2-4)"
+echo "LDD Version Info: $(ldd --version | head -n 1)"
+echo "Linker Version Info: $(ld --version | head -n 1)"
 
 start_time="$(date +%s)"
 

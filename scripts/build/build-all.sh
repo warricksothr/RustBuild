@@ -30,6 +30,10 @@ if [ ! -z $1 ]; then
   CHANNEL=$1
 fi
 
+echo "#######################################################"
+echo "# Building Rust Snapshot, Stdlib, Compiler, and Cargo #"
+echo "# For [$CONTAINER_TAG] On Branch [$CHANNEL]           #"
+echo "#######################################################"
 start_time="$(date +%s)"
 $BASH_SHELL $BUILD_SNAPSHOT_SCRIPT $CHANNEL
 $BASH_SHELL $BUILD_RUST_SCRIPT $CHANNEL
