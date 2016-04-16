@@ -189,7 +189,7 @@ cd build
   --disable-jemalloc \
   --disable-valgrind \
   --enable-ccache \
-  --llvm-root=$LLVM_BUILD_ROOT
+  --llvm-root=$LLVM_BUILD_ROOT \
   $CLANG_PARAMS \
   --enable-local-rust \
   --enable-llvm-static-stdcpp \
