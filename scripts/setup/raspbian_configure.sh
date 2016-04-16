@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# Raspbian configure script
 # This is the script that installs the required dependencies and runs the final setups on the system
 
 set -x
@@ -8,7 +9,7 @@ set -e
 : ${OPENSSL_DIR:=/build/openssl}
 : ${OPENSSL_SRC:=$OPENSSL_DIR/openssl_src}
 : ${CMAKE_SRC:=/build/cmake}
-: ${CMAKE_TAG:=v3.3.2}
+: ${CMAKE_TAG:=v3.5.2}
 : ${LLVM_SRC:=/build/llvm}
 : ${LLVM_BUILD:=/build/llvm_build}
 
@@ -54,6 +55,7 @@ fi
 # Print a file with system info
 echo "$(uname -a)" > SYSTEM_INFO
 echo "$(dpkg -l | grep libc6)" >> SYSTEM_INFO
+echo "$(cmake --version | head -n 1)" >> SYSTEM_INFO
 echo "$(ldd --version | head -n 1)" >> SYSTEM_INFO
 echo "$(ld --version | head -n 1)" >> SYSTEM_INFO
 echo "$(gcc --version | head -n 1)" >> SYSTEM_INFO
@@ -82,7 +84,7 @@ make install
 # Build a newer cmake through the boostrapping process
 cd ${CMAKE_SRC}
 ./bootstrap
-make -j $MAKE_JOBS
+make -j$MAKE_JOBS
 make install
 
 # Build a new clang to use :D
@@ -97,5 +99,16 @@ cmake \
     -DCMAKE_CXX_FLAGS="-O2 -march=armv6 -mfloat-abi=hard -mfpu=vfp" \
     -G "Unix Makefiles" \
     ${LLVM_SRC}
-make -j $MAKE_JOBS
+make -j$MAKE_JOBS
 make install
+
+# Print a file with system info
+echo "$(uname -a)" > SYSTEM_INFO
+echo "$(dpkg -l | grep libc6)" >> SYSTEM_INFO
+echo "$(ldd --version | head -n 1)" >> SYSTEM_INFO
+echo "$(ld --version | head -n 1)" >> SYSTEM_INFO
+echo "$(gcc --version | head -n 1)" >> SYSTEM_INFO
+echo "$(g++ --version | head -n 1)" >> SYSTEM_INFO
+echo "$(clang --version | tr '\\n' '|' | head -n 1)" >> SYSTEM_INFO
+echo "$(clang++ --version | tr '\\n' '|' | head -n 1)" >> SYSTEM_INFO
+echo "$(ccache --version | head -n 1)" >> SYSTEM_INFO

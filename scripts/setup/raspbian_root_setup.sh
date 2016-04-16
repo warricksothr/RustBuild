@@ -15,10 +15,10 @@ set -e
 : ${CHROOT_TAG:=ARMv6-armhf}
 # trunk is the latest development
 # branches/release_XY is the release of LLVM/CLang coresponding to X.Y
-# so branches/release_37 is LLVM/Clang 3.7
-: ${LLVM_RELEASE:="branches/release_37"}
+# so branches/release_38 is LLVM/Clang 3.8
+: ${LLVM_RELEASE:="branches/release_38"}
 # Tag to grab for CMAKE
-: ${CMAKE_TAG:="v3.3.2"}
+: ${CMAKE_TAG:="v3.5.2"}
 
 # Allow custom names
 if [ ! -z "$1" ]; then

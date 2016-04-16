@@ -28,6 +28,7 @@ set -e
 : ${MAX_NUMBER_OF_BUILDS:=10}
 : ${SNAP_DIR:=/build/snapshot}
 : ${SRC_DIR:=/build/rust}
+: ${LLVM_BUILD_ROOT:=/build/llvm_build}
 # The number of process we should use while building
 : ${BUILD_PROCS:=$(($(nproc)-1))}
 
@@ -188,6 +189,7 @@ cd build
   --disable-jemalloc \
   --disable-valgrind \
   --enable-ccache \
+  --llvm-root=$LLVM_BUILD_ROOT
   $CLANG_PARAMS \
   --enable-local-rust \
   --enable-llvm-static-stdcpp \

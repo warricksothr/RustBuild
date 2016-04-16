@@ -7,6 +7,12 @@ set -e
 
 : ${CHROOT_NAME:=RustBuild}
 : ${CHROOT_TAG:=ARMv7}
+# trunk is the latest development
+# branches/release_XY is the release of LLVM/CLang coresponding to X.Y
+# so branches/release_38 is LLVM/Clang 3.8
+: ${LLVM_RELEASE:="branches/release_38"}
+# Tag to grab for CMAKE
+: ${CMAKE_TAG:="v3.5.2"}
 
 # Allow custom names
 if [ ! -z "$1" ]; then
@@ -103,6 +109,26 @@ ln -sf RustBuild/scripts/setup/debian_configure.sh .
 
 # Copy the patches
 cp RustBuild/patches/* ${BUILD}/patches
+
+opwd=$pwd
+# clone Cmake
+mkdir ${BUILD}/cmake
+cd ${BUILD}/cmake
+git clone https://cmake.org/cmake.git .
+git checkout tags/$CMAKE_TAG
+
+# clone LLVM/Clang
+mkdir ${BUILD}
+svn co http://llvm.org/svn/llvm-project/llvm/$LLVM_RELEASE llvm
+cd llvm/tools
+svn co http://llvm.org/svn/llvm-project/cfe/$LLVM_RELEASE clang
+cd clang/tools
+svn co http://llvm.org/svn/llvm-project/clang-tools-extra/$LLVM_RELEASE extra
+cd ../../../projects
+svn co http://llvm.org/svn/llvm-project/compiler-rt/$LLVM_RELEASE compiler-rt
+cd $opwd
+
+mkdir ${BUILD}/llvm_build
 
 # Copy the apt preferences and sources
 cp RustBuild/etc/apt/preferences.d/*.pref ${ROOT}/etc/apt/preferences.d
