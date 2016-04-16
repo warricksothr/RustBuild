@@ -7,7 +7,6 @@ Scripts and patches to auto build Rust and Cargo on an ARM machine
 This repository contains the required setup/configuration/build scripts and patches for you to setup your own Rust compilation machine. Pre-built 'unofficial' Rust/Cargo binaries are listed below for those who do not want to run their own build machine or are unable to.
 
 # Binary Downloads
-
 For those familiar with Jorge Aparicio's [ruststrap](https://github.com/japaric/ruststrap) project; the ARMv6 builds are incredibly similar to his documented process. They're built in a Raspbian container with glibc 2.13 and Clang 3.7. This means that they're compatible with ARMv6-armhf systems and up (Thanks to the requirement by ARM, that all newer ARM architectures are required to recognize and run old ARM architectures). So anyone with a Raspberry Pi running the Wheezy distribution of Raspbian should use those, even if it's the ARMv7 Raspberry Pi 2. However, if the Raspberry Pi 2 is running the newer Jessie distribution of Raspbian, that should be able to run the ARMv7 binaries as it meets the requirement of glibc >= 2.19.
 
 ## Linking Service
@@ -19,9 +18,9 @@ Every 6 weeks Rust will roll forward to a new release version. The linking servi
 ### [Architecture Releases Directory](https://www.dropbox.com/sh/ewam0qujfdfaf19/AAB0_fQF7unuuqwDBZ1dF5fla?dl=0)
 ## ARMv7
 
-(Built on Debian Jessie, with Clang 3.5,  GLIBC 2.19-18, OpenSSL 1.2.0d static)
+(Built on Debian Jessie, with Clang 3.8.1 (3.5 before 2016/04/15),  GLIBC 2.19-18, OpenSSL 1.2.0d static)
 
-For ARMv7+ Devices with atleast GLIBC 2.19
+For ARMv7+ devices with linux and atleast GLIBC 2.19
 
 (Including Raspberry Pi 2 __running Raspbian Jessie__ (8))
 
@@ -41,14 +40,14 @@ For ARMv7+ Devices with atleast GLIBC 2.19
 * [Latest Unofficial Stable Rust Library](https://sothr.com/RustBuild/armv7/rustlib/stable/latest)
 
 ## ARMv7 Direct Repository Links
-### [Unofficial Nightly Binaries (1.8.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
-### [Unofficial Beta Binaries (1.7.0)](https://www.dropbox.com/sh/8z5wi4y697kntjb/AADPPiW1CsxkEZnFjtegHIqoa?dl=0)
-### [Unofficial Stable Binaries (1.6.0)](https://www.dropbox.com/sh/g3aka9nhvigqscx/AAChVewPC1AMlKPYPJNYvWSTa?dl=0)
+### [Unofficial Nightly Binaries (1.10.0)](https://www.dropbox.com/sh/gcat9erkhd4acq1/AABSM3TWIqcrSFx0LRijUNAYa?dl=0)
+### [Unofficial Beta Binaries (1.9.0)](https://www.dropbox.com/sh/ifh0ip3adla24w5/AADZHaipEslFy3pKjAjm5W22a?dl=0)
+### [Unofficial Stable Binaries (1.8.0)](https://www.dropbox.com/sh/d69v86v13kpyynw/AABWzSxFc6JJNFa7OzxdkXIva?dl=0)
 
 ## ARMv6-armhf
 (Built on Raspbian with Clang 3.7 (October 7th+) or GCC 4.8 (September 29th-), GLIBC 2.13-38+rpi2+deb7u8, OpenSSL 1.2.0d static)
 
-For ARMv6+ Devices with atleast GLIBC 2.13
+For ARMv6+ devices with linux and atleast GLIBC 2.13
 
 For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 
@@ -68,14 +67,14 @@ For Raspberry Pi (A, A+, B, B+, 2) running Raspbian Wheezy (7)
 * [Latest Unofficial Stable Rust Library](https://sothr.com/RustBuild/armv6-armhf/rustlib/stable/latest)
 
 ## ARMv6-armhf Direct Repository Links
-### [Unofficial Nightly Binaries (1.8.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
-### [Unofficial Beta Binaries (1.7.0)](https://www.dropbox.com/sh/7ih9mrv9hsazvw1/AAAYC6QAGx6Jh7ch6wiljAYka?dl=0)
-### [Unofficial Stable Binaries (1.6.0)](https://www.dropbox.com/sh/ksbwtblgb4uqo09/AACcNOAuDTh-iYH3uvhl8iJya?dl=0)
+### [Unofficial Nightly Binaries (1.10.0)](https://www.dropbox.com/sh/866e4szgdvjmy45/AABP1moHeCTyST9B3qJIdVfva?dl=0)
+### [Unofficial Beta Binaries (1.9.0)](https://www.dropbox.com/sh/1o0k6law68lfzyb/AACL9yh72JiIwJljUoxs7B5ga?dl=0)
+### [Unofficial Stable Binaries (1.8.0)](https://www.dropbox.com/sh/92tqp0o007d45w4/AACINYqUD4GwpQszZy-iPwaJa?dl=0)
 
 ## Builds tested on:
  - ODROID XU4 (@Today This is the build server) [ARMv7](#armv7) [ARMv6-armhf](#armv6-armhf)
  - CubieBoard2 (8/30/2015) [ARMv7](#armv7)
- - Samsung Note 10.1 (2014) in Arch chroot (12/21/2015) [ARMv7](#armv7)
+ - Samsung Note 10.1 (2014) in Arch chroot (4/14/2015) [ARMv7](#armv7)
  - Raspberry Pi B (10/7/2015) [ARMv6-armhf](#armv6-armhf)
 
 # Binary Install/Uninstall Instructions
@@ -199,6 +198,9 @@ The container with Rust/Cargo nightlies, a Rust snapshot, tools, file cache and 
 These scripts are configured to compile the snapshots and full Rust compilers with Clang for the improvement in build time over a slight reduction in runtime performance. (This may change as new versions of Clang are promoted to debian stable.)
 
 # Todo
+- [x] migrate to latest LLVM so we don't have to rebuild LLVM with every compilation of Rust
+- [x] fix build issues ARMv7 builds
+- [ ] look into why static-ssl no longer seems to be in the configuration for cargo?
 - [x] enhance the scripts to support stable/beta in addition to nightly
 - [x] improve the setup scripts to fail if the required tools are not installed
 - [ ] look into finding a way to always use the latest stable openssl
