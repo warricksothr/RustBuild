@@ -45,3 +45,8 @@ printf "Elapsed Build Time: %02d:%02d:%02d\n" "$((running_time/3600%24))" "$((ru
 
 echo "Cleaning CCache"
 CCache -C
+
+echo "##################################################"
+echo "# Done For [$CONTAINER_TAG] On Branch [$CHANNEL] #"
+echo "##################################################"
+echo ""

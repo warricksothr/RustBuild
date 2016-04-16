@@ -214,3 +214,8 @@ end_time="$(date +%s)"
 running_time=$(($end_time-$start_time))
 # Prints Hours:Minutes:Seconds
 printf "Elapsed Snapshot Build Time: %02d:%02d:%02d\n" "$((running_time/3600%24))" "$((running_time/60%60))" "$((running_time%60))"
+
+echo "#########################################################################"
+echo "# Done Building Rust Snapshot For [$CONTAINER_TAG] On Branch [$CHANNEL] #"
+echo "#########################################################################"
+echo ""

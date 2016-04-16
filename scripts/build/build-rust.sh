@@ -187,6 +187,7 @@ cd build
 #  rm -rf arm-unknown-linux-gnueabihf
 #fi
 
+echo "Configuring Rust Build"
 # Override the LLVM build targets. only need arm.
 ../configure \
   $CHANNEL \
@@ -229,6 +230,7 @@ if [ -z $DONTSHIP ]; then
   if [ "$DESCRIPTOR" != "nightly" ]; then
     $DROPBOX mkdir ${DROPBOX_SAVE_ROOT}
   fi
+  echo "Saving [$TARBALL] and [$TARBALL_LIB] to Dropbox"
   $DROPBOX -p upload $TARBALL ${DROPBOX_SAVE_ROOT}
   $DROPBOX -p upload $TARBALL_LIB ${DROPBOX_SAVE_ROOT}
 fi
@@ -239,7 +241,9 @@ rm $TARBALL_LIB
 tweet_status "Successfully Built: ${CONTAINER_TAG} Rust-${VERSION}-${DESCRIPTOR} #RustBuild"
 
 # delete older nightlies
+echo "Cleaning up number of builds"
 NUMBER_OF_BUILDS=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar | wc -l)
+echo "Found [$NUMBER_OF_BUILDS]/[$MAX_NUMBER_OF_BUILDS]"
 for i in $(seq `expr $MAX_NUMBER_OF_BUILDS + 1` $NUMBER_OF_BUILDS); do
   OLDEST_BUILD=$($DROPBOX list $DROPBOX_SAVE_ROOT | grep rust- | grep -F .tar | head -n 1 | tr -s ' ' | cut -d ' ' -f 4)
   $DROPBOX delete ${DROPBOX_SAVE_ROOT}${OLDEST_BUILD}
@@ -261,6 +265,7 @@ compile_time=$(($compile_end-$start_time))
 printf "Elapsed Rust Compile Time: %02d:%02d:%02d\n" "$((compile_time/3600%24))" "$((compile_time/60%60))" "$((compile_time%60))"
 start_test_time="$(date +%s)"
 
+echo "Running Tests"
 # run tests
 if [ -z $DONTTEST ]; then
   cd $SRC_DIR/build
@@ -270,8 +275,11 @@ if [ -z $DONTTEST ]; then
   # Run the tests with x threads, use the timeout util to prevent running more than 120 minutes
   RUST_TEST_THREADS=$BUILD_PROCS timeout 7200 make check -k >>$LOGFILE 2>&1 || true
   cat $LOGFILE | grep "FAILED" >> $LOGFILE_FAILED
-  $DROPBOX -p upload $LOGFILE ${DROPBOX_SAVE_ROOT}
-  $DROPBOX -p upload $LOGFILE_FAILED ${DROPBOX_SAVE_ROOT}
+  # Only uploading logs if we're set to upload
+  if [ -z $DONTSHIP ]; then
+    $DROPBOX -p upload $LOGFILE ${DROPBOX_SAVE_ROOT}
+    $DROPBOX -p upload $LOGFILE_FAILED ${DROPBOX_SAVE_ROOT}
+  fi
   rm $LOGFILE $LOGFILE_FAILED
 fi
 
@@ -283,3 +291,8 @@ test_time=$(($end_time-$start_test_time))
 printf "Elapsed Rust Test Time: %02d:%02d:%02d\n" "$((test_time/3600%24))" "$((test_time/60%60))" "$((test_time%60))"
 running_time=$(($end_time-$start_time))
 printf "Elapsed Rust Build Time: %02d:%02d:%02d\n" "$((running_time/3600%24))" "$((running_time/60%60))" "$((running_time%60))"
+
+echo "#################################################################################"
+echo "# Done Building Rustc and Rust stdlib For [$CONTAINER_TAG] On Branch [$CHANNEL] #"
+echo "#################################################################################"
+echo ""

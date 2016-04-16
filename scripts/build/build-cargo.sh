@@ -332,13 +332,22 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
   running_time=$(($end_time-$start_time))
   printf "Elapsed Cargo Build Time: %02d:%02d:%02d\n" "$((running_time/3600%24))" "$((running_time/60%60))" "$((running_time%60))"
 
+  echo "######################################################################"
+  echo "# Done Building Rust Cargo For [$CONTAINER_TAG] On Branch [$CHANNEL] #"
+  echo "######################################################################"
+  echo ""
+
   exit 0
 done
 
 # If we reached here, then we failed to build Cargo completely!
-echo "Failed to build a cargo!"
 end_time="$(date +%s)"
 running_time=$(($end_time-$start_time))
 printf "Elapsed Cargo Build Time: %02d:%02d:%02d\n" "$((running_time/3600%24))" "$((running_time/60%60))" "$((running_time%60))"
+
+echo "#################################"
+echo "# Failed To Build a Rust Cargo! #"
+echo "#################################"
+echo
 
 exit 1
