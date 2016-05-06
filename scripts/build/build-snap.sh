@@ -48,9 +48,10 @@ if [ -f/ ~/BUILD_CONFIGURATION ]; then
   . ~/BUILD_CONFIGURATION
 fi
 
-PRINT_TARGET="&1"
-if [ -n "$DEBUG" ]; then
-	PRINT_TARGET="/dev/null"
+PRINT_TARGET=
+if [ -z "$DEBUG" ]; then
+  echo "Debugging Off"
+  PRINT_TARGET="> /dev/null"
 fi
 
 # Set the channel
@@ -112,15 +113,15 @@ echo "cd $SRC_DIR"
 cd $SRC_DIR
 
 echo "Updating Git repository" 
-git remote update >$PRINT_TARGET
-git clean -df >$PRINT_TARGET
-git checkout -- . >$PRINT_TARGET
-git checkout $BRANCH >$PRINT_TARGET
-git submodule update >$PRINT_TARGET
-git reset --hard origin/$BRANCH >$PRINT_TARGET
-git submodule update >$PRINT_TARGET
-git pull >$PRINT_TARGET
-git submodule update >$PRINT_TARGET
+git remote update
+git clean -df
+git checkout -- .
+git checkout $BRANCH
+git submodule update
+git reset --hard origin/$BRANCH
+git submodule update
+git pull
+git submodule update
 
 # As of Rust 1.10 snapshots are no longer used
 # instead the latest stable release is used to build
@@ -199,7 +200,7 @@ fi
 # --host=? the triple that represents our build system
 # --target=? the triple that represents the target system. Used for cross compiling
 cd $SRC_DIR
-git checkout $LAST_SNAP_HASH >$PRINT_TARGET
+git checkout $LAST_SNAP_HASH 
 cd build
 ../configure \
   --disable-docs \
@@ -212,13 +213,13 @@ cd build
   --prefix=/ \
   --build=arm-unknown-linux-gnueabihf \
   --host=arm-unknown-linux-gnueabihf \
-  --target=arm-unknown-linux-gnueabihf >$PRINT_TARGET
+  --target=arm-unknown-linux-gnueabihf 
 # Clean any previous builds
-make clean >$PRINT_TARGET
+make clean
 # Actually build the full rust compiler
-make -j $BUILD_PROCS >$PRINT_TARGET
+make -j $BUILD_PROCS
 # Create a static snapshot version for host triple
-make -j $BUILD_PROCS snap-stage3-H-arm-unknown-linux-gnueabihf >$PRINT_TARGET
+make -j $BUILD_PROCS snap-stage3-H-arm-unknown-linux-gnueabihf
 
 # ship it
 $DROPBOX -p upload rust-stage0-* ${CONTAINER_TAG}/snapshots

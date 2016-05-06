@@ -43,10 +43,10 @@ if [ -f ~/BUILD_CONFIGURATION ]; then
   . ~/BUILD_CONFIGURATION
 fi
 
-PRINT_TARGET="&1"
-if [ -n "$DEBUG" ]; then
-	echo "Debugging Off"
-	PRINT_TARGET="/dev/null"
+PRINT_TARGET=
+if [ -z "$DEBUG" ]; then
+  echo "Debugging Off"
+  PRINT_TARGET="> /dev/null"
 fi
 
 # Determine our appropriate dropbox directories
@@ -127,15 +127,15 @@ start_time="$(date +%s)"
 
 # update source to match upstream
 cd $SRC_DIR
-git remote update >$PRINT_TARGET
-git clean -df >$PRINT_TARGET
-git checkout -- . >$PRINT_TARGET
-git checkout $BRANCH >$PRINT_TARGET
-git submodule update >$PRINT_TARGET
-git reset --hard origin/$BRANCH >$PRINT_TARGET
-git submodule update >$PRINT_TARGET
-git pull >$PRINT_TARGET
-git submodule update >$PRINT_TARGET
+git remote update
+git clean -df
+git checkout -- .
+git checkout $BRANCH
+git submodule update
+git reset --hard origin/$BRANCH
+git submodule update
+git pull
+git submodule update
 
 # Parse the version from the cargo config file
 # Used in the name of the produced packages
@@ -262,12 +262,12 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
     --enable-optimize \
     --local-cargo=$CARGO_DIST_DIR/bin/cargo \
     --local-rust-root=$RUST_DIST_DIR \
-    --prefix=/ >$PRINT_TARGET
+    --prefix=/ 
 
   # Clean previous attempts
-  make clean >$PRINT_TARGET
+  make clean
   # Perform the build. If it fails, failover to the next rust compiler
-  make >$PRINT_TARGET || continue
+  make || continue
 
   # package the distributiable
   rm -rf $DIST_DIR/*

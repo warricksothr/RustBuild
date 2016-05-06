@@ -40,10 +40,10 @@ if [ -f ~/BUILD_CONFIGURATION ]; then
   . ~/BUILD_CONFIGURATION
 fi
 
-PRINT_TARGET="&1"
-if [ -n "$DEBUG" ]; then
-	echo "Debugging Off"
-	PRINT_TARGET="/dev/null"
+PRINT_TARGET=
+if [ -z "$DEBUG" ]; then
+  echo "Debugging Off"
+  PRINT_TARGET="> /dev/null"
 fi
 
 # Set the build procs to 1 less than the number of cores/processors available,
@@ -107,15 +107,15 @@ start_time="$(date +%s)"
 echo "cd $SRC_DIR"
 cd $SRC_DIR
 
-git remote update >$PRINT_TARGET
-git clean -df >$PRINT_TARGET
-git checkout -- . >$PRINT_TARGET
-git checkout $BRANCH >$PRINT_TARGET
-git submodule update >$PRINT_TARGET
-git reset --hard origin/$BRANCH >$PRINT_TARGET
-git submodule update >$PRINT_TARGET
-git pull >$PRINT_TARGET
-git submodule update >$PRINT_TARGET
+git remote update 
+git clean -df 
+git checkout -- .
+git checkout $BRANCH
+git submodule update
+git reset --hard origin/$BRANCH
+git submodule update
+git pull
+git submodule update
 
 # Build with armv7 optimizations if that's the container target
 # https://github.com/warricksothr/RustBuild/issues/11
@@ -218,9 +218,9 @@ echo "Configuring Rust Build"
   --prefix=/ \
   --build=$CONFIG_BUILD \
   --host=$CONFIG_HOST \
-  --target=$CONFIG_TARGET >$PRINT_TARGET
-make clean >$PRINT_TARGET
-RUSTFLAGS="-C codegen-units=$BUILD_PROCS" make -j $BUILD_PROCS >$PRINT_TARGET
+  --target=$CONFIG_TARGET
+make clean
+RUSTFLAGS="-C codegen-units=$BUILD_PROCS" make -j $BUILD_PROCS
 
 # Package rust and rustlib
 rm -rf $DIST_DIR/*
