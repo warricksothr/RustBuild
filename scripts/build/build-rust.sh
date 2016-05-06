@@ -40,6 +40,12 @@ if [ -f ~/BUILD_CONFIGURATION ]; then
   . ~/BUILD_CONFIGURATION
 fi
 
+PRINT_TARGET="&1"
+if [ -n "$DEBUG" ]; then
+	echo "Debugging Off"
+	PRINT_TARGET="/dev/null"
+fi
+
 # Set the build procs to 1 less than the number of cores/processors available,
 # but always atleast 1 if there's only one processor/core
 if [ ! $BUILD_PROCS -gt 1 ]; then BUILD_PROCS=1; fi
@@ -98,16 +104,18 @@ echo "Linker Version Info: $(ld --version | head -n 1)"
 start_time="$(date +%s)"
 
 # Update source to upstream
+echo "cd $SRC_DIR"
 cd $SRC_DIR
-git remote update
-git clean -df
-git checkout -- .
-git checkout $BRANCH
-git submodule update
-git reset --hard origin/$BRANCH
-git submodule update
-git pull
-git submodule update
+
+git remote update >$PRINT_TARGET
+git clean -df >$PRINT_TARGET
+git checkout -- . >$PRINT_TARGET
+git checkout $BRANCH >$PRINT_TARGET
+git submodule update >$PRINT_TARGET
+git reset --hard origin/$BRANCH >$PRINT_TARGET
+git submodule update >$PRINT_TARGET
+git pull >$PRINT_TARGET
+git submodule update >$PRINT_TARGET
 
 # Build with armv7 optimizations if that's the container target
 # https://github.com/warricksothr/RustBuild/issues/11
@@ -134,33 +142,41 @@ case $DESCRIPTOR in
   ;;
 esac
 
-# Get the hash and date of the latest snaphot
-SNAP_HASH=$(head -n 1 src/snapshots.txt | tr -s ' ' | cut -d ' ' -f 3)
+# Rust builds as of 1.10 no longer use a snapsot to compile
+# if src/snapshots.txt doesn't exist use the latest stable
+# to compile instead
+if [ ! "src/snapshots.txt" ]; then
+  # Get the hash and date of the latest snaphot
+  SNAP_HASH=$(head -n 1 src/snapshots.txt | tr -s ' ' | cut -d ' ' -f 3)
 
-# Check if the snapshot is available
-SNAP_TARBALL=$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SNAP_HASH | grep -F .tar)
-if [ -z "$SNAP_TARBALL" ]; then
-  exit 1
-fi
-SNAP_TARBALL=$(echo $SNAP_TARBALL | tr -s ' ' | cut -d ' ' -f 3)
+  # Check if the snapshot is available
+  SNAP_TARBALL=$($DROPBOX list ${CONTAINER_TAG}/snapshots | grep $SNAP_HASH | grep -F .tar)
+  if [ -z "$SNAP_TARBALL" ]; then
+    exit 1
+  fi
+  SNAP_TARBALL=$(echo $SNAP_TARBALL | tr -s ' ' | cut -d ' ' -f 3)
 
-# setup snapshot
-cd $SNAP_DIR
-# Only need to download if our current snapshot is not at the right version
-INSTALLED_SNAPSHOT_VERSION=
-if [ -f VERSION ]; then
-  INSTALLED_SNAPSHOT_VERSION=$(cat VERSION)
-fi
-if [ "$SNAP_TARBALL" != "$INSTALLED_SNAPSHOT_VERSION" ]; then
-  rm -rf *
-  $DROPBOX -p download ${CONTAINER_TAG}/snapshots/$SNAP_TARBALL
-  tar xjf $SNAP_TARBALL --strip-components=1
-  rm $SNAP_TARBALL
-  echo "$SNAP_TARBALL" > VERSION
+  # setup snapshot
+  cd $SNAP_DIR
+  # Only need to download if our current snapshot is not at the right version
+  INSTALLED_SNAPSHOT_VERSION=
+  if [ -f VERSION ]; then
+    INSTALLED_SNAPSHOT_VERSION=$(cat VERSION)
+  fi
+  if [ "$SNAP_TARBALL" != "$INSTALLED_SNAPSHOT_VERSION" ]; then
+    rm -rf *
+    $DROPBOX -p download ${CONTAINER_TAG}/snapshots/$SNAP_TARBALL
+    tar xjf $SNAP_TARBALL --strip-components=1
+    rm $SNAP_TARBALL
+    echo "$SNAP_TARBALL" > VERSION
+  else
+    echo "Requested snapshot $SNAP_TARBALL already installed, no need to re-download and install."
+  fi
+  bin/rustc -V
 else
-  echo "Requested snapshot $SNAP_TARBALL already installed, no need to re-download and install."
+  echo "Not using a snapshot to compile"
+  SNAP_DIR=/opt/rust_stable/rust
 fi
-bin/rustc -V
 
 # Get information about HEAD
 cd $SRC_DIR
@@ -202,9 +218,9 @@ echo "Configuring Rust Build"
   --prefix=/ \
   --build=$CONFIG_BUILD \
   --host=$CONFIG_HOST \
-  --target=$CONFIG_TARGET
-make clean
-RUSTFLAGS="-C codegen-units=$BUILD_PROCS" make -j $BUILD_PROCS
+  --target=$CONFIG_TARGET >$PRINT_TARGET
+make clean >$PRINT_TARGET
+RUSTFLAGS="-C codegen-units=$BUILD_PROCS" make -j $BUILD_PROCS >$PRINT_TARGET
 
 # Package rust and rustlib
 rm -rf $DIST_DIR/*

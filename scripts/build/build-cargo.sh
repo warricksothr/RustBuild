@@ -13,7 +13,7 @@
 # Script to build a cargo version as specified by the passed in channel
 #
 
-#set -x
+set -x
 set -e
 
 # Source the tools script
@@ -41,6 +41,12 @@ set -e
 # Source additional global variables if available
 if [ -f ~/BUILD_CONFIGURATION ]; then
   . ~/BUILD_CONFIGURATION
+fi
+
+PRINT_TARGET="&1"
+if [ -n "$DEBUG" ]; then
+	echo "Debugging Off"
+	PRINT_TARGET="/dev/null"
 fi
 
 # Determine our appropriate dropbox directories
@@ -121,25 +127,27 @@ start_time="$(date +%s)"
 
 # update source to match upstream
 cd $SRC_DIR
-git remote update
-git clean -df
-git checkout -- .
-git checkout $BRANCH
-git submodule update
-git reset --hard origin/$BRANCH
-git submodule update
-git pull
-git submodule update
+git remote update >$PRINT_TARGET
+git clean -df >$PRINT_TARGET
+git checkout -- . >$PRINT_TARGET
+git checkout $BRANCH >$PRINT_TARGET
+git submodule update >$PRINT_TARGET
+git reset --hard origin/$BRANCH >$PRINT_TARGET
+git submodule update >$PRINT_TARGET
+git pull >$PRINT_TARGET
+git submodule update >$PRINT_TARGET
 
 # Parse the version from the cargo config file
 # Used in the name of the produced packages
 VERSION=$(cat Cargo.toml | grep version | head -n 1 | sed -e "s/.*= //" | sed 's/"//g')
 
+echo "Applying patches"
 # apply patch to link statically against libssl
 # This is so that we build cargo with static-ssl, otherwise out distributons
 # may fail to run on other systems. This patch is updated so that ideally
 # our distributions don't throw warnings on other systems.
 #git apply /build/patches/static-ssl.patch
+git apply /build/patches/cargo_change_compiler.patch
 
 # get information about HEAD
 # Construct the hash that describes this build
@@ -254,12 +262,12 @@ for RUST_DIST in $($DROPBOX list $DROPBOX_DIR | grep rust- | grep -F .tar | tr -
     --enable-optimize \
     --local-cargo=$CARGO_DIST_DIR/bin/cargo \
     --local-rust-root=$RUST_DIST_DIR \
-    --prefix=/
+    --prefix=/ >$PRINT_TARGET
 
   # Clean previous attempts
-  make clean
+  make clean >$PRINT_TARGET
   # Perform the build. If it fails, failover to the next rust compiler
-  make || continue 
+  make >$PRINT_TARGET || continue
 
   # package the distributiable
   rm -rf $DIST_DIR/*

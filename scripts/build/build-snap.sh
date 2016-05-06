@@ -44,8 +44,13 @@ set -e
 : ${USE_CLANG:=true}
 
 # Source additional global variables if available
-if [ -f ~/BUILD_CONFIGURATION ]; then
+if [ -f/ ~/BUILD_CONFIGURATION ]; then
   . ~/BUILD_CONFIGURATION
+fi
+
+PRINT_TARGET="&1"
+if [ -n "$DEBUG" ]; then
+	PRINT_TARGET="/dev/null"
 fi
 
 # Set the channel
@@ -103,16 +108,28 @@ echo "Linker Version Info: $(ld --version | head -n 1)"
 start_time="$(date +%s)"
 
 # checkout the latest for the requested rust $BRANCH
+echo "cd $SRC_DIR"
 cd $SRC_DIR
-git remote update
-git clean -df
-git checkout -- .
-git checkout $BRANCH
-git submodule update
-git reset --hard origin/$BRANCH
-git submodule update
-git pull
-git submodule update
+
+echo "Updating Git repository" 
+git remote update >$PRINT_TARGET
+git clean -df >$PRINT_TARGET
+git checkout -- . >$PRINT_TARGET
+git checkout $BRANCH >$PRINT_TARGET
+git submodule update >$PRINT_TARGET
+git reset --hard origin/$BRANCH >$PRINT_TARGET
+git submodule update >$PRINT_TARGET
+git pull >$PRINT_TARGET
+git submodule update >$PRINT_TARGET
+
+# As of Rust 1.10 snapshots are no longer used
+# instead the latest stable release is used to build
+# so exit here if src/snapshots.txt no longer exists in the repo
+if [ ! -f "src/snapshots.txt" ]; then
+	echo "Building a release that no longer needs snapshots."
+	echo "Exiting gracefully"
+	exit 0
+fi
 
 # Check if the latest snapshot has already been built
 LAST_SNAP_HASH=$(head src/snapshots.txt | head -n 1 | tr -s ' ' | cut -d ' ' -f 3)
@@ -182,7 +199,7 @@ fi
 # --host=? the triple that represents our build system
 # --target=? the triple that represents the target system. Used for cross compiling
 cd $SRC_DIR
-git checkout $LAST_SNAP_HASH
+git checkout $LAST_SNAP_HASH >$PRINT_TARGET
 cd build
 ../configure \
   --disable-docs \
@@ -195,13 +212,13 @@ cd build
   --prefix=/ \
   --build=arm-unknown-linux-gnueabihf \
   --host=arm-unknown-linux-gnueabihf \
-  --target=arm-unknown-linux-gnueabihf
+  --target=arm-unknown-linux-gnueabihf >$PRINT_TARGET
 # Clean any previous builds
-make clean
+make clean >$PRINT_TARGET
 # Actually build the full rust compiler
-make -j $BUILD_PROCS
+make -j $BUILD_PROCS >$PRINT_TARGET
 # Create a static snapshot version for host triple
-make -j $BUILD_PROCS snap-stage3-H-arm-unknown-linux-gnueabihf
+make -j $BUILD_PROCS snap-stage3-H-arm-unknown-linux-gnueabihf >$PRINT_TARGET
 
 # ship it
 $DROPBOX -p upload rust-stage0-* ${CONTAINER_TAG}/snapshots

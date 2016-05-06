@@ -12,6 +12,7 @@
 
 # We always want to fail on an error
 # This is the safest way to proxy or reallym do anything here
+#set -x
 set -e
 
 # Set the default debug to false, unless the environment variable is already set
