@@ -174,8 +174,27 @@ if [ ! "src/snapshots.txt" ]; then
   fi
   bin/rustc -V
 else
+  # If not using a snapshot the following is how we build rust
+  # Stable, Beta, Tag => Build with the latest rust stable
+  # Nightly =. Build with the latest rust beta
   echo "Not using a snapshot to compile"
-  SNAP_DIR=/opt/rust_stable/rust
+  case $DESCRIPTOR in
+    stable)
+      SNAP_DIR=/opt/rust_stable/rust
+    ;;
+    beta)
+      SNAP_DIR=/opt/rust_stable/rust
+    ;;
+    nightly) 
+      SNAP_DIR=/opt/rust_beta/rust
+    ;;
+    tag-*)
+      SNAP_DIR=/opt/rust_stable/rust
+    ;;
+    *) 
+      echo "unknown release channel: $CHANNEL" && exit 1
+    ;;
+  esac
 fi
 
 # Get information about HEAD

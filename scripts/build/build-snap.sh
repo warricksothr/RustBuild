@@ -44,7 +44,7 @@ set -e
 : ${USE_CLANG:=true}
 
 # Source additional global variables if available
-if [ -f/ ~/BUILD_CONFIGURATION ]; then
+if [ -f ~/BUILD_CONFIGURATION ]; then
   . ~/BUILD_CONFIGURATION
 fi
 
