@@ -34,9 +34,10 @@ TARGET="RustBuild"
 stop_running_machine "$TARGET"
 
 # Build nightly, beta, and then stable in the same container consecutively
-systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh || stop_running_machine "$TARGET"
-systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
+# Need to build in order of stable -> beta -> nightly now
 systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh stable || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh || stop_running_machine "$TARGET"
 
 # Make sure we've exited the container at the end
 stop_running_machine "$TARGET"
@@ -55,9 +56,10 @@ TARGET="RustBuild-raspbian"
 stop_running_machine "$TARGET"
 
 # Build nightly, beta, and then stable in the same container consecutively
-systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh || stop_running_machine "$TARGET"
-systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
+# Need to build in order of stable -> beta -> nightly now
 systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh stable || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh beta || stop_running_machine "$TARGET"
+systemd-nspawn -D "$CHROOT/$TARGET" /bin/bash /root/build-all.sh || stop_running_machine "$TARGET"
 
 # Make sure we've exited the container at the end
 stop_running_machine "$TARGET"
