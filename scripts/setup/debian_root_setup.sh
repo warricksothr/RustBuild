@@ -29,7 +29,7 @@ fi
 : ${BUILD:=$ROOT/build}
 : ${OPT:=$ROOT/opt}
 : ${OPENSSL_DIR:=$BUILD/openssl}
-: ${OPENSSL_VER:=OpenSSL_1_0_2d}
+: ${OPENSSL_VER:=OpenSSL_1_0_2s}
 : ${OPENSSL_SRC_DIR:=$OPENSSL_DIR/openssl_src}
 
 cd $ROOT
