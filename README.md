@@ -1,5 +1,7 @@
 # RustBuild [![Twitter URL](https://img.shields.io/twitter/url/http/SothrDev.svg?style=social)](https://twitter.com/SothrDev)
 
+## Discontinued! ARM compatible libraries are now part of the standard build process for Rust. They can be downloaded (here)[https://static.rust-lang.org/dist/index.html]. Directions related to cross compiling can be found at (rust-cross)[https://github.com/japaric/rust-cross]
+
 Scripts and patches to auto build Rust and Cargo on an ARM machine
 
 **Unofficial** build scripts and binaries for nightly Rust/Cargo on 'arm-unknown-linux-gnueabihf'
