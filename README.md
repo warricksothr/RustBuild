@@ -2,7 +2,7 @@
 
 ## Discontinued! ARM compatible libraries are now part of the standard build process for Rust. They can be downloaded [here](https://static.rust-lang.org/dist/index.html). Directions related to cross compiling can be found at [rust-cross](https://github.com/japaric/rust-cross).
 
-## If you would like to compile your own version of rustc and rustlib on your ARM device, you can refer to petevine's fork. (https://github.com/petevine/RustBuild_v7)
+## If you would like to compile your own version of rustc and rustlib on your ARM device, you can refer to [petevine's fork](https://github.com/petevine/RustBuild_v7).
 
 Scripts and patches to auto build Rust and Cargo on an ARM machine
 
